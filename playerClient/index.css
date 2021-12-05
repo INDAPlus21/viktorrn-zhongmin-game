@@ -4,29 +4,58 @@ body{
     padding: 0;
 }
 
-#cardBoard{
+/*For the*/
+#cardPlacementSlots{
     position: absolute;
-    top: 300px;
+    top: 10%;
     width: 100%;
-    height: 160px;
+    height: 200px;
+    background-color: antiquewhite;
+    text-align: center;
 }
 
+.cardSlot{
+    position: relative;
+    display: inline-block;
+    width: 120px;
+    height: 180px;
+    margin:0 20px 0 20px;
 
-#deckPoint{
+    border-radius: 20px;
+    border: 10px solid rgb(73, 73, 73);
+
+    transition: all 0.3s;
+    transition-timing-function: cubic-bezier(0,.95,.25,1);
+    
+}
+
+.cardSlot .card{
+    background-color: rgb(92, 84, 56);
+    position: absolute;
+    width:120px;
+    height:180px;
+    bottom:0px;
+    border-radius: 20px;
+    border: 10px solid black;
+    margin: -10px;
+}
+
+/*For the hand*/
+#handPoint{
     position: absolute;
     bottom:40px;
     width:100%;
-    height: 160px;
+    height: 200px;
     background-color: rebeccapurple;
     
     text-align: center;
 }
 
-.card{
+#handPoint .card{
     background-color: rgb(92, 84, 56);
     position: relative;
-    width:100px;
-    height:140px;
+    width:120px;
+    height:180px;
     bottom:0px;
     border-radius: 20px;
     border: 10px solid black;
@@ -37,15 +66,15 @@ body{
     transition-timing-function: cubic-bezier(0,.95,.25,1);
 }
 
-.card:hover{
+#handPoint .card:hover{
     bottom:20px;
     margin: 0 35px 0 5px;
 }
 
 .highlightCard{
     position: absolute;
-    width:100px;
-    height:140px;
+    width:120px;
+    height:180px;
     border-radius: 20px;
     border: 10px solid black;
     background-color: rgb(92, 84, 56);
