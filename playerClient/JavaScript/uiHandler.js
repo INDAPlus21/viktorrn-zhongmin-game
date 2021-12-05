@@ -1,6 +1,5 @@
 import * as Card from './cards.js';
 import * as Main from './main.js';
-import * as utilFunctions from './utilityFunctions.js';
 
 export class UIHandler{
     handHTMLHandle = null;
