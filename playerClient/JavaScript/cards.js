@@ -1,4 +1,5 @@
 import * as Main from './main.js';
+
 export class Card{
     constructor(){
 
@@ -10,7 +11,7 @@ export function getCardDiv(card){
     div.setAttribute('class','card');
     div.setAttribute('handPosition',card);
     div.innerHTML = card;
-    div.onpointerenter = cardHover;
+    div.onpointerover = cardHover;
     div.onpointerleave = cardStopHover;
     return div;
 }
@@ -24,6 +25,7 @@ function cardStopHover(e){
 }
 
 function cardSelected(e){
+    console.log('selected card')
     if(Main.getUIHandler().currentCardSelected == null)
         Main.getUIHandler().selectedCard(this);
 }
