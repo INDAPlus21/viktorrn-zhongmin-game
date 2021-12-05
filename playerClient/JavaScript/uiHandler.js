@@ -26,12 +26,13 @@ export class UIHandler{
         for(let i in this.cardPlacementSlotsHTMLHandle.children){
             let el = this.cardPlacementSlotsHTMLHandle.children[i];
             if(el.tagName == 'DIV' && !el.hasChildNodes()){
+                el.style.transform = 'scale(1.1)';
                 el.onpointerover = () =>{
-                    el.style.border = '10px solid rgb(173, 173, 173)';
-                    el.style.transform = 'scale(1.1)';
+                    el.style.border = '10px solid rgb(220, 220, 220)';
+                    el.style.transform = 'scale(1.3)';
                 }
                 el.onpointerout = () =>{
-                    el.style.transform = ''; 
+                    el.style.transform = 'scale(1.1)'; 
                     el.style.border = '';
                 }
                 el.onpointerdown = this.playedCard;
