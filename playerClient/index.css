@@ -1,0 +1,58 @@
+body{
+    background-color: rgb(235, 229, 229);
+    margin: 0;
+    padding: 0;
+}
+
+#cardBoard{
+    position: absolute;
+    top: 300px;
+    width: 100%;
+    height: 160px;
+}
+
+
+#deckPoint{
+    position: absolute;
+    bottom:40px;
+    width:100%;
+    height: 160px;
+    background-color: rebeccapurple;
+    
+    text-align: center;
+}
+
+.card{
+    background-color: rgb(92, 84, 56);
+    position: relative;
+    width:100px;
+    height:140px;
+    bottom:0px;
+    border-radius: 20px;
+    border: 10px solid black;
+    display: inline-block;
+    margin: 0 0 0 -30px;
+
+    transition: bottom 0.2s, margin 0.75s;
+    transition-timing-function: cubic-bezier(0,.95,.25,1);
+}
+
+.card:hover{
+    bottom:20px;
+    margin: 0 35px 0 5px;
+}
+
+.highlightCard{
+    position: absolute;
+    width:100px;
+    height:140px;
+    border-radius: 20px;
+    border: 10px solid black;
+    background-color: rgb(92, 84, 56);
+    
+    text-align: center;
+    /*transform: translateX(-25%);*/
+    
+    transition: all 0.3s;
+    transition-timing-function: cubic-bezier(0,.95,.25,1);
+}
