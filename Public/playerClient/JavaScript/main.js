@@ -1,4 +1,4 @@
-import * as Card from './cards.js'; 
+import * as Card from './cards.js';
 import * as UIHandler from './uiHandler.js';
 
 let card = [1,2,3,4,5];
