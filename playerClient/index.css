@@ -4,7 +4,41 @@ body{
     padding: 0;
 }
 
-/*For the*/
+body::-webkit-scrollbar {
+    display: none;
+  }
+
+/*For joining server*/
+.joinServerOverlay{
+    display: none;
+    position: absolute;
+    width:80%;
+    height: 300px;
+    top:10%;
+    left:10%;
+    background-color: aliceblue;
+    z-index: 2;
+}
+
+.joinServerOverlay input{
+    position: relative;
+    top:100px;
+    width:79%;
+    padding: 0;
+    height:100px;
+    display: inline-block;
+}
+
+.joinServerOverlay button{
+    padding: 0;
+    position: relative;
+    top:100px;
+    width:20%;
+    height:100px;
+    display: inline-block;
+}
+
+/*For playing cards*/
 #cardPlacementSlots{
     position: absolute;
     top: 10%;
@@ -47,7 +81,6 @@ body{
     width:100%;
     height: 200px;
     background-color: rgba(41, 41, 41, 1);
-    
     text-align: center;
 }
 
