@@ -1,6 +1,12 @@
 function $(el){return document.getElementById(el)}
 
-$('klickedJoinServerBtn').oncklick = () =>{
+$('hostServer').onclick = () =>{
+    window.location.href = './serverClient/';
+}
+
+$('joinServerBtn').onclick = () =>{
     let address = $('serverIP').value;
-    console.log("address",address);
+    console.log("address: ",address);
+    //validate adress and then send off
+    window.location.href = './playerClient/';
 }
