@@ -1,7 +1,7 @@
 import * as Card from './cards.js';
 import * as UIHandler from './uiHandler.js';
 
-let card = [1,2,3,4,5];
+let card = [1,2,3,4,5,6,7];
 let UI_Handle = new UIHandler.UIHandler($('handPoint'),$('cardPlacementSlots')); 
 
 window.onload = function(){

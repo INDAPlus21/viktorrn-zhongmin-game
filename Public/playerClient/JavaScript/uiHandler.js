@@ -4,13 +4,20 @@ import * as Main from './main.js';
 export class UIHandler{
     handHTMLHandle = null;
     cardPlacementSlotsHTMLHandle = null;
+    cardPickZoneHTML = null;
     currentCardSelected = null;
     currentDisplayedCard = null;
     cardWasPlayed = false;
+
     constructor(handHTMLHandle,cardPlacementSlotsHandle){
         this.handHTMLHandle = handHTMLHandle;
         this.cardPlacementSlotsHTMLHandle = cardPlacementSlotsHandle;
     }
+
+    //for card picking
+
+
+    // for card playing
 
     drawDropZones(){
         Main.clearElement(this.cardPlacementSlotsHTMLHandle);
