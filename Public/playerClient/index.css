@@ -3,6 +3,7 @@
 *{
     font-family: MainFont;
     font-weight: 400;
+    cursor: pointer;
 }
 
 body{
@@ -63,7 +64,9 @@ body::-webkit-scrollbar {
 #cardSelectionPage .card{
     display: inline-block;
     margin: 20px;
-    transition: margin 0.75, transform 0.3s;
+    opacity: 1;
+    transition: opacity 3.0s linear, margin 0.75;
+    -webkit-transition: opacity 1.0s linear;
     transition-timing-function: cubic-bezier(0,.95,.25,1); 
 }
 
@@ -149,7 +152,7 @@ body::-webkit-scrollbar {
 }
 
 /* Other elements*/
-#endTurn{
+#endTurnBtn{
     position: absolute;
     z-index: 4;
     background-color: rgb(182, 177, 177);
@@ -162,7 +165,7 @@ body::-webkit-scrollbar {
     right: 20px;
 }
 
-#endTurn:hover{
+#endTurnBtn:hover{
 transform: scale(1.05);
 }
 

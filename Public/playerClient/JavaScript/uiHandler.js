@@ -7,8 +7,10 @@ export class UIHandler{
     cardSelectionPageHTMLHandle = null;
     cardPickZoneHTMLHandle = null;
 
-    currentlyPickingCards = false;
-    yourTurnToPickCard = false;
+    amountOfStartingCardOptions = 12;
+    amountOfStartingCards = 0;
+    cardPickingPhase = null;
+    yourTurnToPickCard = true;
 
     currentCardSelected = null;
     currentDisplayedCard = null;
@@ -21,16 +23,43 @@ export class UIHandler{
         this.cardPickZoneHTMLHandle = cardPickZoneHTMLHandle;
     }
 
+    
+
     //for card picking
-    displayCardPickingZone(cards){
+
+    displayCardSelectionZone(cards,phase){
         this.cardSelectionPageHTMLHandle.style.left = '0px';
         for(let i in cards){
             let div = Card.getCardDiv(i);
+            div.id = ('pickCardIndex'+i);
+            div.setAttribute('pickCardIndex',i);
+            div.onpointerdown = () => {Card.pickCardKlicked(div,phase)};
             this.cardPickZoneHTMLHandle.appendChild(div)
         }
     }
 
-    displayCardTaken(index){
+    hideCardSelectionZone(){
+        this.cardSelectionPageHTMLHandle.style.left = '-100%';
+    }
+
+    selectedStartingCard(card){
+        this.disablePickedCard(card.getAttribute('pickCardIndex'),true)
+    }
+
+    selectedPickCard(card){
+        if(this.yourTurnToPickCard){
+            this.disablePickedCard(card.getAttribute('pickCardIndex'),true)
+        }
+        
+    }
+
+    disablePickedCard(card_index,youPicked){
+        let card = Main.$('pickCardIndex'+card_index);
+        card.onpointerdown = null;
+        card.style.opacity = 0;
+    }
+
+    displayCardBeingTaken(index){
 
     }
 
@@ -90,7 +119,7 @@ export class UIHandler{
     }
 
     addCardToHand(card){
-
+        
     }
 
     selectedHandCard(card){
