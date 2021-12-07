@@ -1,19 +1,31 @@
 <!DOCTYPE html>
 <head>
     <title>rootIndex</title>
-    <link rel="stylesheet" href="fonts/loadfont.css">
-    <style>
-        *{
-            font-family: MainFont;
-            font-weight: 400; 
-        }
-        h1{
-            font-size: 4em;
-            
-        }
-    </style>
+    <link rel="stylesheet" href="index.css">
 </head>
-<body style="text-align: center;">
-    <h1>Zup, du har hittat serverns html sida</h1>    
+<body>
+    <div class="backgroundDiv"></div>
+    <div id="IpDisplay">127.0.0.1:5500</div>
+    <div id="BigBoiTextDisplay">-Server Client Page-</div>
+    <div id="cardSelectionPage">
+        <h1 id="selectCardHeader"> -Players Selecting Cards- </h1>
+        <div id="cardPickZone"></div>
+    </div>
+    <div id="playerBoard">
+        <div id="player1Board">
+            <div class="cardSlots"></div>
+            <div class="cardSlots"></div>
+            <div class="cardSlots"></div>
+            <div class="cardSlots"></div>
+        </div>
+        <div id="player2Board">
+            <div class="cardSlots"></div>
+            <div class="cardSlots"></div>
+            <div class="cardSlots"></div>
+            <div class="cardSlots"></div>
+        </div>
+    </div>
+   
+    <div id="scaleDiv"><h1>Div for the scale</h1></div>
     <script type="module" src=""></script>
 </body>
