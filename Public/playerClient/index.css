@@ -24,7 +24,7 @@ body::-webkit-scrollbar {
     height:100%;
     background-color: rgb(92, 92, 92);
 }
-#cardSelectionPage span{
+#cardSelectionPage h1{
 
 }
 #cardSelectionPage .card{
