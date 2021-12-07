@@ -25,7 +25,6 @@ function cardStopHover(e){
 }
 
 function cardSelected(e){
-    console.log('selected card')
     if(Main.getUIHandler().currentCardSelected == null)
         Main.getUIHandler().selectedCard(this);
 }
