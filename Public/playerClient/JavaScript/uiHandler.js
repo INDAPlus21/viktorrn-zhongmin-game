@@ -4,18 +4,23 @@ import * as Main from './main.js';
 export class UIHandler{
     handHTMLHandle = null;
     cardPlacementSlotsHTMLHandle = null;
-    cardPickZoneHTML = null;
+    cardSelectionPageHTMLHandle = null;
+    cardPickZoneHTMLHandle = null;
     currentCardSelected = null;
     currentDisplayedCard = null;
     cardWasPlayed = false;
 
-    constructor(handHTMLHandle,cardPlacementSlotsHandle){
+    constructor(handHTMLHandle,cardPlacementSlotsHandle,cardSelectionPageHTMLHandle,cardPickZoneHTMLHandle){
         this.handHTMLHandle = handHTMLHandle;
         this.cardPlacementSlotsHTMLHandle = cardPlacementSlotsHandle;
+        this.cardSelectionPageHTMLHandle = cardSelectionPageHTMLHandle;
+        this.cardPickZoneHTMLHandle = cardPickZoneHTMLHandle;
     }
 
     //for card picking
+    drawCardPickZone(){
 
+    }
 
     // for card playing
 
@@ -65,7 +70,10 @@ export class UIHandler{
     drawHand(cards){
         Main.clearElement(this.handHTMLHandle)
         for(let i in cards){
-            this.handHTMLHandle.appendChild(Card.getCardDiv(i));
+            let div = Card.getCardDiv(i);
+            div.onpointerover = Card.handCardHover;
+            div.onpointerleave = Card.handCardStopHover;
+            this.handHTMLHandle.appendChild(div);
         }
     }
 

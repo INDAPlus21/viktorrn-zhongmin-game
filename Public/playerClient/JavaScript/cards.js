@@ -11,20 +11,18 @@ export function getCardDiv(card){
     div.setAttribute('class','card');
     div.setAttribute('handPosition',card);
     div.innerHTML = card;
-    div.onpointerover = cardHover;
-    div.onpointerleave = cardStopHover;
     return div;
 }
 
-function cardHover(e){
-    this.onpointerdown = cardSelected;
+export function handCardHover(e){
+    this.onpointerdown = handCardSelected;
 }
 
-function cardStopHover(e){
+export function handCardStopHover(e){
     this.onpointerdown = null;
 }
 
-function cardSelected(e){
+function handCardSelected(e){
     if(Main.getUIHandler().currentCardSelected == null)
         Main.getUIHandler().selectedCard(this);
 }
