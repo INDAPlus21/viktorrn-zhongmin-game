@@ -14,6 +14,10 @@ export function getCardDiv(card){
     return div;
 }
 
+export function pickCardKlicked(e){
+    this.onpointerdown = Main.getUIHandler().selectedPickCard();
+}
+
 export function handCardHover(e){
     this.onpointerdown = handCardSelected;
 }
@@ -24,7 +28,7 @@ export function handCardStopHover(e){
 
 function handCardSelected(e){
     if(Main.getUIHandler().currentCardSelected == null)
-        Main.getUIHandler().selectedCard(this);
+        Main.getUIHandler().selectedHandCard(this);
 }
 
 

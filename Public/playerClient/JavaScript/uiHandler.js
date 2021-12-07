@@ -6,7 +6,9 @@ export class UIHandler{
     cardPlacementSlotsHTMLHandle = null;
     cardSelectionPageHTMLHandle = null;
     cardPickZoneHTMLHandle = null;
+
     currentlyPickingCards = false;
+    yourTurnToPickCard = false;
 
     currentCardSelected = null;
     currentDisplayedCard = null;
@@ -20,7 +22,15 @@ export class UIHandler{
     }
 
     //for card picking
-    displayCardPickingZone(){
+    displayCardPickingZone(cards){
+        this.cardSelectionPageHTMLHandle.style.left = '0px';
+        for(let i in cards){
+            let div = Card.getCardDiv(i);
+            this.cardPickZoneHTMLHandle.appendChild(div)
+        }
+    }
+
+    displayCardTaken(index){
 
     }
 
@@ -79,11 +89,11 @@ export class UIHandler{
         }
     }
 
-    addPointerEventsToHand(){
-        
+    addCardToHand(card){
+
     }
 
-    selectedCard(card){
+    selectedHandCard(card){
         //animate card klicked
         if(this.currentCardSelected == null){
             let pos = Main.getOffset(card); //get pos from original element to use for display animation
@@ -99,7 +109,7 @@ export class UIHandler{
               copy.style.left = '50%';
               copy.style.top = '50%';
               copy.style.transform = 'scale(2) translateX(-25%)';
-              window.onpointerdown = ()=>{this.returnCard()}
+              window.onpointerdown = ()=>{this.returnHandCard()}
               clearInterval(animation);
             }, 100);
     
@@ -115,7 +125,7 @@ export class UIHandler{
         this.activateDropZone();
     }
 
-    returnCard(){
+    returnHandCard(){
         
         //animation for card
         if(!this.cardWasPlayed){

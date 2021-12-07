@@ -7,6 +7,7 @@ let UI_Handle = new UIHandler.UIHandler($('handPoint'),$('cardPlacementSlots'),$
 window.onload = function(){
     UI_Handle.drawHand(card);
     UI_Handle.drawDropZones();
+    UI_Handle.displayCardPickingZone([1,2,3,4,5,6,7,8,9,10]);
 }
 
 //neccessary Util functions

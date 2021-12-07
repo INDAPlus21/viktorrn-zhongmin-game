@@ -38,15 +38,16 @@ body::-webkit-scrollbar {
 #cardSelectionPage{
     position: absolute;
     top:0;
-    left:100%;
-    z-index: 4;
+    left:-100%;
+    z-index: 5;
     width:100%;
     height:100%;
     background-color: rgb(92, 92, 92);
     -webkit-box-shadow: inset 0px 0px 500px 100px #000000, 0px 0px 500px 100px #000000; 
     box-shadow: inset 0px 0px 500px 100px #000000, 0px 0px 500px 100px #000000;
     text-align: center;
-    display: none;
+
+    transition: left 0.5s;
    
 }
 #cardSelectionPage h1{
@@ -56,17 +57,18 @@ body::-webkit-scrollbar {
 #cardSelectionPage #cardPickZone{
     position: absolute;
     margin-top: 0;
-    width: 100%;
-    height: 100px;
-    background-color: rgba(160, 135, 135, 0.411);
+    width:100%;
 }
 
 #cardSelectionPage .card{
-    position: relative;
     display: inline-block;
-
-    transition: bottom 0.2s, margin 0.75s;
+    margin: 20px;
+    transition: margin 0.75, transform 0.3s;
     transition-timing-function: cubic-bezier(0,.95,.25,1); 
+}
+
+#cardSelectionPage .card:hover{
+    transform: scale(1.05);
 }
 
 /*For playing cards*/
@@ -159,3 +161,8 @@ body::-webkit-scrollbar {
     bottom:20px;
     right: 20px;
 }
+
+#endTurn:hover{
+transform: scale(1.05);
+}
+
