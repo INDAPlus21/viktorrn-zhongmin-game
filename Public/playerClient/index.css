@@ -46,6 +46,7 @@ body::-webkit-scrollbar {
     -webkit-box-shadow: inset 0px 0px 500px 100px #000000, 0px 0px 500px 100px #000000; 
     box-shadow: inset 0px 0px 500px 100px #000000, 0px 0px 500px 100px #000000;
     text-align: center;
+    display: none;
    
 }
 #cardSelectionPage h1{
@@ -100,7 +101,6 @@ body::-webkit-scrollbar {
     margin: -10px;
 }
 
-
 /*For the hand*/
 #handPoint{
     position: absolute;
@@ -144,4 +144,18 @@ body::-webkit-scrollbar {
     
     transition: all 0.3s;
     transition-timing-function: cubic-bezier(0,.95,.25,1);
+}
+
+/* Other elements*/
+#endTurn{
+    position: absolute;
+    z-index: 4;
+    background-color: rgb(182, 177, 177);
+    color:rgb(116, 30, 30);
+    font-size: 3em;
+    width:150px;
+    border: 10px solid rgb(0, 0, 0);
+    border-radius: 20px;
+    bottom:20px;
+    right: 20px;
 }

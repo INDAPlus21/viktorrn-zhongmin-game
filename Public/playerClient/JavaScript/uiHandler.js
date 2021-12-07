@@ -6,6 +6,8 @@ export class UIHandler{
     cardPlacementSlotsHTMLHandle = null;
     cardSelectionPageHTMLHandle = null;
     cardPickZoneHTMLHandle = null;
+    currentlyPickingCards = false;
+
     currentCardSelected = null;
     currentDisplayedCard = null;
     cardWasPlayed = false;
@@ -18,7 +20,7 @@ export class UIHandler{
     }
 
     //for card picking
-    drawCardPickZone(){
+    displayCardPickingZone(){
 
     }
 
@@ -75,6 +77,10 @@ export class UIHandler{
             div.onpointerleave = Card.handCardStopHover;
             this.handHTMLHandle.appendChild(div);
         }
+    }
+
+    addPointerEventsToHand(){
+        
     }
 
     selectedCard(card){
