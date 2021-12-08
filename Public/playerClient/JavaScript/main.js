@@ -10,7 +10,7 @@ let endTurnBtn = $('endTurnBtn')
 window.onload = function(){
     UI_Handle.drawHand(card);
     UI_Handle.drawDropZones();
-    UI_Handle.displayCardSelectionZone([1,2,3,4,5,6,7,8,9,10],'startingPhase');
+    //UI_Handle.displayCardSelectionZone([1,2,3,4,5,6,7,8,9,10],'startingPhase');
 }
 
 //neccessary Util functions

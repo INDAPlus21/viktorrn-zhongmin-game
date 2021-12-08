@@ -108,10 +108,25 @@ body::-webkit-scrollbar {
     top:50%;
     left:50%;
     height:75%;
-    
+    width:100%;
     transform: translate(-50%,-50%);
-    background-color: rgba(220, 220, 220, 0.048);
-    z-index: 5;
+    background-color: rgba(220, 220, 220, 0);
+    z-index: 1;
+}
+
+#player1Board{
+    position: absolute;
+    top:0;
+    left:50%;
+    transform: translateX(-50%);
+}
+
+#player2Board{
+    position: absolute; 
+    bottom:0;
+   
+    left:50%;
+    transform: translateX(-50%);
 }
 
 #playerBoard .cardSlots{
@@ -135,24 +150,17 @@ body::-webkit-scrollbar {
     margin: -10px;
 }
 
-#player1Board{
-    position: relative;
-    bottom:0;
-}
 
-#player2Board{
-    position: relative; 
-    top:0;
-}
 
 /*Health meter*/
 #scaleDiv{
     position: absolute;
     z-index: 5;
     top: 50px;
-    width: 300px;
-    height: 100px;
-    left:50%;
-    transform: translateX(-50%);
+    width: 100px;
+    height: 300px;
+    top:50%;
+    right:15%;
+    transform: translateY(-50%);
     background-color: rgba(95, 95, 95, 0.472);
 }
