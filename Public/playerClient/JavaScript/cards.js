@@ -11,23 +11,32 @@ export function getCardDiv(card){
     div.setAttribute('class','card');
     div.setAttribute('handPosition',card);
     div.innerHTML = card;
-    div.onpointerover = cardHover;
-    div.onpointerleave = cardStopHover;
     return div;
 }
 
-function cardHover(e){
-    this.onpointerdown = cardSelected;
+export function pickCardKlicked(e,phase){
+    switch(phase){
+        case 'startingPhase':
+            e.onpointerdown = Main.getUIHandler().selectedStartingCard(e)
+            break;
+        case 'breakPhase':
+            e.onpointerdown = Main.getUIHandler().selectedPickCard(e);
+            break;
+    }
+    
 }
 
-function cardStopHover(e){
+export function handCardHover(e){
+    this.onpointerdown = handCardSelected;
+}
+
+export function handCardStopHover(e){
     this.onpointerdown = null;
 }
 
-function cardSelected(e){
-    console.log('selected card')
+function handCardSelected(e){
     if(Main.getUIHandler().currentCardSelected == null)
-        Main.getUIHandler().selectedCard(this);
+        Main.getUIHandler().selectedHandCard(this);
 }
 
 

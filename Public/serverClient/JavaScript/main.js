@@ -1,16 +1,6 @@
-import * as Card from './cards.js';
-import * as UIHandler from './uiHandler.js';
-import * as CardLib from './cardLib.js';
-
-let card = [1,2,3,4,5,6,7];
-let UI_Handle = new UIHandler.UIHandler($('handPoint'),$('cardPlacementSlots'),$('cardSelectionPage'),$('cardPickZone')); 
-let CardLibrary = new CardLib.CardLib('url');
-let endTurnBtn = $('endTurnBtn')
 
 window.onload = function(){
-    UI_Handle.drawHand(card);
-    UI_Handle.drawDropZones();
-    //UI_Handle.displayCardSelectionZone([1,2,3,4,5,6,7,8,9,10],'startingPhase');
+  
 }
 
 //neccessary Util functions
