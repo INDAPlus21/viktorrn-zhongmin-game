@@ -1,6 +1,6 @@
 import * as Card from './cards.js';
 import * as UIHandler from './uiHandler.js';
-import * as CardLib from './cardLib.js';
+import * as CardLib from '../../baseClasses/cardLib.js';
 
 let card = [1,2,3,4,5,6,7];
 let UI_Handle = new UIHandler.UIHandler($('handPoint'),$('cardPlacementSlots'),$('cardSelectionPage'),$('cardPickZone')); 

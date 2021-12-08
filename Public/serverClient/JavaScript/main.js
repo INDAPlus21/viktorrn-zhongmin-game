@@ -1,7 +1,34 @@
 
-window.onload = function(){
-  
+
+class GameObject{
+    players = []
+
 }
+class PlayerObject{
+    playerNumber = 0;
+    cardsPlayed = []
+    constructor(){
+
+    }
+}
+
+class Card{
+    constructor(cardHTML,cardData) {
+        this.HTMLKey = cardHTML;
+        this.cardData = cardData;
+    }
+}
+
+
+window.onload = function(){
+
+}
+
+function displayCardPickingPage(){
+
+}
+
+
 
 //neccessary Util functions
 export function $(el) { return document.getElementById(el) };
