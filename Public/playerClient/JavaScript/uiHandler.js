@@ -3,11 +3,11 @@ import * as Main from './main.js';
 
 export class UIHandler{
 
-    amountOfStartingCardOptions = 12;
-    amountOfStartingCards = 0;
+    amountOfStartingCards = 5;
+    cardsPicked = 0;
     cardPickingPhase = null;
-    yourTurnToPickCard = true;
 
+    yourTurnToPickCard = true;
     currentCardSelected = null;
     currentDisplayedCard = null;
     cardWasPlayed = false;
@@ -22,6 +22,7 @@ export class UIHandler{
     //for card picking
 
     displayCardSelectionPage(cards,phase){
+        this.cardsPicked = 0;
         this.cardSelectionPageHTMLHandle.style.top = '0px';
         for(let i in cards){
             let div = Card.getCardDiv(cards[i]);
@@ -37,7 +38,9 @@ export class UIHandler{
     }
 
     selectedStartingCard(card){
+        this.cardsPicked++;
         this.disablePickedCard(card.getAttribute('pickCardIndex'),true)
+        if(this.cardsPicked >= this.amountOfStartingCards) Main.doneWithStartingCards();
     }
 
     selectedPickCard(card){

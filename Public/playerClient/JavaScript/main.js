@@ -2,7 +2,7 @@ import * as Card from './cards.js';
 import * as UIHandler from './uiHandler.js';
 import * as DataManagerImport from '../../dataManager/dataManager.js';
 
-let card = [1,2,3,4,5,6,7];
+let yourTurn = false;
 let UI_Handler = new UIHandler.UIHandler($('handPoint'),$('cardPlacementSlots'),$('cardSelectionPage'),$('cardPickZone')); 
 let DataManager = new DataManagerImport.DataManager();
 
@@ -18,10 +18,12 @@ window.onload = function(){
 }
 
 
-
-
-
 //neccessary Util functions
+export function doneWithStartingCards(){
+    UI_Handler.hideCardSelectionPage();
+    console.log("pickedCards")
+}
+
 export function $(el) { return document.getElementById(el) };
 export function getOffset( el ) {
     var _x = 0;

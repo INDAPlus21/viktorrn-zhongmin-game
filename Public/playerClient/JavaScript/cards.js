@@ -9,6 +9,7 @@ export class Card{
 export function getCardDiv(card){
     let div = document.createElement('div');
     div.setAttribute('class','card');
+    div.setAttribute('cardName',card.name);
 
     let hdiv = document.createElement('div');
     hdiv.innerText = card.name;
