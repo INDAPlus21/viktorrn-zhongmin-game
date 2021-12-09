@@ -51,11 +51,11 @@ socket.on('connect', () => {// run this when connected
   socket.on('playerReady', (playerId, deck) => {
     if (playerInfo.player1.id === playerId) {
       playerInfo.player1.deck = deck;
-      $('player1State').innerHTML = `<span>${playerName}</span><br><b>READY!</b>`
+      $('player1State').innerHTML = `<span>${playerInfo.player1.name}</span><br><b>READY!</b>`
     }
     if (playerInfo.player2.id === playerId) {
       playerInfo.player2.deck = deck;
-      $('player1State').innerHTML = `<span>${playerName}</span><br><b>READY!</b>`
+      $('player1State').innerHTML = `<span>${playerInfo.player2.name}</span><br><b>READY!</b>`
     }
 
     // check if game can start
