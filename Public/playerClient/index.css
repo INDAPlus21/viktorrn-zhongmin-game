@@ -79,8 +79,8 @@ body::-webkit-scrollbar {
     display: inline-block;
     margin: 20px;
     opacity: 1;
-    transition: opacity 3.0s linear, margin 0.75;
-    -webkit-transition: opacity 1.0s linear;
+    transition: opacity 0.3s linear, margin 0.75;
+    -webkit-transition: opacity 0.3s linear;
     transition-timing-function: cubic-bezier(0,.95,.25,1); 
 }
 
@@ -116,8 +116,10 @@ body::-webkit-scrollbar {
 
 .cardSlot .card{
     position: absolute;
-    bottom:0px;
+    top:0px;
     margin: -10px;
+
+    transition: top 0.5s linear;
 }
 
 /*For the hand*/
@@ -144,7 +146,7 @@ body::-webkit-scrollbar {
 }
 
 #handPoint .card:hover{
-    bottom:20px;
+    top:-20px;
     margin: 0 45px 0 -15px;
     z-index: 1;
 }

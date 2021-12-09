@@ -5,8 +5,6 @@ $('hostServer').onclick = () =>{
 }
 
 $('joinServerBtn').onclick = () =>{
-    let address = $('serverIP').value;
-    console.log("address: ",address);
     //validate adress and then send off
     window.location.href = './playerClient/';
 }

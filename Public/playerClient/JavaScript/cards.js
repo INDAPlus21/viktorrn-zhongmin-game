@@ -1,11 +1,3 @@
-import * as Main from './main.js';
-
-export class Card{
-    constructor(){
-        
-    }
-}
-
 export function getCardDiv(card){
     let div = document.createElement('div');
     div.setAttribute('class','card');
@@ -32,19 +24,6 @@ export function getCardDiv(card){
     div.appendChild(cost);
 
     return div;
-}
-
-
-export function handCardHover(e){
-    this.onpointerdown = handCardSelected;
-}
-
-export function handCardStopHover(e){
-    this.onpointerdown = null;
-}
-
-function handCardSelected(e){
-    
 }
 
 
