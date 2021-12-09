@@ -59,7 +59,8 @@ io.on('connection', (socket) => { // server is online
       callback('fail', 'Room does not exist.'); // back to sender
 
     else {
-      socket.to(hostOf(roomId)).emit('isRoomOpen?', username, playerId, (answer) => {
+      let hostSocket = io.sockets.sockets.get(hostOf(roomId)); //this allows you to emit with callback - THANKS STACKOVERFLOW!!!!
+      hostSocket.emit('isRoomOpen?', username, playerId, (answer) => {
 
         if (answer[0] === true) // first element: whether it's closed or not
           callback('fail', answer[1]); // second element: reason of close
