@@ -2,10 +2,6 @@ import * as Card from './cards.js';
 import * as Main from './main.js';
 
 export class UIHandler{
-    handHTMLHandle = null;
-    cardPlacementSlotsHTMLHandle = null;
-    cardSelectionPageHTMLHandle = null;
-    cardPickZoneHTMLHandle = null;
 
     amountOfStartingCardOptions = 12;
     amountOfStartingCards = 0;

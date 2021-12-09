@@ -1,20 +1,39 @@
 import * as Main from '../playerClient/JavaScript/main.js';
 export class CardLib{
-    
-    constructor(filePath){
-        this.library = new Array();
-        this.readCardsFromJSONFile(filePath);
+    jsonPath = '../gameData/';
+
+    constructor(){
+        this.cardLibrary = new Array();
+        this.sigilLibrary = new Array();
     }
 
-    readCardsFromJSONFile(filePath){
+    readJSONFile(filePath,callBack,self){
+        fetch(filePath).then(result => result.json())
+        .then(result => {
+            callBack(result,self);
+            return true;
+        })
+        .catch(error =>{
+            console.log('Error:',error)
+            return false;
+        })
+    }
+
+    readSigilDataFromJSON(){
 
     }
 
-    extractCardData(){
-
+    readCardDataFromJSON(filePath){
+        this.readJSONFile(this.jsonPath+'cards.json',this.handleCardData,this);
     }
 
-    getGameTable(){
+    handleCardData(data,self){
+        console.log(data,self);
+    }
+
+
+
+    getGameCardTable(){
 
     }
 

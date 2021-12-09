@@ -2,16 +2,23 @@ import * as UIHandler from './uiHandler.js';
 
 class GameObject{
     players = []
+    playerTurn = null; // can be either 0 or 1 depending on player based on index in players  
+    currentPhase;
 
+    createPlayer(){
+        if(this.players.length >= 1) return false;
+        let player = new PlayerObject();
+        this.players.push(player);
+        return true;
+    }
 }
 class PlayerObject{
-    playerNumber = 0;
-    cardsPlayed = []
+    cardsPlayed = [];
+    playerID = null;
     constructor(){
 
     }
 }
-
 class Card{
     constructor(cardHTML,cardData) {
         this.HTMLKey = cardHTML;
