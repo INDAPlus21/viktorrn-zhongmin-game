@@ -26,5 +26,9 @@
             "health": 1,
             "cost": 1
         }
+    ],
+
+    "startingCards": [
+        ""
     ]
 }
