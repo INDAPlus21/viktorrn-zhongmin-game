@@ -81,7 +81,7 @@ socket.on('connect', () => {// run this when connected
   })
 
   socket.on('playerReady', (playerId, deck) => {
-
+    
   });
 });
 
