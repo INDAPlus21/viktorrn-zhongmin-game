@@ -1,5 +1,5 @@
 {
-    "cards":[
+    "cards": [
     {
         "name": "card 1",
         "damage": 3,
@@ -20,6 +20,11 @@
         "damage": 0,
         "health": 1,
         "cost": 0
+    },{
+        "name": "card",
+        "damage": 1,
+        "health": 1,
+        "cost": 1
     }
     ]
 }
