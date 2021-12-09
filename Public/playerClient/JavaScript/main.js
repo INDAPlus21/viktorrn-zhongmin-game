@@ -13,6 +13,9 @@ window.onload = function(){
     //UI_Handle.displayCardSelectionZone([1,2,3,4,5,6,7,8,9,10],'startingPhase');
 }
 
+
+
+
 //neccessary Util functions
 export function $(el) { return document.getElementById(el) };
 export function getOffset( el ) {

@@ -1,22 +1,22 @@
 {
     "cards": [
         {
-            "name": "card 1",
+            "name": "Stunted Wolf",
+            "damage": 2,
+            "health": 2,
+            "cost": 1
+        },{
+            "name": "Wolf",
             "damage": 3,
-            "health": 3,
+            "health": 2,
             "cost": 2
         },{
-            "name": "card",
-            "damage": 1,
+            "name": "Grizzly",
+            "damage": 4,
             "health": 1,
             "cost": 1
         },{
-            "name": "card",
-            "damage": 1,
-            "health": 1,
-            "cost": 1
-        },{
-            "name": "squirrel",
+            "name": "Rabbit",
             "damage": 0,
             "health": 1,
             "cost": 0
@@ -26,5 +26,9 @@
             "health": 1,
             "cost": 1
         }
+    ],
+
+    "startingCards":[
+
     ]
 }
