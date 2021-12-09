@@ -13,6 +13,7 @@ h1{
 /*Join room*/
 
 #bodyPregame{
+    font-family: MainFont;
     position: absolute;
     z-index: 12;
     background-color: rgb(102, 102, 102);
@@ -51,6 +52,7 @@ h1{
     font-size: 3em;
     border: 10px solid #000;
     border-radius: 10px;
+    overflow: hidden;
 }
 
 body{
@@ -58,7 +60,7 @@ body{
     margin: 0;
     padding: 0;
     text-align: center;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 body::-webkit-scrollbar {

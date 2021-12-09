@@ -30,6 +30,7 @@ $('joinServerBtn').onmousedown = () =>{
     });
 }
 
+socket.on('startGame')
 
 window.onload = function(){
     DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager,(Manager = DataManager) => {
