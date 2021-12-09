@@ -10,6 +10,11 @@
         "damage": 1,
         "health": 1,
         "cost": 1
+    },{
+        "name": "card",
+        "damage": 1,
+        "health": 1,
+        "cost": 1
     }
     ]
     
