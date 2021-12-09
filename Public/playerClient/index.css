@@ -25,6 +25,7 @@ section { /* Different sections to simulate page changes, while still staying on
 }
 section.onscreen {
     display: block;
+    
 }
 
 .backgroundDiv{
@@ -62,6 +63,7 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
     -webkit-box-shadow: inset 0px 0px 500px 100px #000000; 
     box-shadow: inset 0px 0px 500px 100px #000000;
     background-color: rgb(92, 92, 92);
+    text-align: center;
 }
 
 #joinServerPage div{
@@ -82,11 +84,14 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
 }
 
 #joinServerPage button{
-    
-    height:100%;
-    width: 200px;  
+    padding:160px;
     font-size: 3em;  
+}
 
+#joinServerPage #loginErrorText{
+    margin: 30px 0 0 0;
+    width: 100%;
+    font-size: 2em;
 }
 
 /*For selecting cards*/

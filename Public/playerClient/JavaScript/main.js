@@ -18,7 +18,7 @@ socket.on('connect', () => {// run this when connected
 });
 
 $('joinServerBtn').onmousedown = () =>{
-    roomId = $('serverIP').value.toLowerCase();
+    roomId = ($('serverIP').value).toLowerCase();
     playerName = $('loginPlayerName').value;
 
     socket.emit('joinRoom', roomId, playerName, socketId, (verdict, reason) => {
@@ -30,7 +30,9 @@ $('joinServerBtn').onmousedown = () =>{
     });
 }
 
-socket.on('startGame')
+socket.on('startGame',()=>{
+    console.log("start game Event activated")
+})
 
 window.onload = function(){
     DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager,(Manager = DataManager) => {
