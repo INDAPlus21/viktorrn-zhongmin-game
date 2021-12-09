@@ -1,46 +1,84 @@
+@import url('../fonts/loadfont.css');
+
+*{
+    font-family: MainFont;
+    font-weight: 400;
+    cursor: pointer;
+}
+
 body{
     background-color: rgb(102, 102, 102);
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
+}
+.backgroundDiv{
+    position: absolute;
+    top:0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(102, 102, 102,0);
+    -webkit-box-shadow: inset 0px 0px 500px 100px #000000; 
+    box-shadow: inset 0px 0px 500px 100px #000000;
+    z-index: 2;
+    pointer-events: none;
 }
 
 body::-webkit-scrollbar {
     display: none;
   }
 
-/*For joining server*/
-.joinServerOverlay{
-    display: none;
+.card{
+    background-color: rgb(92, 84, 56);
+    width:120px;
+    height:180px;
+    border-radius: 20px;
+    border: 10px solid black;
+}
+
+/*For selecting cards*/
+#cardSelectionPage{
     position: absolute;
-    width:80%;
-    height: 300px;
-    top:10%;
-    left:10%;
-    background-color: aliceblue;
-    z-index: 2;
+    top:-100%;
+    left:0;
+    z-index: 5;
+    width:100%;
+    height:100%;
+    background-color: rgb(92, 92, 92);
+    -webkit-box-shadow: inset 0px 0px 500px 100px #000000, 0px 0px 500px 100px #000000; 
+    box-shadow: inset 0px 0px 500px 100px #000000, 0px 0px 500px 100px #000000;
+    text-align: center;
+
+    transition: left 0.5s;
+   
+}
+#cardSelectionPage h1{
+    font-size: 6em;
+    margin: 70px 0 0 0;
+}
+#cardSelectionPage #cardPickZone{
+    position: absolute;
+    margin-top: 0;
+    width:100%;
 }
 
-.joinServerOverlay input{
-    position: relative;
-    top:100px;
-    width:79%;
-    padding: 0;
-    height:100px;
+#cardSelectionPage .card{
     display: inline-block;
+    margin: 20px;
+    opacity: 1;
+    transition: opacity 3.0s linear, margin 0.75;
+    -webkit-transition: opacity 1.0s linear;
+    transition-timing-function: cubic-bezier(0,.95,.25,1); 
 }
 
-.joinServerOverlay button{
-    padding: 0;
-    position: relative;
-    top:100px;
-    width:20%;
-    height:100px;
-    display: inline-block;
+#cardSelectionPage .card:hover{
+    transform: scale(1.05);
 }
 
 /*For playing cards*/
 #cardPlacementSlots{
     position: absolute;
+    z-index: 1;
     top: 10%;
     width: 100%;
     height: 200px;
@@ -64,13 +102,8 @@ body::-webkit-scrollbar {
 }
 
 .cardSlot .card{
-    background-color: rgb(92, 84, 56);
     position: absolute;
-    width:120px;
-    height:180px;
     bottom:0px;
-    border-radius: 20px;
-    border: 10px solid black;
     margin: -10px;
 }
 
@@ -80,32 +113,32 @@ body::-webkit-scrollbar {
     bottom:40px;
     width:100%;
     height: 200px;
-    background-color: rgba(41, 41, 41, 1);
+    background-color: rgba(41, 41, 41, 0);
     text-align: center;
+    z-index: 3;
 }
 
 #handPoint .card{
-    background-color: rgb(92, 84, 56);
     position: relative;
-    width:120px;
-    height:180px;
     bottom:0px;
-    border-radius: 20px;
-    border: 10px solid black;
     display: inline-block;
-    margin: 0 0 0 -30px;
+    margin: 0 0 0 -60px;
 
-    transition: bottom 0.2s, margin 0.75s;
+
+    transition: bottom 0.2s, margin 0.75s, box-shadow 0.4s;
     transition-timing-function: cubic-bezier(0,.95,.25,1);
 }
 
 #handPoint .card:hover{
     bottom:20px;
-    margin: 0 35px 0 5px;
+    margin: 0 45px 0 -15px;
+
+    z-index: 1;
 }
 
 .highlightCard{
     position: absolute;
+    z-index: 10;
     width:120px;
     height:180px;
     border-radius: 20px;
@@ -118,3 +151,22 @@ body::-webkit-scrollbar {
     transition: all 0.3s;
     transition-timing-function: cubic-bezier(0,.95,.25,1);
 }
+
+/* Other elements*/
+#endTurnBtn{
+    position: absolute;
+    z-index: 4;
+    background-color: rgb(182, 177, 177);
+    color:rgb(116, 30, 30);
+    font-size: 3em;
+    width:150px;
+    border: 10px solid rgb(0, 0, 0);
+    border-radius: 20px;
+    bottom:20px;
+    right: 20px;
+}
+
+#endTurnBtn:hover{
+transform: scale(1.05);
+}
+

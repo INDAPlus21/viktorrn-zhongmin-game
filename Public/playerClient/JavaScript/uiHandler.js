@@ -2,15 +2,64 @@ import * as Card from './cards.js';
 import * as Main from './main.js';
 
 export class UIHandler{
-    handHTMLHandle = null;
-    cardPlacementSlotsHTMLHandle = null;
+
+    amountOfStartingCardOptions = 12;
+    amountOfStartingCards = 0;
+    cardPickingPhase = null;
+    yourTurnToPickCard = true;
+
     currentCardSelected = null;
     currentDisplayedCard = null;
     cardWasPlayed = false;
-    constructor(handHTMLHandle,cardPlacementSlotsHandle){
+
+    constructor(handHTMLHandle,cardPlacementSlotsHandle,cardSelectionPageHTMLHandle,cardPickZoneHTMLHandle){
         this.handHTMLHandle = handHTMLHandle;
         this.cardPlacementSlotsHTMLHandle = cardPlacementSlotsHandle;
+        this.cardSelectionPageHTMLHandle = cardSelectionPageHTMLHandle;
+        this.cardPickZoneHTMLHandle = cardPickZoneHTMLHandle;
     }
+
+    
+
+    //for card picking
+
+    displayCardSelectionZone(cards,phase){
+        this.cardSelectionPageHTMLHandle.style.left = '0px';
+        for(let i in cards){
+            let div = Card.getCardDiv(i);
+            div.id = ('pickCardIndex'+i);
+            div.setAttribute('pickCardIndex',i);
+            div.onpointerdown = () => {Card.pickCardKlicked(div,phase)};
+            this.cardPickZoneHTMLHandle.appendChild(div)
+        }
+    }
+
+    hideCardSelectionZone(){
+        this.cardSelectionPageHTMLHandle.style.left = '-100%';
+    }
+
+    selectedStartingCard(card){
+        this.disablePickedCard(card.getAttribute('pickCardIndex'),true)
+    }
+
+    selectedPickCard(card){
+        if(this.yourTurnToPickCard){
+            this.disablePickedCard(card.getAttribute('pickCardIndex'),true)
+        }
+        
+    }
+
+    disablePickedCard(card_index,youPicked){
+        let card = Main.$('pickCardIndex'+card_index);
+        card.onpointerdown = null;
+        card.style.opacity = 0;
+    }
+
+    displayCardBeingTaken(index){
+
+    }
+
+    // for card playing
 
     drawDropZones(){
         Main.clearElement(this.cardPlacementSlotsHTMLHandle);
@@ -58,55 +107,68 @@ export class UIHandler{
     drawHand(cards){
         Main.clearElement(this.handHTMLHandle)
         for(let i in cards){
-            this.handHTMLHandle.appendChild(Card.getCardDiv(i));
+            let div = Card.getCardDiv(i);
+            div.onpointerover = Card.handCardHover;
+            div.onpointerleave = Card.handCardStopHover;
+            this.handHTMLHandle.appendChild(div);
         }
     }
 
-    selectedCard(card){
-        //animate card klicked
-        let pos = Main.getOffset(card); //get pos from original element to use for display animation
-        let copy = card.cloneNode(true); //clones card element to create a display copy
-        copy.setAttribute('class','highlightCard'); //setting som attributes for display element
-        document.body.appendChild(copy);
-        copy.setAttribute('ogLeft',pos.left);
-        copy.setAttribute('ogTop',pos.top);
-        copy.style.left = pos.left + 'px';
-        copy.style.top = pos.top + 'px';
+    addCardToHand(card){
         
-        var animation = setInterval(() => { //used for display animation
-          copy.style.left = '50%';
-          copy.style.top = '50%';
-          copy.style.transform = 'scale(2) translateX(-25%)';
-          window.onpointerdown = ()=>{this.returnCard()}
-          clearInterval(animation);
-        }, 100);
+    }
 
-        this.currentDisplayedCard = copy;  
-
-        this.currentCardSelected = card;
-        this.currentCardSelected.style.visibility = 'hidden'; //visible
-        this.currentCardSelected.style.margin = '0 35px 0 5px';
+    selectedHandCard(card){
+        //animate card klicked
+        if(this.currentCardSelected == null){
+            let pos = Main.getOffset(card); //get pos from original element to use for display animation
+            let copy = card.cloneNode(true); //clones card element to create a display copy
+            copy.setAttribute('class','highlightCard'); //setting som attributes for display element
+            document.body.appendChild(copy);
+            copy.setAttribute('ogLeft',pos.left);
+            copy.setAttribute('ogTop',pos.top);
+            copy.style.left = pos.left + 'px';
+            copy.style.top = pos.top + 'px';
+            
+            var animation = setInterval(() => { //used for display animation
+              copy.style.left = '50%';
+              copy.style.top = '50%';
+              copy.style.transform = 'scale(2) translateX(-25%)';
+              window.onpointerdown = ()=>{this.returnHandCard()}
+              clearInterval(animation);
+            }, 100);
+    
+            this.currentDisplayedCard = copy;  
+    
+            this.currentCardSelected = card;
+            this.currentCardSelected.style.visibility = 'hidden'; //visible
+            this.currentCardSelected.style.margin = '0 35px 0 5px';
+        }
+       
   
         //activate drop zone
         this.activateDropZone();
     }
 
-    returnCard(){
+    returnHandCard(){
         
         //animation for card
         if(!this.cardWasPlayed){
-            console.log("returned card")  
-            this.currentDisplayedCard.style.left = this.currentDisplayedCard.getAttribute('ogLeft') + 'px';
-            this.currentDisplayedCard.style.top = this.currentDisplayedCard.getAttribute('ogTop') + 'px';
-            this.currentDisplayedCard.style.transform = 'scale(1) translateX(0)';
+            try{
+                this.currentDisplayedCard.style.left = this.currentDisplayedCard.getAttribute('ogLeft') + 'px';
+                this.currentDisplayedCard.style.top = this.currentDisplayedCard.getAttribute('ogTop') + 'px';
+                this.currentDisplayedCard.style.transform = 'scale(1) translateX(0)';
+            }catch{}            
     
             var animation = setInterval(() => { //used for display animation
-                document.body.removeChild(Main.getUIHandler().currentDisplayedCard)
-                window.onpointerdown = null;
-                this.currentCardSelected.style.margin ="";
-                this.currentCardSelected.style.visibility = ''; //visible
-                this.currentDisplayedCard = null;
-                this.currentCardSelected = null;
+                window.onpointerdown = null;   
+                try{
+                    document.body.removeChild(Main.getUIHandler().currentDisplayedCard)
+                    this.currentCardSelected.style.margin ="";
+                    this.currentCardSelected.style.visibility = ''; //visible
+                    this.currentDisplayedCard = null;
+                    this.currentCardSelected = null;
+                }catch{}
                 clearInterval(animation);
               }, 200);
         }
@@ -123,7 +185,6 @@ export class UIHandler{
         displayCard.style.left = pos.left +'px';
         displayCard.style.top = pos.top + 'px';
         displayCard.style.transform = '';
-        Main.getUIHandler().currentCardSelected.style.show = 'none';
 
         Main.getUIHandler().disableDropZone();
 

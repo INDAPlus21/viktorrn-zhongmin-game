@@ -1,0 +1,16 @@
+{
+    "cards":[
+    {
+        "name": "card 1",
+        "damage": 3,
+        "health": 3,
+        "cost": 2
+    },{
+        "name": "card",
+        "damage": 1,
+        "health": 1,
+        "cost": 1
+    }
+    ]
+    
+}
