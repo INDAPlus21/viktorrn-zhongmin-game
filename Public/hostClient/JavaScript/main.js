@@ -2,6 +2,7 @@ import * as UIHandler from './uiHandler.js';
 import * as DataManagerImport from '../../dataManager/dataManager.js';
 
 let socket = io(); // event listener/emitter
+let socketId; // the client's unique id for the socket connection
 let roomId; // room id
 let playerInfo = new Object();
 /*
@@ -54,9 +55,10 @@ window.onload = function(){
     }
 }
 
-
-socket.on('connect', () => {// run upon connection
+// socket connection
+socket.on('connect', () => {// run this when connected
   console.log("I'm online! with id " + socket.id);
+  socketId = socket.id;
 
   // this is only run once, when the host client connects
   socket.emit('createRoom', socket.id, (generated) => {
