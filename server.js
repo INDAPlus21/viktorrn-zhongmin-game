@@ -26,19 +26,20 @@ function hostOf(roomId) {
 }
 
 io.on('connection', (socket) => { // server is online
-  console.log('server is online.');
 
   // event from host: host creates a new room. hostId is the unique socket id of the hosting client
   // the callback function responds with the valid room id.
-  socket.on('createRoom', (hostId, callback) => { 
+  socket.on('createRoom', (hostId, callback) => {
 
     for (const id in roomList) { // force delete all expired ids
       if ( roomList[id] < Date.now() ) delete roomList[id];
     }
 
+    let id;
+
     do
-      let id = randomRoomId(); // generate new id
-    while (Object.keys(roomList).contains(id)); // repeat until id is unique
+      id = randomRoomId(); // generate new id
+    while (Object.keys(roomList).includes(id)); // repeat until id is unique
 
     roomList[id] = new Array();
     roomList[id][0] = Date.now() + 3600000 // add 1 hour to current timestamp
