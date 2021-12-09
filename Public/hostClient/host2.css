@@ -1,0 +1,40 @@
+* {
+    font-family: Verdana;
+}
+
+i {
+    font-style: italic;
+}
+b {
+    font-weight: bold;
+}
+
+body, section.displaying, section#bodyPregame div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+section {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    display: none;
+}
+
+section#bodyPregame, #bodyPregame div {
+    /*flex*/
+    flex-direction: column;
+}
+section#bodyPregame div {
+    /*flex*/
+    width: 600px;
+    min-height:100px;
+    padding: 30px;
+    border-bottom:2px dotted black;
+}
+section#bodyPregame div h1 {
+    font-size: 4em;
+    margin-top: 0.2em;
+}

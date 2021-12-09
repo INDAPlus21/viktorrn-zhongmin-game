@@ -1,11 +1,19 @@
 <!DOCTYPE html>
 <head>
     <title>rootIndex</title>
-    <link rel="stylesheet" href="index.css">
+    <!--<link rel="stylesheet" href="index.css">-->
+    <link rel="stylesheet" href="host2.css">
     <script src="/socket.io/socket.io.js"></script>
+    <script src="./JavaScript/hostSocket.js"></script>
 </head>
 <body>
-    <button id="SelectionPageShow">Toggle Page</button>
+    <section id="bodyPregame" class="displaying">
+        <div id="roomCode">Join the game at:<h1>????</h1></div>
+        <div id="player1State">Waiting...</div>
+        <div id="player2State">Waiting...</div>
+    </section>
+    <section id="bodyIngame">
+        <button id="SelectionPageShow">Toggle Page</button>
 
     <div class="backgroundDiv"></div>
     <div id="IpDisplay">127.0.0.1:5500</div>
@@ -33,5 +41,6 @@
         </div>
 
     </div>
+    </section>
     <script type="module" src="./JavaScript/main.js"></script>
 </body>
