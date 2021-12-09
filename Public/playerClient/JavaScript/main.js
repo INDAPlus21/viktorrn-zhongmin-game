@@ -47,9 +47,13 @@ function yourTurn(cardsInHand,cardsPlayed){ //will be changed to a socket on fun
    
 }
 
+
+// this function is run when the player is done selecting their starting deck and is ready to play
 export function doneWithStartingCards(cards){
     UI_Handler.hideCardSelectionPage();
-    console.log(cards);
+    console.log("roomId",roomId,"pid",socketId,"cards",cards)
+    socket.emit('ready', roomId, socketId, cards);
+    // @viktor at here, maybe change to another section that is just a blank waiting screen
 }
 
 export function cardPlayed(cardName){

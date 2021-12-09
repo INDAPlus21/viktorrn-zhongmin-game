@@ -49,6 +49,20 @@ socket.on('connect', () => {// run this when connected
   })
 
   socket.on('playerReady', (playerId, deck) => {
-    
+    if (playerInfo.player1.id === playerId) {
+      playerInfo.player1.deck = deck;
+      $('player1State').innerHTML = `<span>${playerName}</span><br><b>READY!</b>`
+    }
+    if (playerInfo.player2.id === playerId) {
+      playerInfo.player2.deck = deck;
+      $('player1State').innerHTML = `<span>${playerName}</span><br><b>READY!</b>`
+    }
+
+    // check if game can start
+    let deck1 = playerInfo.player1.deck
+    let deck2 = playerInfo.player2.deck
+    if (deck1 !== undefined && deck1.length !== 0 && deck2 !== undefined && deck2.length !== 0) {
+      socket.emit('startGame', roomId)
+    }
   });
 });
