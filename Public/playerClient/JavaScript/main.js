@@ -30,28 +30,27 @@ $('joinServerBtn').onmousedown = () =>{
     });
 }
 
+
 window.onload = function(){
     DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager,(Manager = DataManager) => {
         let cards = []
         for(let i of DataManager.startingCards) cards.push(DataManager.getSpecificCard(i));
         UI_Handler.displayCardSelectionPage(cards,"startingPhase");
         UI_Handler.drawDropZones();
-        yourTurn(cards);
     })
 }
+
+
 
 function yourTurn(cardsInHand,cardsPlayed){ //will be changed to a socket on function
     currentlyYourTurn = true;
     UI_Handler.drawHand(cardsInHand);
     UI_Handler.cardsPlayed = cardsPlayed;
-   
 }
 
 
 // this function is run when the player is done selecting their starting deck and is ready to play
 export function doneWithStartingCards(cards){
-    UI_Handler.hideCardSelectionPage();
-    console.log("roomId",roomId,"pid",socketId,"cards",cards)
     socket.emit('ready', roomId, socketId, cards);
     // @viktor at here, maybe change to another section that is just a blank waiting screen
 }
