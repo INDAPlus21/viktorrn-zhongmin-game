@@ -73,6 +73,7 @@ io.on('connection', (socket) => { // server is online
   });
 
   // event from player: body onunload, notify host.
+  // NOTE: not working yet
   socket.on('leaveRoom', (roomId, playerId) => {
     socket.to(hostOf(roomId)).emit('playerLeft', playerId);
   })
