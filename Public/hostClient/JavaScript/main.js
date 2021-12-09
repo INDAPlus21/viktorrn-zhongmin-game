@@ -36,23 +36,12 @@ class GameObject{
     }
 }
 
-
 let UI_Handler = new UIHandler.UIHandler($('cardSelectionPage'),$('cardPickZone'));
 let DataManager = new DataManagerImport.DataManager();
 let boolToggle = false;
 let cards = [1,2,3,4,5,6]
 
-
 window.onload = function(){
-    $('SelectionPageShow').onpointerdown = () =>{
-        if(boolToggle == false){
-            boolToggle = true;
-            UI_Handler.displayCardSelectionPage(cards);
-        }else{
-            boolToggle = false;
-           UI_Handler.hideCardSelectionPage();
-        }
-    }
 }
 
 // socket connection
