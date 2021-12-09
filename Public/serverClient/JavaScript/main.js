@@ -1,4 +1,4 @@
-
+import * as UIHandler from './uiHandler.js';
 
 class GameObject{
     players = []
@@ -20,8 +20,22 @@ class Card{
 }
 
 
-window.onload = function(){
+let UI_Handler = new UIHandler.UIHandler($('cardSelectionPage'),$('cardPickZone'));
+let boolToggle = false;
+let cards = [1,2,3,4,5,6]
 
+
+window.onload = function(){
+    $('SelectionPageShow').onpointerdown = () =>{
+        
+        if(boolToggle == false){
+            boolToggle = true;
+            UI_Handler.displayCardSelectionPage(cards);
+        }else{
+            boolToggle = false;
+           UI_Handler.hideCardSelectionPage();
+        }
+    }
 }
 
 function displayCardPickingPage(){
