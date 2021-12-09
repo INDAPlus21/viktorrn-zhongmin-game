@@ -13,8 +13,7 @@ window.onload = function(){
     DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager,(Manager = DataManager) => {
         let cards = []
         for(let i of DataManager.startingCards) cards.push(DataManager.getSpecificCard(i));
-        //UI_Handler.displayCardSelectionPage(cards,"startingPhase");
-        UI_Handler.drawHand(cards);
+        UI_Handler.displayCardSelectionPage(cards,"startingPhase");
     })
 }
 

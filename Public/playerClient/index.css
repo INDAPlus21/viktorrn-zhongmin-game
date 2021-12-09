@@ -63,6 +63,7 @@ body::-webkit-scrollbar {
 }
 
 #cardSelectionPage .card{
+    position: relative;
     display: inline-block;
     margin: 20px;
     opacity: 1;
@@ -140,13 +141,14 @@ body::-webkit-scrollbar {
     vertical-align: top;
 }
 
-.name{
+.card .name{
     font-size: 2.2em;
     height: 20px;
     width: 100%;
 }
 
-.damage{
+.card .damage{
+    bottom: 20px;
     font-size: 2.5em;
     font-weight: bold;
     position: absolute;
@@ -155,7 +157,7 @@ body::-webkit-scrollbar {
     color: rgb(110, 30, 30);
 }
 
-.health{
+.card .health{
     font-size: 2.5em;
     font-weight: bold;
     position: absolute;
@@ -164,7 +166,7 @@ body::-webkit-scrollbar {
     color: rgb(88, 149, 69);
 }
 
-.cost{
+.card .cost{
     font-size: 2em;
     font-weight: bold;
     position: absolute;
