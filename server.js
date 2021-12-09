@@ -4,7 +4,7 @@ let app = express(); // create an express object
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
-app.use(express.static(__dirname + '/public')); // exposes the 'public' dir as the frontend's root dir - thanks stackoverflow
+app.use(express.static(__dirname + '/Public')); // exposes the 'public' dir as the frontend's root dir - thanks stackoverflow
 
 let roomList = {};
 /*an object with room IDs as key, and an array of two elements as value.
@@ -88,7 +88,7 @@ io.on('connection', (socket) => { // server is online
 
   // event from player: player is playing a card on the field.
   socket.on('playCard', (roomId, playerId, card, column) => {
-    
+
   });
 
 
