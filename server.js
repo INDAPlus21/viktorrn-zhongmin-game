@@ -80,6 +80,7 @@ io.on('connection', (socket) => { // server is online
   // event from player: player has assembled their starting deck and is ready to start.
   // this action cannot be undone.
   socket.on('ready', (roomId, playerId, deck) => {
+    console.log("playerReady",roomId,playerId,deck)
     socket.to(hostOf(roomId)).emit('playerReady', playerId, deck);
   });
 
