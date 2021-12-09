@@ -3,22 +3,22 @@
     <title>Page</title>
     <link rel="stylesheet" href="index.css">
     <script src="/socket.io/socket.io.js"></script>
-    <script src="./JavaScript/socket.js"></script>
     
 </head>
 <body>
-    <section id="login" class="onscreen">
+    <section id="login" class="onscreen" style="text-align: center;">
         <input 
             id="serverIP" value="" placeholder="4-letter join code" type="text"
-            style="margin: 20px 0; height: 30px; width: 100px; font-size: 1.2em;" 
+            style="margin: 300px 0 0 0; height: 30px; width: 100px; font-size: 1.2em;" 
         ></input><br>
         <input 
-        id="loginPlayerName" value="" placeholder="Username" type="text"
-        style="margin: 20px 0; height: 30px; width: 100px; font-size: 1.2em;" 
+            id="loginPlayerName" value="" placeholder="Username" type="text"
+            style="margin: 20px 0; height: 30px; width: 100px; font-size: 1.2em;" 
         ></input><br>
-        <button id="joinServerBtn" style="height:30px; font-size: 1.2em;" onclick="joinServer()">Join Server</button>
+        <button id="joinServerBtn" style="height:30px; width: 110px; font-size: 1.2em;">Join Server</button>
         <br>
         <div id="loginErrorText"></div>
+        <div class="backgroundDiv"></div>
     </section>
     <section id="selectstartercards">
         <div class="backgroundDiv"></div>

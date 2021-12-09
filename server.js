@@ -54,7 +54,7 @@ io.on('connection', (socket) => { // server is online
   // the callback function responds with whether the player is ok join or not.
   // the player will join a socket.io room with the same id as the room's join code, for ease of broadcast.
   socket.on('joinRoom', (roomId, username, playerId, callback) => { 
-
+    console.log()
     if (roomList[roomId] === undefined) // if no such room
       callback('fail', 'Room does not exist.'); // back to sender
 

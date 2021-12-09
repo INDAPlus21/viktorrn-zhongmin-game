@@ -24,6 +24,7 @@ section { /* Different sections to simulate page changes, while still staying on
 section.onscreen {
     display: block;
 }
+
 .backgroundDiv{
     position: absolute;
     top:0;
@@ -46,6 +47,45 @@ body::-webkit-scrollbar {
     height:180px;
     border-radius: 20px;
     border: 10px solid black;
+}
+
+#joinServerPage{
+    position: absolute;
+    z-index: 10;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(102, 102, 102,0);
+    -webkit-box-shadow: inset 0px 0px 500px 100px #000000; 
+    box-shadow: inset 0px 0px 500px 100px #000000;
+    background-color: rgb(92, 92, 92);
+}
+
+#joinServerPage div{
+    position: relative;
+    background-color: red;
+    width:500px;
+    height: 100px;
+    left:50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
+
+#joinServerPage input{
+    width: 100px;
+    height:100%;
+  
+    font-size: 1.5em;  
+
+}
+
+#joinServerPage button{
+    
+    height:100%;
+    width: 200px;  
+    font-size: 3em;  
+
 }
 
 /*For selecting cards*/
