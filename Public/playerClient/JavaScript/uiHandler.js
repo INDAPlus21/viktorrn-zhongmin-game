@@ -12,6 +12,8 @@ export class UIHandler{
     currentDisplayedCard = null;
     cardWasPlayed = false;
 
+    cardsPlayed = null;
+
     constructor(handHTMLHandle,cardPlacementSlotsHandle,cardSelectionPageHTMLHandle,cardPickZoneHTMLHandle){
         this.handHTMLHandle = handHTMLHandle;
         this.cardPlacementSlotsHTMLHandle = cardPlacementSlotsHandle;
@@ -21,9 +23,7 @@ export class UIHandler{
 
     //entry
     selectedStartingCard(card){
-        this.cardsPicked.push(card.getAttribute('cardName'));
-        this.disablePickedCard(card.getAttribute('pickCardIndex'),true)
-        if(this.cardsPicked.length >= this.amountOfStartingCards) Main.doneWithStartingCards(this.cardsPicked);
+        
     }
 
     //for card picking
@@ -35,7 +35,11 @@ export class UIHandler{
             let div = Card.getCardDiv(cards[i]);
             div.id = ('pickCardIndex'+i);
             div.setAttribute('pickCardIndex',i);
-            div.onpointerdown = () => {Card.pickCardKlicked(div,phase)};
+            div.onpointerdown = () => {
+                this.cardsPicked.push(div.getAttribute('cardName'));
+                this.disablePickedCard(div.getAttribute('pickCardIndex'),true)
+                if(this.cardsPicked.length >= this.amountOfStartingCards) Main.doneWithStartingCards(this.cardsPicked);
+            };
             this.cardPickZoneHTMLHandle.appendChild(div)
         }
     }
@@ -44,23 +48,10 @@ export class UIHandler{
         this.cardSelectionPageHTMLHandle.style.top = '-100%';
     }
 
-    
-
-    selectedPickCard(card){
-        if(this.yourTurnToPickCard){
-            this.disablePickedCard(card.getAttribute('pickCardIndex'),true)
-        }
-        
-    }
-
     disablePickedCard(card_index,youPicked){
         let card = Main.$('pickCardIndex'+card_index);
         card.onpointerdown = null;
         card.style.opacity = 0;
-    }
-
-    displayCardBeingTaken(index){
-
     }
 
     // for card playing
@@ -76,6 +67,8 @@ export class UIHandler{
     }
 
     activateDropZone(){
+        //change it based on
+
         for(let i in this.cardPlacementSlotsHTMLHandle.children){
             let el = this.cardPlacementSlotsHTMLHandle.children[i];
             if(el.tagName == 'DIV' && !el.hasChildNodes()){
@@ -112,15 +105,20 @@ export class UIHandler{
         Main.clearElement(this.handHTMLHandle)
         for(let i in cards){
             let div = Card.getCardDiv(cards[i]);
-            div.onpointerover = Card.handCardHover;
-            div.onpointerleave = Card.handCardStopHover;
+            div.onpointerover = () => {
+                div.onpointerdown = () => {
+                    if(Main.getUIHandler().currentCardSelected == null)
+                    Main.getUIHandler().selectedHandCard(div);
+                }
+            }
+            div.onpointerleave = () =>{
+                div.onpointerdown = null;
+            }
             this.handHTMLHandle.appendChild(div);
         }
     }
 
-    addCardToHand(card){
-        
-    }
+    //for handling card actions
 
     selectedHandCard(card){
         //animate card klicked
@@ -205,6 +203,9 @@ export class UIHandler{
             Main.getUIHandler().currentCardSelected = null;
             Main.getUIHandler().currentCardSelected = null;
             Main.getUIHandler().cardWasPlayed = false;
+
+            Main.cardPlayed(card.getAttribute('cardName'));
+            
             clearInterval(animation);
           }, 150);
 

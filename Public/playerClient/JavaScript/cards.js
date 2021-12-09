@@ -34,17 +34,6 @@ export function getCardDiv(card){
     return div;
 }
 
-export function pickCardKlicked(e,phase){
-    switch(phase){
-        case 'startingPhase':
-            e.onpointerdown = Main.getUIHandler().selectedStartingCard(e)
-            break;
-        case 'breakPhase':
-            e.onpointerdown = Main.getUIHandler().selectedPickCard(e);
-            break;
-    }
-    
-}
 
 export function handCardHover(e){
     this.onpointerdown = handCardSelected;
@@ -55,8 +44,7 @@ export function handCardStopHover(e){
 }
 
 function handCardSelected(e){
-    if(Main.getUIHandler().currentCardSelected == null)
-        Main.getUIHandler().selectedHandCard(this);
+    
 }
 
 

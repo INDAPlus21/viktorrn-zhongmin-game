@@ -141,13 +141,13 @@ body::-webkit-scrollbar {
     vertical-align: top;
 }
 
-.card .name{
+.name{
     font-size: 2.2em;
     height: 20px;
     width: 100%;
 }
 
-.card .damage{
+.damage{
     bottom: 20px;
     font-size: 2.5em;
     font-weight: bold;
@@ -157,7 +157,7 @@ body::-webkit-scrollbar {
     color: rgb(110, 30, 30);
 }
 
-.card .health{
+.health{
     font-size: 2.5em;
     font-weight: bold;
     position: absolute;
@@ -166,7 +166,7 @@ body::-webkit-scrollbar {
     color: rgb(88, 149, 69);
 }
 
-.card .cost{
+.cost{
     font-size: 2em;
     font-weight: bold;
     position: absolute;
