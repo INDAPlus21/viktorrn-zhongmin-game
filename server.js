@@ -81,20 +81,38 @@ io.on('connection', (socket) => { // server is online
   // event from player: player has assembled their starting deck and is ready to start.
   // this action cannot be undone.
   socket.on('ready', (roomId, playerId, deck) => {
-    console.log("playerReady",roomId,playerId,deck)
     socket.to(hostOf(roomId)).emit('playerReady', playerId, deck);
   });
 
-  // event from host: both players have locked in their decks: change player's UI to game field.
-  socket.on('startGame', (roomId) => {
-    socket.to(roomId).except(hostOf(roomId)).emit('startGame');
-  })
-
-  // event from player: player is playing a card on the field.
-  socket.on('playCard', (roomId, playerId, card, column) => {
-    
+  // event from host: both players have locked in their decks: change player's UI to game field, and the player with firstPlayerId starts their round first.
+  socket.on('startGame', (roomId, firstPlayerId) => {
+    socket.to(roomId).except(hostOf(roomId)).emit('startGame', firstPlayerId);
   });
 
+  // event from player: player is playing a card on the field.
+  socket.on('playerPlayCard', (roomId, playerId, card, column) => {
+    socket.to(hostOf(roomId)).emit('playerPlayCard', playerId, card, column);
+  });
+
+  // event from player: player is sacrificing a card on the field and should receive 1 blood.
+  socket.on('playerSacrificeCard', (roomId, playerId, column) => {
+    socket.to(hostOf(roomId)).emit('playerSacrificeCard', playerId, card, column);
+  });
+
+  // event from player: player is ending turn
+  socket.on('playerEndTurn', (roomId, playerId) => {
+    socket.to(hostOf(roomId)).emit('playerEndTurn', playerId);
+  });
+
+  // event from host: the specified player starts their turn. The other player's turn, if it's still active for some reason, is stopped.
+  socket.on('startTurn', (roomId, playPlayerId) => {
+    socket.to(roomId).except(hostOf(roomId)).emit('startTurn', playPlayerId);
+  });
+
+  // event from host: the game has ended, the specified player display that they won, the other player that they lost.
+  socket.on('endGame', (roomId, winnerPlayerId) => {
+    socket.to(roomId).except(hostOf(roomId)).emit('endGame', winnerPlayerId);
+  })
 
 });
 
