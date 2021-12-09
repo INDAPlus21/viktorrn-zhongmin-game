@@ -44,6 +44,8 @@ socket.on('connect', () => {// run this when connected
       answer[0] = true;
       callback(answer);
     }
+
+    console.log("player Joined",playerInfo)
   })
 
   socket.on('playerReady', (playerId, deck) => {
