@@ -1,10 +1,10 @@
 import * as Card from './cards.js';
 import * as Main from './main.js';
 
-export class UIHandler{
+export class UIHandler{ 
 
     amountOfStartingCards = 5;
-    cardsPicked = 0;
+    cardsPicked;
     cardPickingPhase = null;
 
     yourTurnToPickCard = true;
@@ -19,10 +19,17 @@ export class UIHandler{
         this.cardPickZoneHTMLHandle = cardPickZoneHTMLHandle;
     }
 
-    //for card picking
+    //entry
+    selectedStartingCard(card){
+        this.cardsPicked.push(card.getAttribute('cardName'));
+        this.disablePickedCard(card.getAttribute('pickCardIndex'),true)
+        if(this.cardsPicked.length >= this.amountOfStartingCards) Main.doneWithStartingCards(this.cardsPicked);
+    }
 
+    //for card picking
     displayCardSelectionPage(cards,phase){
-        this.cardsPicked = 0;
+        this.cardsPicked = [];
+
         this.cardSelectionPageHTMLHandle.style.top = '0px';
         for(let i in cards){
             let div = Card.getCardDiv(cards[i]);
@@ -37,11 +44,7 @@ export class UIHandler{
         this.cardSelectionPageHTMLHandle.style.top = '-100%';
     }
 
-    selectedStartingCard(card){
-        this.cardsPicked++;
-        this.disablePickedCard(card.getAttribute('pickCardIndex'),true)
-        if(this.cardsPicked >= this.amountOfStartingCards) Main.doneWithStartingCards();
-    }
+    
 
     selectedPickCard(card){
         if(this.yourTurnToPickCard){
@@ -104,7 +107,7 @@ export class UIHandler{
             
         }
     }
-
+ 
     drawHand(cards){
         Main.clearElement(this.handHTMLHandle)
         for(let i in cards){

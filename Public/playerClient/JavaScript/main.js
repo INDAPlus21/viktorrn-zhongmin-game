@@ -17,13 +17,13 @@ window.onload = function(){
     })
 }
 
-
-//neccessary Util functions
-export function doneWithStartingCards(){
+export function doneWithStartingCards(cards){
     UI_Handler.hideCardSelectionPage();
-    console.log("pickedCards")
+    console.log(cards);
 }
 
+
+//neccessary Util functions
 export function $(el) { return document.getElementById(el) };
 export function getOffset( el ) {
     var _x = 0;
