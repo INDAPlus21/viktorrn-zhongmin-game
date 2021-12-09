@@ -61,8 +61,8 @@ io.on('connection', (socket) => { // server is online
     else {
       socket.to(hostOf(roomId)).emit('isRoomOpen?', username, playerId, (answer) => {
 
-        if (answer === true)
-          callback('fail', 'Could not join room. It may be full, ingame, or the same name/client is already inside.');
+        if (answer[0] === true) // first element: whether it's closed or not
+          callback('fail', answer[1]); // second element: reason of close
         else
           callback('success');
           // the host client will have already added the player to the database back in the 'isRoomOpen?' event
