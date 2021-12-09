@@ -3,7 +3,7 @@ import * as UIHandler from './uiHandler.js';
 import * as DataManagerImport from '../../dataManager/dataManager.js';
 
 let currentlyYourTurn = false;
-let UI_Handler = new UIHandler.UIHandler($('handPoint'),$('cardPlacementSlots'),$('cardSelectionPage'),$('cardPickZone')); 
+let UI_Handler = new UIHandler.UIHandler($('handPoint'),$('actionSlots'),$('cardSelectionPage'),$('cardPickZone')); 
 let DataManager = new DataManagerImport.DataManager();
 let endTurnBtn = $('endTurnBtn');
 
@@ -25,13 +25,16 @@ $('joinServerBtn').onmousedown = () =>{
         if (verdict==='fail') $('loginErrorText').innerHTML = reason;
         else {
             $('login').classList.remove('onscreen');
-            $('selectstartercards').classList.add('onscreen');
+            $('selectStarterCards').classList.add('onscreen');
         }
     });
 }
 
-socket.on('startGame',()=>{
-    console.log("start game Event activated")
+socket.on('startGame', (playerId) => {
+    UI_Handler.hideCardSelectionPage();
+    if (playerId === socketId) {
+        $('playArea').classList.add('onscreen');
+    }
 })
 
 window.onload = function(){
@@ -39,16 +42,8 @@ window.onload = function(){
         let cards = []
         for(let i of DataManager.startingCards) cards.push(DataManager.getSpecificCard(i));
         UI_Handler.displayCardSelectionPage(cards,"startingPhase");
-        UI_Handler.drawDropZones();
+        UI_Handler.displayActionSlots('chooseCard',cards);
     })
-}
-
-
-
-function yourTurn(cardsInHand,cardsPlayed){ //will be changed to a socket on function
-    currentlyYourTurn = true;
-    UI_Handler.drawHand(cardsInHand);
-    UI_Handler.cardsPlayed = cardsPlayed;
 }
 
 
@@ -59,6 +54,10 @@ export function doneWithStartingCards(cards){
 }
 
 export function cardPlayed(cardName){
+
+}
+
+export function chooseCard(deck,cardType){
 
 }
 

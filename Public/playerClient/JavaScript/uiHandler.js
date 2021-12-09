@@ -14,22 +14,16 @@ export class UIHandler{
 
     cardsPlayed = null;
 
-    constructor(handHTMLHandle,cardPlacementSlotsHandle,cardSelectionPageHTMLHandle,cardPickZoneHTMLHandle){
+    constructor(handHTMLHandle,actionSlotsHTMLHandle,cardSelectionPageHTMLHandle,cardPickZoneHTMLHandle){
         this.handHTMLHandle = handHTMLHandle;
-        this.cardPlacementSlotsHTMLHandle = cardPlacementSlotsHandle;
+        this.actionSlotsHTMLHandle = actionSlotsHTMLHandle;
         this.cardSelectionPageHTMLHandle = cardSelectionPageHTMLHandle;
         this.cardPickZoneHTMLHandle = cardPickZoneHTMLHandle;
-    }
-
-    //entry
-    selectedStartingCard(card){
-        
     }
 
     //for card picking
     displayCardSelectionPage(cards,phase){
         this.cardsPicked = [];
-
         this.cardSelectionPageHTMLHandle.style.top = '0px';
         for(let i in cards){
             let div = Card.getCardDiv(cards[i]);
@@ -54,23 +48,55 @@ export class UIHandler{
         card.style.opacity = 0;
     }
 
-    // for card playing
+    // for gameLogic
 
-    drawDropZones(){
-        Main.clearElement(this.cardPlacementSlotsHTMLHandle);
-        for(let i in [1,2,3,4]){
-            let div =  document.createElement('div');
-            div.setAttribute('class','cardSlot');
-            this.cardPlacementSlotsHTMLHandle.appendChild(div);
+
+    displayActionSlots(state,deck){
+        Main.clearElement(this.actionSlotsHTMLHandle);
+        switch(state){
+
+            case 'playCards':
+                for(let i in [1,2,3,4]){
+                    let div =  document.createElement('div');
+                    div.setAttribute('class','cardSlot');
+                    this.actionSlotsHTMLHandle.appendChild(div);
+                }
+            break;
+
+            case 'chooseCard':
+                    let squirrel = document.createElement('div');
+                    squirrel.setAttribute('class','card');
+                    let name = document.createElement('div');
+                    name.innerText = "Squirrel";
+                    name.setAttribute('class','name')
+                    squirrel.appendChild(name);
+                    this.actionSlotsHTMLHandle.appendChild(squirrel);
+
+                    if(deck.length > 0){
+                        let beast =  document.createElement('div');
+                        beast.setAttribute('class','card');
+                        name = document.createElement('div');
+                        name.innerText = "Beast";
+                        name.setAttribute('class','name')
+                        beast.appendChild(name);
+                        this.actionSlotsHTMLHandle.appendChild(beast);
+                    }
+            break;
+
+            case 'waitingForTurn':
+                let div =  document.createElement('div');
+                div.setAttribute('class','waitTingForTurn');
+                div.innerText = "Waiting For Turn...";
+                this.actionSlotsHTMLHandle.appendChild(div);
+            break;
         }
-
     }
 
     activateDropZone(){
         //change it based on
 
-        for(let i in this.cardPlacementSlotsHTMLHandle.children){
-            let el = this.cardPlacementSlotsHTMLHandle.children[i];
+        for(let i in this.actionSlotsHTMLHandle.children){
+            let el = this.actionSlotsHTMLHandle.children[i];
             if(el.tagName == 'DIV' && !el.hasChildNodes()){
                 el.style.transform = 'scale(1.1)';
                 el.onpointerover = () =>{
@@ -88,8 +114,8 @@ export class UIHandler{
     }
 
     disableDropZone(){
-        for(let i in this.cardPlacementSlotsHTMLHandle.children){
-            let el = this.cardPlacementSlotsHTMLHandle.children[i];
+        for(let i in this.actionSlotsHTMLHandle.children){
+            let el = this.actionSlotsHTMLHandle.children[i];
             if(el.tagName == 'DIV'){
                 el.style.transform = ''; 
                 el.style.border = '';
@@ -100,7 +126,9 @@ export class UIHandler{
             
         }
     }
- 
+
+    //for handling card actions
+
     drawHand(cards){
         Main.clearElement(this.handHTMLHandle)
         for(let i in cards){
@@ -119,8 +147,6 @@ export class UIHandler{
             this.handHTMLHandle.appendChild(card);
         }
     }
-
-    //for handling card actions
 
     selectedHandCard(card){
         //animate card klicked

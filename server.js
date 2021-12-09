@@ -89,6 +89,12 @@ io.on('connection', (socket) => { // server is online
     socket.to(roomId).except(hostOf(roomId)).emit('startGame', firstPlayerId);
   });
 
+  // event from player: player either draws a card from their deck, or a squirrel.
+  socket.on('playerDrawCard', (roomId, playerId, deck, callback) => {
+    let hostSocket = io.sockets.sockets.get(hostOf(roomId)); //this allows you to emit with callback -SO
+    hostSocket.emit('playerDrawCard', playerId, deck, (drawnCard) => { callback(drawnCard); });
+  });
+
   // event from player: player is playing a card on the field.
   socket.on('playerPlayCard', (roomId, playerId, card, column) => {
     socket.to(hostOf(roomId)).emit('playerPlayCard', playerId, card, column);

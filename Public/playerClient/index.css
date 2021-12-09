@@ -135,7 +135,7 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
 }
 
 /*For playing cards*/
-#cardPlacementSlots{
+#actionSlots{
     position: absolute;
     z-index: 1;
     top: 10%;
@@ -144,7 +144,7 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
     text-align: center;
 }
 
-.cardSlot{
+#actionSlots .cardSlot{
     position: relative;
     display: inline-block;
     width: 120px;
@@ -160,12 +160,32 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
     
 }
 
-.cardSlot .card{
+#actionSlots .cardSlot .card{
     position: absolute;
     top:0px;
     margin: -10px;
 
     transition: top 0.5s linear;
+}
+
+#actionSlots .card{
+    position: relative;
+    display: inline-block;
+    margin:0 20px 0 20px;
+    transition: border 1s, transform 0.3s;
+    transition-timing-function: cubic-bezier(0,.95,.25,1);
+}
+
+#actionSlots .card:hover{
+    transform: scale(1.05);
+}
+
+#actionSlots .waitTingForTurn{
+    font-size: 5em;
+    position: fixed;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
 }
 
 /*For the hand*/

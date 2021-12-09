@@ -7,6 +7,27 @@ let playerInfo = new Object();
 
 let GAMESTATE = 'lobby';
 
+let boardInfo = {
+  player1: [
+    {
+      name: 'Starvation',
+      health: '6',
+      power: '6',
+      sigil: ['air'],
+      age: '0'
+    },
+    null,
+    null,
+    null
+  ],
+  player2: [
+    null,
+    null,
+    null,
+    null
+  ]
+}
+
 // socket connection
 socket.on('connect', () => {// run this when connected
   console.log("I'm online! with id " + socket.id);
@@ -31,7 +52,7 @@ socket.on('connect', () => {// run this when connected
     if (answer[1] === null) { // if none of the above failure conditions match, let the player in
       callback(answer); // tell the player they will be joining
 
-      let playerObj = {'name': playerName, 'id': playerId, 'deck': [], 'blood': 0}
+      let playerObj = {name:playerName, id:playerId, originalDeck:[], remainingDeck:[], hand:[], blood:0}
 
       if (playerInfo.player1 === undefined) {
         playerInfo.player1 = playerObj;
@@ -44,8 +65,6 @@ socket.on('connect', () => {// run this when connected
       answer[0] = true;
       callback(answer);
     }
-
-    console.log("player Joined",playerInfo)
   })
 
   socket.on('playerReady', (playerId, deck) => {
@@ -60,12 +79,20 @@ socket.on('connect', () => {// run this when connected
       }
 
     // check if game can start // cheep as error handling, yes box
-    let deck1 = playerInfo.player1.deck
-    let deck2 = playerInfo.player2.deck
-    if (deck1 !== undefined && deck1.length !== 0 && deck2 !== undefined && deck2.length !== 0) {
-      socket.emit('startGame', roomId, playerInfo.player1.playerId)
-    }
-
+    if (playerInfo.player1.deck.length !== 0 && playerInfo.player2.deck.length !== 0)
+      socket.emit('startGame', roomId, playerInfo.player1.playerId);
+      GAMESTATE = 'ingame';
     }catch{}
+  });
+
+  socket.on('playerDrawCard', (playerId, deck, callback) => {
+
+  });
+
+  socket.on('playerEndTurn', (playerId) => {
+    if (playerInfo.player1.id === playerId) {
+    }
+    if (playerInfo.player2.id === playerId) {
+    }
   });
 });
