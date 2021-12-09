@@ -1,4 +1,5 @@
 import * as UIHandler from './uiHandler.js';
+import * as DataManagerImport from '../../dataManager/dataManager.js';
 
 class GameObject{
     players = []
@@ -28,13 +29,14 @@ class Card{
 
 
 let UI_Handler = new UIHandler.UIHandler($('cardSelectionPage'),$('cardPickZone'));
+let DataManager = new DataManagerImport.DataManager();
+DataManager.readCardDataFromJSON();
 let boolToggle = false;
 let cards = [1,2,3,4,5,6]
 
 
 window.onload = function(){
     $('SelectionPageShow').onpointerdown = () =>{
-        
         if(boolToggle == false){
             boolToggle = true;
             UI_Handler.displayCardSelectionPage(cards);
@@ -44,12 +46,6 @@ window.onload = function(){
         }
     }
 }
-
-function displayCardPickingPage(){
-
-}
-
-
 
 //neccessary Util functions
 export function $(el) { return document.getElementById(el) };
