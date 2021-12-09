@@ -5,13 +5,19 @@ import * as DataManagerImport from '../../dataManager/dataManager.js';
 let card = [1,2,3,4,5,6,7];
 let UI_Handler = new UIHandler.UIHandler($('handPoint'),$('cardPlacementSlots'),$('cardSelectionPage'),$('cardPickZone')); 
 let DataManager = new DataManagerImport.DataManager();
+
 let endTurnBtn = $('endTurnBtn')
 
+
 window.onload = function(){
-    UI_Handler.drawHand(card);
-    UI_Handler.drawDropZones();
-    //UI_Handle.displayCardSelectionZone([1,2,3,4,5,6,7,8,9,10],'startingPhase');
+    DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager,(Manager = DataManager) => {
+        let cards = []
+        for(let i of DataManager.startingCards) cards.push(DataManager.getSpecificCard(i));
+        //UI_Handler.displayCardSelectionPage(cards,"startingPhase");
+        UI_Handler.drawHand(cards);
+    })
 }
+
 
 
 
@@ -36,7 +42,7 @@ export function clearElement(el){
 export function getUIHandler(){
     return UI_Handler;
 }
-export function getCardLib(){
+export function getDataManager(){
     return DataManager;
 }
 export function cloneObject(obj){

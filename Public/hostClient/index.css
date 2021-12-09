@@ -61,6 +61,43 @@ body::-webkit-scrollbar {
     height:180px;
     border-radius: 20px;
     border: 10px solid black;
+    vertical-align: top;
+}
+
+.card{
+    
+}
+
+.name{
+    font-size: 2.2em;
+    height: 20px;
+    width: 100%;
+}
+
+.damage{
+    font-size: 2.5em;
+    font-weight: bold;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: rgb(110, 30, 30);
+}
+
+.health{
+    font-size: 2.5em;
+    font-weight: bold;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    color: rgb(88, 149, 69);
+}
+
+.cost{
+    font-size: 2em;
+    font-weight: bold;
+    position: absolute;
+    bottom: 80px;
+    width: 100%;
 }
 
 #BigBoiTextDisplay{

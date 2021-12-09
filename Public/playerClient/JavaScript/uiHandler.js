@@ -19,14 +19,12 @@ export class UIHandler{
         this.cardPickZoneHTMLHandle = cardPickZoneHTMLHandle;
     }
 
-    
-
     //for card picking
 
-    displayCardSelectionZone(cards,phase){
-        this.cardSelectionPageHTMLHandle.style.left = '0px';
+    displayCardSelectionPage(cards,phase){
+        this.cardSelectionPageHTMLHandle.style.top = '0px';
         for(let i in cards){
-            let div = Card.getCardDiv(i);
+            let div = Card.getCardDiv(cards[i]);
             div.id = ('pickCardIndex'+i);
             div.setAttribute('pickCardIndex',i);
             div.onpointerdown = () => {Card.pickCardKlicked(div,phase)};
@@ -34,8 +32,8 @@ export class UIHandler{
         }
     }
 
-    hideCardSelectionZone(){
-        this.cardSelectionPageHTMLHandle.style.left = '-100%';
+    hideCardSelectionPage(){
+        this.cardSelectionPageHTMLHandle.style.top = '-100%';
     }
 
     selectedStartingCard(card){
@@ -107,7 +105,7 @@ export class UIHandler{
     drawHand(cards){
         Main.clearElement(this.handHTMLHandle)
         for(let i in cards){
-            let div = Card.getCardDiv(i);
+            let div = Card.getCardDiv(cards[i]);
             div.onpointerover = Card.handCardHover;
             div.onpointerleave = Card.handCardStopHover;
             this.handHTMLHandle.appendChild(div);

@@ -30,7 +30,6 @@ class Card{
 
 let UI_Handler = new UIHandler.UIHandler($('cardSelectionPage'),$('cardPickZone'));
 let DataManager = new DataManagerImport.DataManager();
-DataManager.readCardDataFromJSON();
 let boolToggle = false;
 let cards = [1,2,3,4,5,6]
 

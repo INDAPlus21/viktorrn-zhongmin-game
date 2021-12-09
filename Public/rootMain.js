@@ -1,7 +1,7 @@
 function $(el){return document.getElementById(el)}
 
 $('hostServer').onclick = () =>{
-    window.location.href = './serverClient/';
+    window.location.href = './hostClient/';
 }
 
 $('joinServerBtn').onclick = () =>{

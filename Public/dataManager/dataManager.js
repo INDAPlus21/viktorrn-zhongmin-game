@@ -3,13 +3,20 @@ export class DataManager{
 
     constructor(){
         this.cardLibrary = new Array();
+        this.startingCards = new Array();
         this.sigilLibrary = new Array();
     }
 
-    readJSONFile(filePath,callBack,self){
+    parseCardDataFromJSON(filePath,lib,callback){
         fetch(filePath).then(result => result.json())
         .then(result => {
-            callBack(result,self);
+            for(let i in result.cards){
+                lib.cardLibrary.push(result.cards[i]);
+            }
+            for(let c in result.startingCards){
+                lib.startingCards.push(result.startingCards[c]);
+            }
+            callback();
             return true;
         })
         .catch(error =>{
@@ -22,25 +29,15 @@ export class DataManager{
 
     }
 
-    readCardDataFromJSON(filePath){
-        this.readJSONFile(this.jsonPath+'cards.json',this.handleCardData,this);
-    }
-
-    handleCardData(data,self){
-        for(let i in data.cards){
-            self.cardLibrary.push(data.cards[i]);
-        }
-        console.log(data,self);
-    }
-
-
-
     getGameCardTable(){
 
     }
 
     getSpecificCard(name){
-        
+       for(let c of this.cardLibrary){
+           if(c.name == name) return this.cloneObject(c);
+       } 
+       return null;
     }
 
     cloneObject(obj){
