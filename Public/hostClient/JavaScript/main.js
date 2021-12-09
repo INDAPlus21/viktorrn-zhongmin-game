@@ -1,28 +1,6 @@
 import * as UIHandler from './uiHandler.js';
 import * as DataManagerImport from '../../dataManager/dataManager.js';
 
-let socket = io(); // event listener/emitter
-let socketId; // the client's unique id for the socket connection
-let roomId; // room id
-let playerInfo = new Object();
-/*
-  playerInfo =
-  {
-    "player1": {
-      "name": ...,
-      "id": ...,
-      "deck": [],
-      "blood": 0
-    },
-    "player2": {
-      ...
-    }
-  }
-  Use a different object for common game stats like the damage scale maybe?
-*/
-
-let GAMESTATE = 'lobby';
-
 class GameObject{
     players = []
     playerTurn = null; // can be either 0 or 1 depending on player based on index in players  
@@ -44,6 +22,7 @@ let cards = [1,2,3,4,5,6]
 window.onload = function(){
 }
 
+<<<<<<< HEAD
 // socket connection
 socket.on('connect', () => {// run this when connected
   console.log("I'm online! with id " + socket.id);
@@ -85,6 +64,8 @@ socket.on('connect', () => {// run this when connected
   });
 });
 
+=======
+>>>>>>> 464d25618e8ce4e1d98d2e2a740d47e57be15100
 //neccessary Util functions
 export function $(el) { return document.getElementById(el) };
 export function getOffset( el ) {
