@@ -91,7 +91,7 @@ io.on('connection', (socket) => { // server is online
 
   // event from player: player is playing a card on the field.
   socket.on('playCard', (roomId, playerId, card, column) => {
-
+    
   });
 
 
