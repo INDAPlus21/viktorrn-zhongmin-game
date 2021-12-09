@@ -12,6 +12,19 @@ body{
     padding: 0;
     overflow-x: hidden;
 }
+
+section { /* Different sections to simulate page changes, while still staying on the same page */
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: none;
+}
+section.onscreen {
+    display: block;
+}
+
 .backgroundDiv{
     position: absolute;
     top:0;
