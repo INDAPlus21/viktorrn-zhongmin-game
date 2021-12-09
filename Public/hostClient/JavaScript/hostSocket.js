@@ -28,6 +28,30 @@ let boardInfo = {
   ]
 }
 
+function isPlayer (playerId) {
+  if (playerInfo.player1.id === playerId) return 1;
+  else if (playerInfo.player2.id === playerId) return 2;
+  else return false;
+}
+
+function shuffle (array) {
+  let currentIndex = array.length,  randomIndex;
+
+  // While there remain elements to shuffle...
+  while (currentIndex != 0) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+
+  return array;
+}
+
 // socket connection
 socket.on('connect', () => {// run this when connected
   console.log("I'm online! with id " + socket.id);
@@ -69,24 +93,36 @@ socket.on('connect', () => {// run this when connected
 
   socket.on('playerReady', (playerId, deck) => {
     try{
-      if (playerInfo.player1.id === playerId) {
-        playerInfo.player1.deck = deck;
+      if (isPlayer(playerId)===1) {
+        playerInfo.player1.originalDeck = deck;
         $('player1State').innerHTML = `<span>${playerInfo.player1.name}</span><br><b>READY!</b>`
       }
-      if (playerInfo.player2.id === playerId) {
-        playerInfo.player2.deck = deck;
+      if (isPlayer(playerId)===2) {
+        playerInfo.player2.originalDeck = deck;
         $('player2State').innerHTML = `<span>${playerInfo.player2.name}</span><br><b>READY!</b>`
       }
 
     // check if game can start // cheep as error handling, yes box
-    if (playerInfo.player1.deck.length !== 0 && playerInfo.player2.deck.length !== 0)
+    if (playerInfo.player1.originalDeck.length !== 0 && playerInfo.player2.originalDeck.length !== 0)
+      // copy original deck to remaining deck for the game
+      playerInfo.player1.remainingDeck = shuffle(playerInfo.player1.originalDeck);
+      playerInfo.player2.remainingDeck = shuffle(playerInfo.player2.originalDeck);
+      // start this mf
       socket.emit('startGame', roomId, playerInfo.player1.playerId);
       GAMESTATE = 'ingame';
     }catch{}
   });
 
-  socket.on('playerDrawCard', (playerId, deck, callback) => {
+  socket.on('playerDrawCard', (playerId, callback) => {
+    let remaining = playerInfo['player'+isPlayer(playerId)].remainingDeck;
 
+    let card = remaining.shift(); // the card that was drawn - undefined if empty
+
+    callback(card); // send the card back for stuff like animations?
+
+    playerInfo['player'+isPlayer(playerId)].hand.push(remaining.shift()); // get first element of deck, remove first element from deck
+
+    socket.emit('syncHand')
   });
 
   socket.on('playerEndTurn', (playerId) => {

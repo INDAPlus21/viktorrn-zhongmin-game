@@ -1,11 +1,16 @@
 import * as Card from './cards.js';
 import * as UIHandler from './uiHandler.js';
 import * as DataManagerImport from '../../dataManager/dataManager.js';
+import e from 'express';
 
 let currentlyYourTurn = false;
 let UI_Handler = new UIHandler.UIHandler($('handPoint'),$('actionSlots'),$('cardSelectionPage'),$('cardPickZone')); 
 let DataManager = new DataManagerImport.DataManager();
 let endTurnBtn = $('endTurnBtn');
+
+let playerHand;
+let playerBoard;
+let yourTurn = false;
 
 let socket = io(); // event listener/emitter
 let roomId; // room id
@@ -37,6 +42,20 @@ socket.on('startGame', (playerId) => {
     }
 })
 
+socket.on('syncHand', (hand,board) => {
+    playerHand = [];
+    for(let i in hand){
+        playerHand.push().DataManager.getSpecificCard(hand[i]);
+    }
+    UI_Handler.drawHand(playerHand);
+});
+
+socket.on('startTurn', (playerId,playerBoard) => {
+    if (playerId === socketId) {
+        
+    }
+})
+
 window.onload = function(){
     DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager,(Manager = DataManager) => {
         let cards = []
@@ -53,11 +72,18 @@ export function doneWithStartingCards(cards){
     // @viktor at here, maybe change to another section that is just a blank waiting screen
 }
 
-export function cardPlayed(cardName){
+export function chooseCard(cardType,deck){
+    switch(cardType){
+        case 'beast':
 
+            break;
+        case 'squirrel':
+
+            break;
+    }
 }
 
-export function chooseCard(deck,cardType){
+export function cardPlayed(cardName){
 
 }
 
@@ -84,6 +110,14 @@ export function getUIHandler(){
 export function getDataManager(){
     return DataManager;
 }
+export function getPlayerBoard(){
+    return playerBoard;
+}
+
+export function getYourTurn(){
+    return yourTurn;
+}
+
 export function cloneObject(obj){
     return JSON.parse(JSON.stringify(obj));
 }

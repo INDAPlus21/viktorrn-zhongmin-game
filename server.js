@@ -91,8 +91,12 @@ io.on('connection', (socket) => { // server is online
 
   // event from player: player either draws a card from their deck, or a squirrel.
   socket.on('playerDrawCard', (roomId, playerId, deck, callback) => {
-    let hostSocket = io.sockets.sockets.get(hostOf(roomId)); //this allows you to emit with callback -SO
-    hostSocket.emit('playerDrawCard', playerId, deck, (drawnCard) => { callback(drawnCard); });
+    if (deck === 'squirrel') // squirrel is infinite (for now) so no need to ask the host for the deck
+      callback('squirrel');
+    else {
+      let hostSocket = io.sockets.sockets.get(hostOf(roomId)); //this allows you to emit with callback -SO
+      hostSocket.emit('playerDrawCard', playerId, (drawnCard) => { callback(drawnCard); });
+    }
   });
 
   // event from player: player is playing a card on the field.
@@ -110,9 +114,15 @@ io.on('connection', (socket) => { // server is online
     socket.to(hostOf(roomId)).emit('playerEndTurn', playerId);
   });
 
+  // event from host: the player's hand is updated with the list from the host, to eliminate desync issues.
+  // this is triggered in multiple places.
+  socket.on('syncHand', (roomId, playerId, playerHand) => {
+    socket.to(playerId).emit('syncHand', playerHand);
+  });
+
   // event from host: the specified player starts their turn. The other player's turn, if it's still active for some reason, is stopped.
-  socket.on('startTurn', (roomId, playPlayerId) => {
-    socket.to(roomId).except(hostOf(roomId)).emit('startTurn', playPlayerId);
+  socket.on('startTurn', (roomId, playPlayerId, playerBoard) => {
+    socket.to(roomId).except(hostOf(roomId)).emit('startTurn', playPlayerId, playerBoard);
   });
 
   // event from host: the game has ended, the specified player display that they won, the other player that they lost.

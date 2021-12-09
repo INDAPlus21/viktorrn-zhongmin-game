@@ -7,7 +7,6 @@ export class UIHandler{
     cardsPicked;
     cardPickingPhase = null;
 
-    yourTurnToPickCard = true;
     currentCardSelected = null;
     currentDisplayedCard = null;
     cardWasPlayed = false;
@@ -53,6 +52,7 @@ export class UIHandler{
 
     displayActionSlots(state,deck){
         Main.clearElement(this.actionSlotsHTMLHandle);
+        let div;
         switch(state){
 
             case 'playCards':
@@ -66,6 +66,10 @@ export class UIHandler{
             case 'chooseCard':
                     let squirrel = document.createElement('div');
                     squirrel.setAttribute('class','card');
+                    squirrel.onpointerdown = () =>{
+                        Main.clearElement(this.actionSlotsHTMLHandle);
+                        Main.chooseCard('squirrel');
+                    }
                     let name = document.createElement('div');
                     name.innerText = "Squirrel";
                     name.setAttribute('class','name')
@@ -75,6 +79,10 @@ export class UIHandler{
                     if(deck.length > 0){
                         let beast =  document.createElement('div');
                         beast.setAttribute('class','card');
+                        beast.onpointerdown = () =>{
+                            Main.clearElement(this.actionSlotsHTMLHandle);
+                            Main.chooseCard('beast');
+                        }
                         name = document.createElement('div');
                         name.innerText = "Beast";
                         name.setAttribute('class','name')
@@ -84,9 +92,23 @@ export class UIHandler{
             break;
 
             case 'waitingForTurn':
-                let div =  document.createElement('div');
+                div =  document.createElement('div');
                 div.setAttribute('class','waitTingForTurn');
                 div.innerText = "Waiting For Turn...";
+                this.actionSlotsHTMLHandle.appendChild(div);
+            break;
+
+            case 'youLost':
+                div =  document.createElement('div');
+                div.setAttribute('class','waitTingForTurn');
+                div.innerText = "You Lost...";
+                this.actionSlotsHTMLHandle.appendChild(div);
+            break;
+
+            case 'youWon':
+                div =  document.createElement('div');
+                div.setAttribute('class','waitTingForTurn');
+                div.innerText = "You Won!";
                 this.actionSlotsHTMLHandle.appendChild(div);
             break;
         }
@@ -94,7 +116,6 @@ export class UIHandler{
 
     activateDropZone(){
         //change it based on
-
         for(let i in this.actionSlotsHTMLHandle.children){
             let el = this.actionSlotsHTMLHandle.children[i];
             if(el.tagName == 'DIV' && !el.hasChildNodes()){
@@ -136,7 +157,7 @@ export class UIHandler{
             //handle klick event
             card.onpointerover = () => {
                 card.onpointerdown = () => {
-                    if(Main.getUIHandler().currentCardSelected == null) Main.getUIHandler().selectedHandCard(card);
+                    if(Main.getUIHandler().currentCardSelected === null && Main.getYourTurn() === true) Main.getUIHandler().selectedHandCard(card);
                 }
             }
             //handle leave event
@@ -177,7 +198,7 @@ export class UIHandler{
        
   
         //activate drop zone
-        this.activateDropZone();
+        this.activateDropZone(board);
     }
 
     returnHandCard(){
