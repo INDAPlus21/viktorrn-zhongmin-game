@@ -22,50 +22,6 @@ let cards = [1,2,3,4,5,6]
 window.onload = function(){
 }
 
-<<<<<<< HEAD
-// socket connection
-socket.on('connect', () => {// run this when connected
-  console.log("I'm online! with id " + socket.id);
-  socketId = socket.id;
-
-  // this is only run once, when the host client connects
-  socket.emit('createRoom', socket.id, (generated) => {
-    roomId = generated;
-    console.log(roomId);
-    socket.join(roomId);
-  });
-
-  // playerClient's joinRoom -> server's isRoomOpen?
-  socket.on('isRoomOpen?', (playerName, playerId, callback) => {
-    let answer = new Array();
-    answer[0] = false;
-
-    answer[1] = (Object.keys(playerInfo).length > 1) ? "The room is full."
-              : (GAMESTATE !== 'lobby') ? "The game has already started."
-              : null;
-    
-    if (answer[1] === null) { // if none of the above failure conditions match, let the player in
-      callback(answer); // tell the player they will be joining
-
-      let playerObj = {'name': playerName, 'id': playerId, 'deck': [], 'blood': 0}
-
-      if (playerInfo.player1 === undefined)
-        playerInfo.player1 = playerObj;
-      else
-        playerInfo.player2 = playerObj;
-    } else {
-      answer[0] = true;
-      callback(answer);
-    }
-  })
-
-  socket.on('playerReady', (playerId, deck) => {
-    
-  });
-});
-
-=======
->>>>>>> 464d25618e8ce4e1d98d2e2a740d47e57be15100
 //neccessary Util functions
 export function $(el) { return document.getElementById(el) };
 export function getOffset( el ) {

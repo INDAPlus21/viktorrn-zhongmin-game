@@ -47,8 +47,6 @@ function yourTurn(cardsInHand,cardsPlayed){ //will be changed to a socket on fun
    
 }
 
-  
-
 export function doneWithStartingCards(cards){
     UI_Handler.hideCardSelectionPage();
     console.log(cards);
