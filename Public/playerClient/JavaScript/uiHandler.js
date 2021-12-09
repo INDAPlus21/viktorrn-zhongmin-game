@@ -104,17 +104,19 @@ export class UIHandler{
     drawHand(cards){
         Main.clearElement(this.handHTMLHandle)
         for(let i in cards){
-            let div = Card.getCardDiv(cards[i]);
-            div.onpointerover = () => {
-                div.onpointerdown = () => {
-                    if(Main.getUIHandler().currentCardSelected == null)
-                    Main.getUIHandler().selectedHandCard(div);
+            let card = Card.getCardDiv(cards[i]);
+            //handle klick event
+            card.onpointerover = () => {
+                card.onpointerdown = () => {
+                    if(Main.getUIHandler().currentCardSelected == null) Main.getUIHandler().selectedHandCard(card);
                 }
             }
-            div.onpointerleave = () =>{
-                div.onpointerdown = null;
+            //handle leave event
+            card.onpointerleave = () =>{
+                card.onpointerdown = null;
             }
-            this.handHTMLHandle.appendChild(div);
+            
+            this.handHTMLHandle.appendChild(card);
         }
     }
 
@@ -200,12 +202,16 @@ export class UIHandler{
             card.onpointerdown = null;
             card.onpointerout = null;
             el.appendChild(card);
+            
+            
             Main.getUIHandler().currentCardSelected = null;
             Main.getUIHandler().currentCardSelected = null;
             Main.getUIHandler().cardWasPlayed = false;
 
             Main.cardPlayed(card.getAttribute('cardName'));
             
+            
+
             clearInterval(animation);
           }, 150);
 
