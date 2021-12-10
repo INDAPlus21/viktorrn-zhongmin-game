@@ -3,7 +3,7 @@ import * as Main from './main.js';
 
 export class UIHandler{ 
 
-    amountOfStartingCards = 1;
+    amountOfStartingCards = 4;
     cardsPicked;
     cardPickingPhase = null;
 
