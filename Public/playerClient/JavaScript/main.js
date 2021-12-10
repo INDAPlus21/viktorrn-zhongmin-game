@@ -9,8 +9,7 @@ let DataManager = new DataManagerImport.DataManager();
 let endTurnBtn = $('endTurnBtn');
 
 let playerHand;
-let playerBoard;
-let yourTurn = false;
+let playerBoard = new Array();
 
 let socket = io(); // event listener/emitter
 let roomId; // room id
@@ -35,31 +34,29 @@ $('joinServerBtn').onmousedown = () =>{
     });
 }
 
-socket.on('startGame', (playerId,board) => {
+socket.on('startGame', () => {
     //UI_Handler.hideCardSelectionPage();
-    console.log("startGame")
     $('selectStarterCards').classList.remove('onscreen');
     $('playArea').classList.add('onscreen');
-    if (playerId === socketId) {
-        UI_Handler.displayActionSlots();
-        UI_Handler.drawHand();
-    }else{
-        UI_Handler.displayActionSlots('waitIngForTurn');
-    }
+    UI_Handler.displayActionSlots('waitingForTurn');
 })
 
-socket.on('syncHand', (hand,board) => {
+socket.on('syncHand', (hand) => {
     playerHand = [];
     for(let i in hand){
-        playerHand.push().DataManager.getSpecificCard(hand[i]);
+        playerHand.push(DataManager.getSpecificCard(hand[i]))
     }
-    UI_Handler.drawHand(playerHand);
+    //UI_Handler.drawHand(playerHand);
 });
 
-socket.on('startTurn', (playerId,playerBoard) => {
-    if (playerId === socketId) {
-        
-    }
+socket.on('startTurn', (pb , turn) => {
+    console.log("start Turn")
+    playerBoard = pb;
+    if(turn != 0){
+        UI_Handler.displayActionSlots('chooseCard');
+    }   
+    UI_Handler.displayActionSlots('playCards');
+    UI_Handler.drawHand(playerHand);
 })
 
 window.onload = function(){
@@ -89,8 +86,14 @@ export function chooseCard(cardType,deck){
     }
 }
 
-export function cardPlayed(cardName){
-
+export function cardPlayed(cardName,col){
+    for(let c in playerHand){
+        if(playerHand[c].name == cardName){
+            playerHand.splice(c,1);
+        }
+    }
+    console.log("col",col);
+    socket.emit('playerPlayCard', roomId, socketId, cardName, col);
 }
 
 //neccessary Util functions
@@ -118,10 +121,6 @@ export function getDataManager(){
 }
 export function getPlayerBoard(){
     return playerBoard;
-}
-
-export function getYourTurn(){
-    return yourTurn;
 }
 
 export function cloneObject(obj){

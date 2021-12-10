@@ -160,14 +160,6 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
     
 }
 
-#actionSlots .cardSlot .card{
-    position: absolute;
-    top:0px;
-    margin: -10px;
-
-    transition: top 0.5s linear;
-}
-
 #actionSlots .card{
     position: relative;
     display: inline-block;
@@ -178,6 +170,19 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
 
 #actionSlots .card:hover{
     transform: scale(1.05);
+}
+
+#actionSlots .cardSlot .card{
+    position: absolute;
+    top:0px;
+    margin: -10px -60px;
+
+    transition: top 0.5s linear, opacity 1s linear;
+    -webkit-transition: opacity 1s linear;
+}
+
+#actionSlots .cardSlot:hover{
+
 }
 
 #actionSlots .waitTingForTurn{

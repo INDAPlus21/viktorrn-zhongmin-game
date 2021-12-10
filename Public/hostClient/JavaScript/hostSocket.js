@@ -9,13 +9,7 @@ let GAMESTATE = 'lobby';
 
 let boardInfo = {
   player1: [
-    {
-      name: 'Starvation',
-      health: '6',
-      power: '6',
-      sigil: ['air'],
-      age: '0'
-    },
+    null,
     null,
     null,
     null
@@ -25,8 +19,18 @@ let boardInfo = {
     null,
     null,
     null
-  ]
+  ],
+  turn: 0,
+  p1damage: 0,
+  p2damage: 0
 }
+/*{
+  name: 'Starvation',
+  health: 6,
+  power: 6,
+  sigil: ['air'],
+  age: 0
+}*/
 
 function isPlayer (playerId) {
   if (playerInfo.player1.id === playerId) return 1;
@@ -110,31 +114,56 @@ socket.on('connect', () => {// run this when connected
       playerInfo.player2.remainingDeck = shuffle(playerInfo.player2.originalDeck);
       // start this mf
       //starts with giving player 1 the cards and then prompting
-      socket.emit('startGame', roomId, playerInfo.player1.playerId);
-      socket.emit('syncHand', roomId, playerInfo.player1.playerId,playerInfo.player1.remainingDeck)
+      let turn = 0;
+      socket.emit('startGame', roomId, playerInfo.player1.id, playerInfo.player2.id);
+      socket.emit('syncHand', playerInfo.player1.id, playerInfo.player1.remainingDeck);
+      socket.emit('startTurn', playerInfo.player1.id, boardInfo.player1, turn);
       GAMESTATE = 'ingame';
       $('bodyPregame').classList.remove('onscreen');
       $('bodyIngame').classList.add('onscreen');
     }
-    }catch{}
+    }catch (error) {
+      console.log(error);
+      console.log(playerInfo);
+    }
   });
 
   socket.on('playerDrawCard', (playerId, callback) => {
     let remaining = playerInfo['player'+isPlayer(playerId)].remainingDeck;
-    // @hex, you only need to shuffle once, on the StartTurn event as its allways called prior to this event
     let card = remaining.shift(); // the card that was drawn - undefined if empty
-
     callback(card); // send the card back for stuff like animations?
 
-    playerInfo['player'+isPlayer(playerId)].hand.push(remaining.shift()); // get first element of deck, remove first element from deck
-
-    socket.emit('syncHand')
+    let i = isPlayer(playerId);
+    playerInfo['player'+i].hand.push(remaining.shift()); // get first element of deck, remove first element from deck
+    let hand = playerInfo['player'+i].hand;
+    socket.emit('syncHand', playerId, hand);
   });
 
-  socket.on('playerEndTurn', (playerId) => {
-    if (playerInfo.player1.id === playerId) {
+  // big calculations in here!!!!
+  socket.on('playerEndTurn', async (playerId) => {
+    let i = isPlayer(playerId); // get which player it is
+    let n = i===1 ? 2 : 1; // get the number of the opposite player
+
+    for (let k=0; k<4; k++) { // loop through all 4 columns
+
+      let thisCard = boardInfo['player'+i][k]; // the card at this position
+      if (thisCard === null) continue; // if there is no card here, continue to the next column
+
+      else { // if there IS a card here
+        if (thisCard.age > 0) { // and it can attack
+          let opposingCard = boardInfo['player'+n][k]; // get the opposing card
+
+          if (opposingCard === null || thisCard.sigil.includes('air')) {
+            p1damage += thisCard.power; // if there is no card opposing it OR if this card ignores opposing cards, attack the player
+          } else {
+            opposingCard.health -= thisCard.power; // attack the opposing card
+            if (opposingCard.health <= 0) boardInfo['player'+n][k] = null // set column to null if it dies from the attack
+          }
+        }
+        thisCard.age += 1 // age by 1
+      }
     }
-    if (playerInfo.player2.id === playerId) {
-    }
+
+    
   });
 });

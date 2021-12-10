@@ -3,7 +3,7 @@ import * as Main from './main.js';
 
 export class UIHandler{ 
 
-    amountOfStartingCards = 5;
+    amountOfStartingCards = 1;
     cardsPicked;
     cardPickingPhase = null;
 
@@ -114,11 +114,10 @@ export class UIHandler{
         }
     }
 
-    activateDropZone(){
-        //change it based on
-        for(let i in this.actionSlotsHTMLHandle.children){
+    activateDropZone(board){
+        for(let i in board){
             let el = this.actionSlotsHTMLHandle.children[i];
-            if(el.tagName == 'DIV' && !el.hasChildNodes()){
+            if(board[i] == null){
                 el.style.transform = 'scale(1.1)';
                 el.onpointerover = () =>{
                     el.style.border = '10px solid rgb(220, 220, 220)';
@@ -128,9 +127,10 @@ export class UIHandler{
                     el.style.transform = 'scale(1.1)'; 
                     el.style.border = '';
                 }
-                el.onpointerdown = this.playedCard;
+                el.onpointerdown = () =>{
+                    this.playedCard(i,el);
+                } 
             }
-            
         }
     }
 
@@ -156,8 +156,11 @@ export class UIHandler{
             let card = Card.getCardDiv(cards[i]);
             //handle klick event
             card.onpointerover = () => {
+                
                 card.onpointerdown = () => {
-                    if(Main.getUIHandler().currentCardSelected === null && Main.getYourTurn() === true) Main.getUIHandler().selectedHandCard(card);
+                    console.log("card klicked",Main.getUIHandler())
+                    
+                    if(Main.getUIHandler().currentCardSelected === null) Main.getUIHandler().selectedHandCard(card);
                 }
             }
             //handle leave event
@@ -198,7 +201,7 @@ export class UIHandler{
        
   
         //activate drop zone
-        this.activateDropZone(board);
+        this.activateDropZone(Main.getPlayerBoard());
     }
 
     returnHandCard(){
@@ -228,18 +231,20 @@ export class UIHandler{
         this.disableDropZone();
     }
 
-    playedCard(){
+    playedCard(col,target){
         Main.getUIHandler().cardWasPlayed = true;
         let displayCard = Main.getUIHandler().currentDisplayedCard;
         let selectedCard = Main.getUIHandler().currentCardSelected;
-        let pos = Main.getOffset(this); 
+        let pos = Main.getOffset(target); 
         displayCard.style.left = pos.left +'px';
         displayCard.style.top = pos.top + 'px';
         displayCard.style.transform = '';
 
         Main.getUIHandler().disableDropZone();
+        Main.getPlayerBoard()[col] = 0;
 
-        var animation = setInterval((el = this,dispCard = displayCard,card = selectedCard) => { //used for display animation
+        var animation = setInterval((el = target,dispCard = displayCard,card = selectedCard) => { //used for display animation
+            
             el.onpointerdown = null;
             window.onpointerdown = null;
             document.body.removeChild(dispCard);
@@ -249,13 +254,13 @@ export class UIHandler{
             card.onpointerdown = null;
             card.onpointerout = null;
             el.appendChild(card);
-            
-            
+            card.style.opacity = '0';
+
             Main.getUIHandler().currentCardSelected = null;
             Main.getUIHandler().currentCardSelected = null;
             Main.getUIHandler().cardWasPlayed = false;
 
-            Main.cardPlayed(card.getAttribute('cardName'));
+            Main.cardPlayed(card.getAttribute('cardName'),col);
             
             
 

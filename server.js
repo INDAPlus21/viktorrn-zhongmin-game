@@ -86,9 +86,10 @@ io.on('connection', (socket) => { // server is online
 
   // event from host: both players have locked in their decks: change player's UI to game field, and the player with firstPlayerId starts their round first.
   // startgame event should prompt player 1 to be able to play
-  socket.on('startGame', (roomId, firstPlayerId, board) => { 
-    console.log("startGame init")
-    socket.to(roomId).except(hostOf(roomId)).emit('startGame', firstPlayerId,board);
+  socket.on('startGame', (roomId, firstPlayerId, secondPlayerId) => { 
+    socket.to(firstPlayerId).emit('startGame');
+    socket.to(secondPlayerId).emit('startGame');
+    //socket.to(firstPlayerId).emit('startTurn', playerBoard, canDrawCard);
   });
 
   // event from player: player either draws a card from their deck, or a squirrel.
@@ -101,30 +102,30 @@ io.on('connection', (socket) => { // server is online
     }
   });
 
-  // event from player: player is playing a card on the field.
-  socket.on('playerPlayCard', (roomId, playerId, card, column) => {
-    socket.to(hostOf(roomId)).emit('playerPlayCard', playerId, card, column);
-  });
-
-  // event from player: player is sacrificing a card on the field and should receive 1 blood.
-  socket.on('playerSacrificeCard', (roomId, playerId, column) => {
-    socket.to(hostOf(roomId)).emit('playerSacrificeCard', playerId, card, column);
-  });
-
-  // event from player: player is ending turn
-  socket.on('playerEndTurn', (roomId, playerId) => {
-    socket.to(hostOf(roomId)).emit('playerEndTurn', playerId);
+  // event from host: the specified player starts their turn.
+  socket.on('startTurn', (playerId, playerBoard, turn) => {
+    socket.to(playerId).emit('startTurn', playerBoard, turn);
   });
 
   // event from host: the player's hand is updated with the list from the host, to eliminate desync issues.
   // this is triggered in multiple places.
-  socket.on('syncHand', (roomId, playerId, playerHand) => {
+  socket.on('syncHand', (playerId, playerHand) => {
     socket.to(playerId).emit('syncHand', playerHand);
   });
 
-  // event from host: the specified player starts their turn. The other player's turn, if it's still active for some reason, is stopped.
-  socket.on('startTurn', (roomId, playPlayerId, playerBoard) => {
-    socket.to(roomId).except(hostOf(roomId)).emit('startTurn', playPlayerId, playerBoard);
+ // event from player: player is ending turn
+ socket.on('playerEndTurn', (roomId, playerId) => {
+  socket.to(hostOf(roomId)).emit('playerEndTurn', playerId);
+});
+
+  // event from player: player is playing a card on the field.
+  socket.on('playerPlayCard', (roomId, playerId, card, column) => {
+    socket.to(hostOf(roomId)).emit('playerPlayCard', playerId, card, column);
+  });
+  // did
+  // event from player: player is sacrificing a card on the field and should receive 1 blood.
+  socket.on('playerSacrificeCard', (roomId, playerId, column) => {
+    socket.to(hostOf(roomId)).emit('playerSacrificeCard', playerId, card, column);
   });
 
   // event from host: the game has ended, the specified player display that they won, the other player that they lost.
