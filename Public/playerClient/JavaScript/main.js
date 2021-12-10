@@ -43,6 +43,7 @@ socket.on('startGame', () => {
 })
 
 socket.on('syncClient', (hand,playerboard,bloodLevel) => {
+    console.log("sync",hand,playerboard,bloodLevel)
     playerHand = hand;
     playerBoard = playerboard;
     playerBloodLevel = bloodLevel;
@@ -53,9 +54,11 @@ socket.on('syncClient', (hand,playerboard,bloodLevel) => {
 });
 
 socket.on('startTurn', (turn) => {
-    if(turn != 0){
+    console.log("playerHand",playerHand,"start");
+    if(turn !== 0){
         UI_Handler.displayActionSlots('chooseCard');
     }   
+    
     UI_Handler.displayActionSlots('playCards');
     UI_Handler.drawHand(playerHand);
 })
@@ -66,13 +69,18 @@ window.onload = function(){
         for(let i of DataManager.startingCards) cards.push(DataManager.getSpecificCard(i));
         UI_Handler.displayCardSelectionPage(cards,"startingPhase");
         UI_Handler.displayActionSlots('chooseCard',cards);
+        $('endTurnBtn').onpointerdown = endTurn();
     })
 }
 
 
 // this function is run when the player is done selecting their starting deck and is ready to play
 export function doneWithStartingCards(cards){
-    socket.emit('ready', roomId, socketId, cards);
+    let deck = [];
+    for(let i in cards){
+        deck.push(DataManager.getSpecificCard(cards[i]))
+    }
+    socket.emit('ready', roomId, socketId, deck);
     // @viktor at here, maybe change to another section that is just a blank waiting screen
 }
 
@@ -89,6 +97,10 @@ export function chooseCard(cardType,deck){
 
 export function cardPlayed(cardIndex,col){
     socket.emit('playerPlayCard', roomId, socketId, cardIndex, col);
+}
+
+export function endTurn() {
+    socket.emit('playerEndTurn', roomId, socketId);
 }
 
 //neccessary Util functions

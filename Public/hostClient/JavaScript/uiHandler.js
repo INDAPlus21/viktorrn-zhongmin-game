@@ -1,5 +1,5 @@
 import * as Main from './hostSocket.js';
-
+import * as Card from './cards.js';
 export class UIHandler{
     cardPickingPhase = null;
 
@@ -47,13 +47,13 @@ export class UIHandler{
         Main.$('playerBoard').appendChild(p1Slot);
         Main.$('playerBoard').appendChild(p2Slot);
         
-        for(i in [1,2,3,4]){
+        for(let i in [1,2,3,4]){
             let div1 = document.createElement('div');
-            div1.classList.add('.cardSlots')
+            div1.classList.add('cardSlots')
             div1.id = 'p1SlotIndex'+i;
 
             let div2 = document.createElement('div');
-            div2.classList.add('.cardSlots')
+            div2.classList.add('cardSlots')
             div2.id = 'p12lotIndex'+i;
 
             Main.$('player1Board').appendChild(div1);
@@ -77,5 +77,7 @@ export class UIHandler{
                 Main.$('p2SlotIndex'+c).appendChild(card);
             }
         }
+
+        let scale = document.createElement('div');
     }
 }

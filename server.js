@@ -109,8 +109,11 @@ io.on('connection', (socket) => { // server is online
 
   // event from host: the player's hand is updated with the list from the host, to eliminate desync issues.
   // this is triggered in multiple places.
-  socket.on('syncClient', (playerId, playerHand, playerBoard, playerBlood) => {
-    socket.to(playerId).emit('syncClient', playerHand, playerBoard, playerBlood);
+  socket.on('syncClient', (playerObj, board) => {
+    let id = playerObj.id;
+    let hand = playerObj.hand;
+    let blood = playerObj.blood;
+    socket.to(id).emit('syncClient', hand, board, blood);
   });
 
  // event from player: player is ending turn

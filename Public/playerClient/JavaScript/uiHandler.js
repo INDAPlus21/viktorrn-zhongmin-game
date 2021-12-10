@@ -76,19 +76,22 @@ export class UIHandler{
                     squirrel.appendChild(name);
                     this.actionSlotsHTMLHandle.appendChild(squirrel);
 
-                    if(deck.length > 0){
-                        let beast =  document.createElement('div');
-                        beast.setAttribute('class','card');
-                        beast.onpointerdown = () =>{
-                            Main.clearElement(this.actionSlotsHTMLHandle);
-                            Main.chooseCard('beast');
+                    try{
+                        if(deck.length > 0){
+                            let beast =  document.createElement('div');
+                            beast.setAttribute('class','card');
+                            beast.onpointerdown = () =>{
+                                Main.clearElement(this.actionSlotsHTMLHandle);
+                                Main.chooseCard('beast');
+                            }
+                            name = document.createElement('div');
+                            name.innerText = "Beast";
+                            name.setAttribute('class','name')
+                            beast.appendChild(name);
+                            this.actionSlotsHTMLHandle.appendChild(beast);
                         }
-                        name = document.createElement('div');
-                        name.innerText = "Beast";
-                        name.setAttribute('class','name')
-                        beast.appendChild(name);
-                        this.actionSlotsHTMLHandle.appendChild(beast);
-                    }
+                    }catch(error){console.log(error)}
+                    
             break;
 
             case 'waitingForTurn':

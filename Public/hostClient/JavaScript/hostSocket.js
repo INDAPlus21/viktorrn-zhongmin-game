@@ -97,7 +97,7 @@ socket.on('connect', () => {// run this when connected
     }
   })
 
-  socket.on('playerReady', (playerId, deck) => {
+  socket.on('playerReady', async (playerId, deck) => {
     try{
       if (isPlayer(playerId)===1) {
         playerInfo.player1.originalDeck = deck;
@@ -115,12 +115,16 @@ socket.on('connect', () => {// run this when connected
         playerInfo.player1.remainingDeck = shuffle(playerInfo.player1.originalDeck);
         playerInfo.player2.remainingDeck = shuffle(playerInfo.player2.originalDeck);
         // start this mf
+        // both players draw 4 cards to put in their hand
+        for (let i in [1,2,3,4]) {
+          drawOneCard(playerInfo.player1);
+          drawOneCard(playerInfo.player2);
+        }
         //starts with giving player 1 the cards and then prompting
-        let turn = 0;
         UI_Handler.displayBoard(boardInfo);
-        socket.emit('startGame', roomId, playerInfo.player1.id, playerInfo.player2.id);
-        socket.emit('syncClient', playerInfo.player1.id, playerInfo.player1.remainingDeck, boardInfo.player1, playerInfo.player1.blood);
-        socket.emit('startTurn', playerInfo.player1.id, turn);
+        await socket.emit('startGame', roomId, playerInfo.player1.id, playerInfo.player2.id);
+        await socket.emit('syncClient', playerInfo.player1, boardInfo.player1);
+        await socket.emit('startTurn', playerInfo.player1.id, 0);
         GAMESTATE = 'ingame';
         $('bodyPregame').classList.remove('onscreen');
         $('bodyIngame').classList.add('onscreen');
@@ -138,22 +142,20 @@ socket.on('connect', () => {// run this when connected
 
     let i = isPlayer(playerId);
     playerInfo['player'+i].hand.push(remaining.shift()); // get first element of deck, remove first element from deck
-    let hand = playerInfo['player'+i].hand; // new hand
-    socket.emit('syncClient', playerId, hand, boardInfo['player'+i], playerInfo['player'+i].blood); // refresh the client with new data
+
+    socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i]); // refresh the client with new data
   });
 
   socket.on('playerPlayCard', (playerId, cardIndex, column) => {
     let i = isPlayer(playerId); // get which player it is
-    let cardName = playerInfo['player'+i].hand[cardIndex]; // get the name of the card being played
+    let card = playerInfo['player'+i].hand[cardIndex]; // get the card that is being played
     playerInfo['player'+i].hand.splice(cardIndex, 1); // remove the card from the player's hand
-    let card = DataManagerImport.getSpecificCard(cardName); // extract the card data from the card's name
 
     boardInfo['player'+i][column] = card; // add that card to the board
     delete boardInfo['player'+i][column].cost; // cost is irrelevant to boardInfo since it's already placed out
     boardInfo['player'+i][column].age = 0; // how long the card has been on the board
 
-    let hand = playerInfo['player'+i].hand; // new hand
-    socket.emit('syncClient', playerId, hand, boardInfo['player'+i], playerInfo['player'+i].blood); // refresh the client with new data
+    socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i]); // refresh the client with new data
 
     UI_Handler.displayBoard(boardInfo);
   });
@@ -183,10 +185,24 @@ socket.on('connect', () => {// run this when connected
       }
     }
     UI_Handler.displayBoard(boardInfo);
+
+    await new Promise(r => setTimeout(r, 1000)); // wait 1 sec
+
+    if (i===2) boardInfo.turn += 1 // if the player is player2 then a round has passed
+
+    // the opposing player's turn starts
+    socket.emit('syncClient', playerInfo['player'+n], boardInfo['player'+n]);
+    socket.emit('startTurn', playerInfo['player'+n], turn);
   });
 });
 
 // SEPARATOR - You are now entering Not Socket
+
+function drawOneCard(playerObj) {
+  if (playerObj.remainingDeck.length > 0)
+  playerObj.hand.push(playerObj.remainingDeck.shift());
+  // shift() takes one element from the array and pushes it into the player's hand
+}
 
 //neccessary Util functions
 export function $(el) { return document.getElementById(el) };
