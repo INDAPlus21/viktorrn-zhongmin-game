@@ -93,15 +93,11 @@ socket.on('connect', () => {// run this when connected
 
   socket.on('playerReady', (playerId, deck) => {
     try{
-      console.log("deck",deck)
-      console.log(playerInfo)
       if (isPlayer(playerId)===1) {
-        //
         playerInfo.player1.originalDeck = deck;
         $('player1State').innerHTML = `<span>${playerInfo.player1.name}</span><br><b>READY!</b>`
       }
       if (isPlayer(playerId)===2) {
-        //console.log("p1",playerInfo.player1.originalDeck,"p2",playerInfo.player2.originalDeck)
         playerInfo.player2.originalDeck = deck;
         $('player2State').innerHTML = `<span>${playerInfo.player2.name}</span><br><b>READY!</b>`
       }
@@ -109,15 +105,13 @@ socket.on('connect', () => {// run this when connected
     // check if game can start // cheep as error handling, yes box
     
     if (playerInfo.player1.originalDeck.length !== 0 && playerInfo.player2.originalDeck.length !== 0){
-      console.log("p1",playerInfo.player1.originalDeck)
-      console.log("p2",playerInfo.player2.originalDeck)  
     // copy original deck to remaining deck for the game
       playerInfo.player1.remainingDeck = shuffle(playerInfo.player1.originalDeck);
       playerInfo.player2.remainingDeck = shuffle(playerInfo.player2.originalDeck);
       // start this mf
       //starts with giving player 1 the cards and then prompting
       socket.emit('startGame', roomId, playerInfo.player1.playerId);
-      //socket.emit('syncHand', roomId, playerInfo.player1.playerId,playerInfo.player1.remainingDeck)
+      socket.emit('syncHand', roomId, playerInfo.player1.playerId,playerInfo.player1.remainingDeck)
       GAMESTATE = 'ingame';
       $('bodyPregame').classList.remove('onscreen');
       $('bodyIngame').classList.add('onscreen');
