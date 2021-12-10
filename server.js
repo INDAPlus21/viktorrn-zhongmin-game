@@ -136,8 +136,9 @@ io.on('connection', (socket) => { // server is online
   });
 
   // event from host: the game has ended, the specified player display that they won, the other player that they lost.
-  socket.on('endGame', (roomId, winnerPlayerId) => {
-    socket.to(roomId).except(hostOf(roomId)).emit('endGame', winnerPlayerId);
+  socket.on('endGame', (winnerPlayerId, loserPlayerId) => {
+    socket.to(winnerPlayerId).emit('youWin');
+    socket.to(loserPlayerId).emit('youLose');
   })
 
 });

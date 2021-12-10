@@ -178,11 +178,12 @@ socket.on('connect', () => {// run this when connected
         if (thisCard.age > 0) { // and it can attack
           let opposingCard = boardInfo['player'+n][k]; // get the opposing card
 
-          if (opposingCard === null || thisCard.sigil.includes('air')) {
-            boardInfo[`p${i}damage`] += thisCard.power; // if there is no card opposing it OR if this card ignores opposing cards, attack the player
-            console.log(`card: ${thisCard.name} from player ${i} dealt ${thisCard.power}, total ${boardInfo[`p${i}damage`]}`);
+          if (opposingCard === null /*|| thisCard.sigil.includes('air')*/) {
+            console.log(boardInfo);
+            boardInfo[`p${i}damage`] += thisCard.damage; // if there is no card opposing it OR if this card ignores opposing cards, attack the player
+            console.log(`card: ${thisCard.name} from player ${i} dealt ${thisCard.damage}, total ${boardInfo[`p${i}damage`]}`);
           } else {
-            opposingCard.health -= thisCard.power; // attack the opposing card
+            opposingCard.health -= thisCard.damage; // attack the opposing card
             if (opposingCard.health <= 0) boardInfo['player'+n][k] = null // set column to null if it dies from the attack
           }
         }
@@ -195,11 +196,17 @@ socket.on('connect', () => {// run this when connected
 
     console.log("starting player "+n+"'s turn");
 
-    if (i===2) boardInfo.turn += 1 // if the player is player2 then a round has passed
-
-    // the opposing player's turn starts
-    socket.emit('syncClient', playerInfo['player'+n], boardInfo['player'+n]);
-    socket.emit('startTurn', playerInfo['player'+n].id, boardInfo.turn);
+    // testing for win condition (must tip the scale by 7 to win)
+    if (boardInfo.p1damage -6 > boardInfo.p2damage) {
+      socket.emit('endGame', playerInfo.player1.id, playerInfo.player2.id);
+    } else if (boardInfo.p2damage -6 > boardInfo.p1damage) {
+      socket.emit('endGame', playerInfo.player2.id, playerInfo.player1.id);
+    } else { // no win condition was reached
+      if (i===2) boardInfo.turn += 1 // if the player is player2 then a round has passed
+      // the opposing player's turn starts
+      socket.emit('syncClient', playerInfo['player'+n], boardInfo['player'+n]);
+      socket.emit('startTurn', playerInfo['player'+n].id, boardInfo.turn);
+    }
   });
 });
 

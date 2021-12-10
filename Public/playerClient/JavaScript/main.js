@@ -61,7 +61,16 @@ socket.on('startTurn', (turn) => {
     
     UI_Handler.displayActionSlots('playCards');
     UI_Handler.drawHand(playerHand);
-})
+});
+
+socket.on('youWin', () => {
+    $('playArea').classList.remove('onscreen');
+    $('youWin').classList.add('onscreen');
+});
+socket.on('youLose', () => {
+    $('playArea').classList.remove('onscreen');
+    $('youLose').classList.add('onscreen');
+});
 
 window.onload = function(){
     DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager,(Manager = DataManager) => {
