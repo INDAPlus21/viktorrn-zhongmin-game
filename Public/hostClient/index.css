@@ -40,6 +40,15 @@ h1{
   height: 20px;
 }
 
+section{
+    display: none;
+}
+
+section.onscreen {
+    display: block;
+    
+}
+
 /**/
 
 #SelectionPageShow{

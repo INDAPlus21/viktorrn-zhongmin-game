@@ -9,7 +9,7 @@
     <script src="./JavaScript/hostSocket.js"></script>
 </head>
 <body>
-    <section id="bodyPregame" class="displaying">
+    <section id="bodyPregame" class="onscreen">
         <div class="backgroundDiv"></div>
         <div id="roomCode">Join the game at:<h1>????</h1></div>
         <div id="player1State">Waiting...</div>
@@ -17,33 +17,33 @@
         <div id="player2State">Waiting...</div>
     </section>
     <section id="bodyIngame">
-        <button id="SelectionPageShow">Toggle Page</button>
+        <!--<button id="SelectionPageShow">Toggle Page</button>-->
 
-    <div class="backgroundDiv"></div>
-    <div id="BigBoiTextDisplay">-Server Client Page-</div>
-    <div id="cardSelectionPage">
-        <h1 id="selectCardHeader"> -Players Selecting Cards- </h1>
-        <div id="cardPickZone"></div>
-    </div>
-    <div id="playerBoard">
-        <div id="player1Board">
-            <div class="cardSlots"></div>
-            <div class="cardSlots"></div>
-            <div class="cardSlots"></div>
-            <div class="cardSlots"></div>
+        <div class="backgroundDiv"></div>
+        <!--<div id="BigBoiTextDisplay">-Server Client Page-</div>-->
+        <div id="cardSelectionPage">
+            <h1 id="selectCardHeader"> -Players Selecting Cards- </h1>
+            <div id="cardPickZone"></div>
         </div>
-        <div id="player2Board">
-            <div class="cardSlots"></div>
-            <div class="cardSlots"></div>
-            <div class="cardSlots"></div>
-            <div class="cardSlots"></div>
-        </div>
-        <div id="scaleDiv">
-            <div id="player1Scale">0</div>
-            <div id="player2Scale">0</div>
-        </div>
+        <div id="playerBoard">
+            <div id="player1Board">
+                <div class="cardSlots"></div>
+                <div class="cardSlots"></div>
+                <div class="cardSlots"></div>
+                <div class="cardSlots"></div>
+            </div>
+            <div id="player2Board">
+                <div class="cardSlots"></div>
+                <div class="cardSlots"></div>
+                <div class="cardSlots"></div>
+                <div class="cardSlots"></div>
+            </div>
+            <div id="scaleDiv">
+                <div id="player1Scale">0</div>
+                <div id="player2Scale">0</div>
+            </div>
 
-    </div>
+        </div>
     </section>
     <script type="module" src="./JavaScript/main.js"></script>
 </body>

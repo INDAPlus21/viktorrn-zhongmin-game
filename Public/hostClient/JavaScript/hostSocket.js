@@ -93,29 +93,40 @@ socket.on('connect', () => {// run this when connected
 
   socket.on('playerReady', (playerId, deck) => {
     try{
+      console.log("deck",deck)
+      console.log(playerInfo)
       if (isPlayer(playerId)===1) {
+        //
         playerInfo.player1.originalDeck = deck;
         $('player1State').innerHTML = `<span>${playerInfo.player1.name}</span><br><b>READY!</b>`
       }
       if (isPlayer(playerId)===2) {
+        //console.log("p1",playerInfo.player1.originalDeck,"p2",playerInfo.player2.originalDeck)
         playerInfo.player2.originalDeck = deck;
         $('player2State').innerHTML = `<span>${playerInfo.player2.name}</span><br><b>READY!</b>`
       }
 
     // check if game can start // cheep as error handling, yes box
+    
     if (playerInfo.player1.originalDeck.length !== 0 && playerInfo.player2.originalDeck.length !== 0)
-      // copy original deck to remaining deck for the game
+      console.log("p1",playerInfo.player1.originalDeck)
+      console.log("p2",playerInfo.player2.originalDeck)  
+    // copy original deck to remaining deck for the game
       playerInfo.player1.remainingDeck = shuffle(playerInfo.player1.originalDeck);
       playerInfo.player2.remainingDeck = shuffle(playerInfo.player2.originalDeck);
       // start this mf
+      //starts with giving player 1 the cards and then prompting
       socket.emit('startGame', roomId, playerInfo.player1.playerId);
+      //socket.emit('syncHand', roomId, playerInfo.player1.playerId,playerInfo.player1.remainingDeck)
       GAMESTATE = 'ingame';
+      $('bodyPregame').classList.remove('onscreen');
+      $('bodyIngame').classList.add('onscreen');
     }catch{}
   });
 
   socket.on('playerDrawCard', (playerId, callback) => {
     let remaining = playerInfo['player'+isPlayer(playerId)].remainingDeck;
-
+    // @hex, you only need to shuffle once, on the StartTurn event as its allways called prior to this event
     let card = remaining.shift(); // the card that was drawn - undefined if empty
 
     callback(card); // send the card back for stuff like animations?

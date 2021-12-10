@@ -1,7 +1,7 @@
 import * as Card from './cards.js';
 import * as UIHandler from './uiHandler.js';
 import * as DataManagerImport from '../../dataManager/dataManager.js';
-import e from 'express';
+//import e from './express'; // Comment- doesnt load
 
 let currentlyYourTurn = false;
 let UI_Handler = new UIHandler.UIHandler($('handPoint'),$('actionSlots'),$('cardSelectionPage'),$('cardPickZone')); 
@@ -35,10 +35,16 @@ $('joinServerBtn').onmousedown = () =>{
     });
 }
 
-socket.on('startGame', (playerId) => {
-    UI_Handler.hideCardSelectionPage();
+socket.on('startGame', (playerId,board) => {
+    //UI_Handler.hideCardSelectionPage();
+    console.log("startGame")
+    $('selectStarterCards').classList.remove('onscreen');
+    $('playArea').classList.add('onscreen');
     if (playerId === socketId) {
-        $('playArea').classList.add('onscreen');
+        UI_Handler.displayActionSlots();
+        UI_Handler.drawHand();
+    }else{
+        UI_Handler.displayActionSlots('waitIngForTurn');
     }
 })
 

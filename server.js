@@ -85,8 +85,10 @@ io.on('connection', (socket) => { // server is online
   });
 
   // event from host: both players have locked in their decks: change player's UI to game field, and the player with firstPlayerId starts their round first.
-  socket.on('startGame', (roomId, firstPlayerId) => {
-    socket.to(roomId).except(hostOf(roomId)).emit('startGame', firstPlayerId);
+  // startgame event should prompt player 1 to be able to play
+  socket.on('startGame', (roomId, firstPlayerId, board) => { 
+    console.log("startGame init")
+    socket.to(roomId).except(hostOf(roomId)).emit('startGame', firstPlayerId,board);
   });
 
   // event from player: player either draws a card from their deck, or a squirrel.
