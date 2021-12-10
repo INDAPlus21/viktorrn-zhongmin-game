@@ -104,13 +104,13 @@ io.on('connection', (socket) => { // server is online
 
   // event from host: the specified player starts their turn.
   socket.on('startTurn', (playerId, playerBoard, turn) => {
-    socket.to(playerId).emit('startTurn', playerBoard, turn);
+    socket.to(playerId).emit('startTurn', turn);
   });
 
   // event from host: the player's hand is updated with the list from the host, to eliminate desync issues.
   // this is triggered in multiple places.
-  socket.on('syncHand', (playerId, playerHand) => {
-    socket.to(playerId).emit('syncHand', playerHand);
+  socket.on('syncClient', (playerId, playerHand, playerBoard, playerBlood) => {
+    socket.to(playerId).emit('syncClient', playerHand, playerBoard, playerBlood);
   });
 
  // event from player: player is ending turn
@@ -119,8 +119,8 @@ io.on('connection', (socket) => { // server is online
 });
 
   // event from player: player is playing a card on the field.
-  socket.on('playerPlayCard', (roomId, playerId, card, column) => {
-    socket.to(hostOf(roomId)).emit('playerPlayCard', playerId, card, column);
+  socket.on('playerPlayCard', (roomId, playerId, cardIndex, column) => {
+    socket.to(hostOf(roomId)).emit('playerPlayCard', playerId, cardIndex, column);
   });
   // did
   // event from player: player is sacrificing a card on the field and should receive 1 blood.

@@ -10,6 +10,7 @@ let endTurnBtn = $('endTurnBtn');
 
 let playerHand;
 let playerBoard = new Array();
+let playerBloodLevel;
 
 let socket = io(); // event listener/emitter
 let roomId; // room id
@@ -41,17 +42,17 @@ socket.on('startGame', () => {
     UI_Handler.displayActionSlots('waitingForTurn');
 })
 
-socket.on('syncHand', (hand) => {
-    playerHand = [];
-    for(let i in hand){
+socket.on('syncClient', (hand,playerboard,bloodLevel) => {
+    playerHand = hand;
+    playerBoard = playerboard;
+    playerBloodLevel = bloodLevel;
+    /*for(let i in hand){
         playerHand.push(DataManager.getSpecificCard(hand[i]))
-    }
+    }*/
     //UI_Handler.drawHand(playerHand);
 });
 
-socket.on('startTurn', (pb , turn) => {
-    console.log("start Turn")
-    playerBoard = pb;
+socket.on('startTurn', (turn) => {
     if(turn != 0){
         UI_Handler.displayActionSlots('chooseCard');
     }   
@@ -86,14 +87,8 @@ export function chooseCard(cardType,deck){
     }
 }
 
-export function cardPlayed(cardName,col){
-    for(let c in playerHand){
-        if(playerHand[c].name == cardName){
-            playerHand.splice(c,1);
-        }
-    }
-    console.log("col",col);
-    socket.emit('playerPlayCard', roomId, socketId, cardName, col);
+export function cardPlayed(cardIndex,col){
+    socket.emit('playerPlayCard', roomId, socketId, cardIndex, col);
 }
 
 //neccessary Util functions

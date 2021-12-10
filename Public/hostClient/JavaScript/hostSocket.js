@@ -1,4 +1,5 @@
-function $(el) { return document.getElementById(el) };
+import * as UIHandler from './uiHandler.js';
+import * as DataManagerImport from '../../dataManager/dataManager.js';
 
 let socket = io(); // event listener/emitter
 let socketId; // the client's unique id for the socket connection
@@ -24,13 +25,14 @@ let boardInfo = {
   p1damage: 0,
   p2damage: 0
 }
-/*{
-  name: 'Starvation',
-  health: 6,
-  power: 6,
-  sigil: ['air'],
-  age: 0
-}*/
+
+let UI_Handler = new UIHandler.UIHandler($('cardSelectionPage'),$('cardPickZone'));
+let DataManager = new DataManagerImport.DataManager();
+
+
+window.onload = function(){
+  DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager);
+}
 
 function isPlayer (playerId) {
   if (playerInfo.player1.id === playerId) return 1;
@@ -115,8 +117,9 @@ socket.on('connect', () => {// run this when connected
       // start this mf
       //starts with giving player 1 the cards and then prompting
       let turn = 0;
+      UI_Handler.displayBoard(boardInfo);
       socket.emit('startGame', roomId, playerInfo.player1.id, playerInfo.player2.id);
-      socket.emit('syncHand', playerInfo.player1.id, playerInfo.player1.remainingDeck);
+      socket.emit('syncClient', playerInfo.player1.id, playerInfo.player1.remainingDeck, boardInfo.player1, playerInfo.player1.blood);
       socket.emit('startTurn', playerInfo.player1.id, boardInfo.player1, turn);
       GAMESTATE = 'ingame';
       $('bodyPregame').classList.remove('onscreen');
@@ -135,8 +138,22 @@ socket.on('connect', () => {// run this when connected
 
     let i = isPlayer(playerId);
     playerInfo['player'+i].hand.push(remaining.shift()); // get first element of deck, remove first element from deck
-    let hand = playerInfo['player'+i].hand;
-    socket.emit('syncHand', playerId, hand);
+    let hand = playerInfo['player'+i].hand; // new hand
+    socket.emit('syncClient', playerId, hand, boardInfo['player'+i], playerInfo['player'+i].blood); // refresh the client with new data
+  });
+
+  socket.on('playerPlayCard', (playerId, cardIndex, column) => {
+    let i = isPlayer(playerId); // get which player it is
+    let cardName = playerInfo['player'+i].hand[cardIndex]; // get the name of the card being played
+    playerInfo['player'+i].hand.splice(cardIndex, 1); // remove the card from the player's hand
+    let card = DataManagerImport.getSpecificCard(cardName); // extract the card data from the card's name
+
+    boardInfo['player'+i][column] = card; // add that card to the board
+    delete boardInfo['player'+i][column].cost; // cost is irrelevant to boardInfo since it's already placed out
+    boardInfo['player'+i][column].age = 0; // how long the card has been on the board
+
+    let hand = playerInfo['player'+i].hand; // new hand
+    socket.emit('syncClient', playerId, hand, boardInfo['player'+i], playerInfo['player'+i].blood); // refresh the client with new data
   });
 
   // big calculations in here!!!!
@@ -163,7 +180,51 @@ socket.on('connect', () => {// run this when connected
         thisCard.age += 1 // age by 1
       }
     }
-
-    
+    UI_Handler.displayBoard(boardInfo);
   });
 });
+
+// SEPARATOR - You are now entering Not Socket
+
+import * as UIHandler from './uiHandler.js';
+import * as DataManagerImport from '../../dataManager/dataManager.js';
+
+class GameObject{
+    players = []
+    playerTurn = null; // can be either 0 or 1 depending on player based on index in players  
+    currentPhase;
+
+    createPlayer(){
+        if(this.players.length >= 1) return false;
+        let player = new PlayerObject();
+        this.players.push(player);
+        return true;
+    }
+}
+
+//neccessary Util functions
+export function $(el) { return document.getElementById(el) };
+export function getOffset( el ) {
+    var _x = 0;
+    var _y = 0;
+    while( el && !isNaN( el.offsetLeft ) && !isNaN( el.offsetTop ) ) {
+        _x += el.offsetLeft - el.scrollLeft;
+        _y += el.offsetTop - el.scrollTop;
+        el = el.offsetParent;
+    }
+    return { top: _y, left: _x };
+}
+export function clearElement(el){
+    while(el.firstChild){
+        el.removeChild(el.firstChild);
+    }
+}
+export function getUIHandler(){
+    return UI_Handle;
+}
+export function getCardLib(){
+    return CardLibrary;
+}
+export function cloneObject(obj){
+    return JSON.parse(JSON.stringify(obj));
+}

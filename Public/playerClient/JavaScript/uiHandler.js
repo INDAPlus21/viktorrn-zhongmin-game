@@ -154,6 +154,7 @@ export class UIHandler{
         Main.clearElement(this.handHTMLHandle)
         for(let i in cards){
             let card = Card.getCardDiv(cards[i]);
+            card.setAttribute('cardIndex',i);
             //handle klick event
             card.onpointerover = () => {
                 
@@ -260,7 +261,7 @@ export class UIHandler{
             Main.getUIHandler().currentCardSelected = null;
             Main.getUIHandler().cardWasPlayed = false;
 
-            Main.cardPlayed(card.getAttribute('cardName'),col);
+            Main.cardPlayed(card.getAttribute('cardIndex'),col);
             
             
 

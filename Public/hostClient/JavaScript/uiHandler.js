@@ -31,11 +31,36 @@ export class UIHandler{
 
     }
 
-}
+    // card display
+    getCardDiv(card){
+        let div = Card.getCardDiv(card);
+        div.setAttribute('class','card');
+        return div;
+    }
 
-function getCardDiv(card){
-    let div = document.createElement('div');
-    div.setAttribute('class','card');
-    div.innerHTML = card;
-    return div;
+    displayBoard(boardInfo){
+        Main.clearElement($('playerBoard'))
+        for(let i in [1,2,3,4]){
+            let p1Slot =  document.createElement('div');
+            p1Slot.classList.add('cardSlots');
+            let p2Slot =  document.createElement('div');
+            p2Slot.classList.add('cardSlots');
+            Main.$('playerBoard').appendChild(p1Slot);
+            Main.$('playerBoard').appendChild(p2Slot);
+        }
+
+        for(let c in boardInfo.player1){
+            if(boardInfo.player1[c] !== null){
+                let card = this.getCardDiv(boardInfo.player1[c]);
+                Main.$('player1Board').appendChild(card);
+            }
+        }
+
+        for(let c in boardInfo.player2){
+            if(boardInfo.player2[c] !== null){
+                let card = this.getCardDiv(boardInfo.player2[c]);
+                Main.$('player2Board').appendChild(card);
+            }
+        }
+    }
 }

@@ -36,7 +36,7 @@ export class DataManager{
     getSpecificCard(name){
        for(let c of this.cardLibrary){
            if(c.name == name) return this.cloneObject(c);
-       } 
+       }
        return null;
     }
 

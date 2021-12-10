@@ -223,7 +223,7 @@ body::-webkit-scrollbar {
 #playerBoard .cardSlots .card{
     position: absolute;
     bottom:0px;
-    margin: -10px;
+    margin: -10px -60px;
 }
 
 
