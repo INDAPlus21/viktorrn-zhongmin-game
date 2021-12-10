@@ -47,10 +47,6 @@ socket.on('syncClient', (hand,playerboard,bloodLevel) => {
     playerHand = hand;
     playerBoard = playerboard;
     playerBloodLevel = bloodLevel;
-    /*for(let i in hand){
-        playerHand.push(DataManager.getSpecificCard(hand[i]))
-    }*/
-    //UI_Handler.drawHand(playerHand);
 });
 
 socket.on('startTurn', (turn) => {
@@ -67,6 +63,7 @@ socket.on('youWin', () => {
     $('playArea').classList.remove('onscreen');
     $('youWin').classList.add('onscreen');
 });
+
 socket.on('youLose', () => {
     $('playArea').classList.remove('onscreen');
     $('youLose').classList.add('onscreen');
@@ -85,6 +82,7 @@ window.onload = function(){
 
 // this function is run when the player is done selecting their starting deck and is ready to play
 export function doneWithStartingCards(cards){
+    UI_Handler.hideCardSelectionPage();
     let deck = [];
     for(let i in cards){
         deck.push(DataManager.getSpecificCard(cards[i]))
@@ -109,6 +107,7 @@ export function cardPlayed(cardIndex,col){
 }
 
 export function endTurn() {
+    UI_Handler.displayActionSlots('waitingForTurn');
     socket.emit('playerEndTurn', roomId, socketId);
 }
 

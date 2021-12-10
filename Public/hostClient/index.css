@@ -46,11 +46,9 @@ section{
 
 section.onscreen {
     display: block;
-    
 }
 
 /**/
-
 #SelectionPageShow{
     position: absolute;
     z-index: 10;
@@ -225,11 +223,7 @@ body::-webkit-scrollbar {
     bottom:0px;
     margin: 0 -10px 0 0;
 }
-
-
-
-/*Health meter*/
-#scaleDiv{
+#playerBoard #scaleDiv{
     position: absolute;
     width: 150px;
     height: 40px;
@@ -247,7 +241,7 @@ body::-webkit-scrollbar {
     font-size: 5em;
 }
 
-#scaleDiv #player1Scale{
+#playerBoard #scaleDiv #player1Scale{
     position: absolute;
     width: 90px;
     left:50%;
@@ -259,7 +253,7 @@ body::-webkit-scrollbar {
     border: 10px solid rgb(41, 41, 41);
 }
 
-#scaleDiv #player2Scale{
+#playerBoard #scaleDiv #player2Scale{
     position: absolute;
     width: 90px;
     left:50%;

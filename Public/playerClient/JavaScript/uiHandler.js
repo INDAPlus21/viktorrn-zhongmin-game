@@ -114,6 +114,7 @@ export class UIHandler{
                 div.innerText = "You Won!";
                 this.actionSlotsHTMLHandle.appendChild(div);
             break;
+        
         }
     }
 
