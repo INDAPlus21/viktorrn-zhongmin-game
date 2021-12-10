@@ -108,7 +108,7 @@ socket.on('connect', () => {// run this when connected
 
     // check if game can start // cheep as error handling, yes box
     
-    if (playerInfo.player1.originalDeck.length !== 0 && playerInfo.player2.originalDeck.length !== 0)
+    if (playerInfo.player1.originalDeck.length !== 0 && playerInfo.player2.originalDeck.length !== 0){
       console.log("p1",playerInfo.player1.originalDeck)
       console.log("p2",playerInfo.player2.originalDeck)  
     // copy original deck to remaining deck for the game
@@ -121,6 +121,7 @@ socket.on('connect', () => {// run this when connected
       GAMESTATE = 'ingame';
       $('bodyPregame').classList.remove('onscreen');
       $('bodyIngame').classList.add('onscreen');
+    }
     }catch{}
   });
 
