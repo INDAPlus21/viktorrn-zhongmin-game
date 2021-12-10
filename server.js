@@ -103,7 +103,7 @@ io.on('connection', (socket) => { // server is online
   });
 
   // event from host: the specified player starts their turn.
-  socket.on('startTurn', (playerId, playerBoard, turn) => {
+  socket.on('startTurn', (playerId, turn) => {
     socket.to(playerId).emit('startTurn', turn);
   });
 

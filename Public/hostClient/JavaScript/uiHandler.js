@@ -1,5 +1,4 @@
-import * as Card from './cards.js';
-import * as Main from './main.js';
+import * as Main from './hostSocket.js';
 
 export class UIHandler{
     cardPickingPhase = null;
@@ -39,27 +38,43 @@ export class UIHandler{
     }
 
     displayBoard(boardInfo){
-        Main.clearElement($('playerBoard'))
-        for(let i in [1,2,3,4]){
-            let p1Slot =  document.createElement('div');
-            p1Slot.classList.add('cardSlots');
-            let p2Slot =  document.createElement('div');
-            p2Slot.classList.add('cardSlots');
-            Main.$('playerBoard').appendChild(p1Slot);
-            Main.$('playerBoard').appendChild(p2Slot);
+        
+        Main.clearElement(Main.$('playerBoard'))
+        let p1Slot =  document.createElement('div');
+        p1Slot.id = 'player1Board';
+        let p2Slot =  document.createElement('div');
+        p2Slot.id = 'player2Board';
+        Main.$('playerBoard').appendChild(p1Slot);
+        Main.$('playerBoard').appendChild(p2Slot);
+        
+        for(i in [1,2,3,4]){
+            let div1 = document.createElement('div');
+            div1.classList.add('.cardSlots')
+            div1.id = 'p1SlotIndex'+i;
+
+            let div2 = document.createElement('div');
+            div2.classList.add('.cardSlots')
+            div2.id = 'p12lotIndex'+i;
+
+            Main.$('player1Board').appendChild(div1);
+            Main.$('player2Board').appendChild(div2);
+            
         }
+
+        console.log(boardInfo.player1)
 
         for(let c in boardInfo.player1){
             if(boardInfo.player1[c] !== null){
                 let card = this.getCardDiv(boardInfo.player1[c]);
-                Main.$('player1Board').appendChild(card);
+                
+                Main.$('p1SlotIndex'+c).appendChild(card);
             }
         }
 
         for(let c in boardInfo.player2){
             if(boardInfo.player2[c] !== null){
                 let card = this.getCardDiv(boardInfo.player2[c]);
-                Main.$('player2Board').appendChild(card);
+                Main.$('p2SlotIndex'+c).appendChild(card);
             }
         }
     }

@@ -31,7 +31,7 @@ let DataManager = new DataManagerImport.DataManager();
 
 
 window.onload = function(){
-  DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager);
+  DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager,()=>{});
 }
 
 function isPlayer (playerId) {
@@ -110,21 +110,21 @@ socket.on('connect', () => {// run this when connected
 
     // check if game can start // cheep as error handling, yes box
     
-    if (playerInfo.player1.originalDeck.length !== 0 && playerInfo.player2.originalDeck.length !== 0){
-    // copy original deck to remaining deck for the game
-      playerInfo.player1.remainingDeck = shuffle(playerInfo.player1.originalDeck);
-      playerInfo.player2.remainingDeck = shuffle(playerInfo.player2.originalDeck);
-      // start this mf
-      //starts with giving player 1 the cards and then prompting
-      let turn = 0;
-      UI_Handler.displayBoard(boardInfo);
-      socket.emit('startGame', roomId, playerInfo.player1.id, playerInfo.player2.id);
-      socket.emit('syncClient', playerInfo.player1.id, playerInfo.player1.remainingDeck, boardInfo.player1, playerInfo.player1.blood);
-      socket.emit('startTurn', playerInfo.player1.id, boardInfo.player1, turn);
-      GAMESTATE = 'ingame';
-      $('bodyPregame').classList.remove('onscreen');
-      $('bodyIngame').classList.add('onscreen');
-    }
+      if (playerInfo.player1.originalDeck.length > 0 && playerInfo.player2.originalDeck.length > 0) {
+      // copy original deck to remaining deck for the game
+        playerInfo.player1.remainingDeck = shuffle(playerInfo.player1.originalDeck);
+        playerInfo.player2.remainingDeck = shuffle(playerInfo.player2.originalDeck);
+        // start this mf
+        //starts with giving player 1 the cards and then prompting
+        let turn = 0;
+        UI_Handler.displayBoard(boardInfo);
+        socket.emit('startGame', roomId, playerInfo.player1.id, playerInfo.player2.id);
+        socket.emit('syncClient', playerInfo.player1.id, playerInfo.player1.remainingDeck, boardInfo.player1, playerInfo.player1.blood);
+        socket.emit('startTurn', playerInfo.player1.id, turn);
+        GAMESTATE = 'ingame';
+        $('bodyPregame').classList.remove('onscreen');
+        $('bodyIngame').classList.add('onscreen');
+      }
     }catch (error) {
       console.log(error);
       console.log(playerInfo);
@@ -154,6 +154,8 @@ socket.on('connect', () => {// run this when connected
 
     let hand = playerInfo['player'+i].hand; // new hand
     socket.emit('syncClient', playerId, hand, boardInfo['player'+i], playerInfo['player'+i].blood); // refresh the client with new data
+
+    UI_Handler.displayBoard(boardInfo);
   });
 
   // big calculations in here!!!!
@@ -185,22 +187,6 @@ socket.on('connect', () => {// run this when connected
 });
 
 // SEPARATOR - You are now entering Not Socket
-
-import * as UIHandler from './uiHandler.js';
-import * as DataManagerImport from '../../dataManager/dataManager.js';
-
-class GameObject{
-    players = []
-    playerTurn = null; // can be either 0 or 1 depending on player based on index in players  
-    currentPhase;
-
-    createPlayer(){
-        if(this.players.length >= 1) return false;
-        let player = new PlayerObject();
-        this.players.push(player);
-        return true;
-    }
-}
 
 //neccessary Util functions
 export function $(el) { return document.getElementById(el) };
