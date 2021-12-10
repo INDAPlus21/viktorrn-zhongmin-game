@@ -47,14 +47,15 @@ io.on('connection', (socket) => { // server is online
 
     console.log("New room created with ID: "+id);
 
+    console.log(roomList);
+
     callback(id);
   });
 
   // event from player: player attempts to join room. playerId is player client's socket id
   // the callback function responds with whether the player is ok join or not.
   // the player will join a socket.io room with the same id as the room's join code, for ease of broadcast.
-  socket.on('joinRoom', (roomId, username, playerId, callback) => { 
-    console.log()
+  socket.on('joinRoom', (roomId, username, playerId, callback) => {
     if (roomList[roomId] === undefined) // if no such room
       callback('fail', 'Room does not exist.'); // back to sender
 
@@ -67,6 +68,8 @@ io.on('connection', (socket) => { // server is online
         else
           callback('success');
           // the host client will have already added the player to the database back in the 'isRoomOpen?' event
+
+          console.log('player '+playerId+' has joined room '+roomId)
       });
     }
 
@@ -117,9 +120,10 @@ io.on('connection', (socket) => { // server is online
   });
 
  // event from player: player is ending turn
- socket.on('playerEndTurn', (roomId, playerId) => {
-  socket.to(hostOf(roomId)).emit('playerEndTurn', playerId);
-});
+  socket.on('playerEndTurn', (roomId, playerId) => {
+    console.log('player '+playerId+' has ended their turn in '+roomId+'. Over to you, '+hostOf(roomId))
+    socket.to(hostOf(roomId)).emit('playerEndTurn', playerId);
+  });
 
   // event from player: player is playing a card on the field.
   socket.on('playerPlayCard', (roomId, playerId, cardIndex, column) => {

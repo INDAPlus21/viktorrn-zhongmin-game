@@ -168,14 +168,19 @@ socket.on('connect', () => {// run this when connected
     for (let k=0; k<4; k++) { // loop through all 4 columns
 
       let thisCard = boardInfo['player'+i][k]; // the card at this position
-      if (thisCard === null) continue; // if there is no card here, continue to the next column
+      if (thisCard === null) {
+        console.log('null column');
+        continue; // if there is no card here, continue to the next column
+      }
 
       else { // if there IS a card here
+        console.log('card: '+thisCard.name);
         if (thisCard.age > 0) { // and it can attack
           let opposingCard = boardInfo['player'+n][k]; // get the opposing card
 
           if (opposingCard === null || thisCard.sigil.includes('air')) {
-            p1damage += thisCard.power; // if there is no card opposing it OR if this card ignores opposing cards, attack the player
+            boardInfo[`p${i}damage`] += thisCard.power; // if there is no card opposing it OR if this card ignores opposing cards, attack the player
+            console.log(`card: ${thisCard.name} from player ${i} dealt ${thisCard.power}, total ${boardInfo[`p${i}damage`]}`);
           } else {
             opposingCard.health -= thisCard.power; // attack the opposing card
             if (opposingCard.health <= 0) boardInfo['player'+n][k] = null // set column to null if it dies from the attack
@@ -188,11 +193,13 @@ socket.on('connect', () => {// run this when connected
 
     await new Promise(r => setTimeout(r, 1000)); // wait 1 sec
 
+    console.log("starting player "+n+"'s turn");
+
     if (i===2) boardInfo.turn += 1 // if the player is player2 then a round has passed
 
     // the opposing player's turn starts
     socket.emit('syncClient', playerInfo['player'+n], boardInfo['player'+n]);
-    socket.emit('startTurn', playerInfo['player'+n], turn);
+    socket.emit('startTurn', playerInfo['player'+n].id, boardInfo.turn);
   });
 });
 

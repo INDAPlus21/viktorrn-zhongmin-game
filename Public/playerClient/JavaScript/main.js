@@ -69,7 +69,7 @@ window.onload = function(){
         for(let i of DataManager.startingCards) cards.push(DataManager.getSpecificCard(i));
         UI_Handler.displayCardSelectionPage(cards,"startingPhase");
         UI_Handler.displayActionSlots('chooseCard',cards);
-        $('endTurnBtn').onpointerdown = endTurn();
+        $('endTurnBtn').onpointerdown = endTurn;
     })
 }
 

@@ -54,14 +54,14 @@ export class UIHandler{
 
             let div2 = document.createElement('div');
             div2.classList.add('cardSlots')
-            div2.id = 'p12lotIndex'+i;
+            div2.id = 'p2SlotIndex'+i;
 
             Main.$('player1Board').appendChild(div1);
             Main.$('player2Board').appendChild(div2);
             
         }
 
-        console.log(boardInfo.player1)
+        console.log(boardInfo);
 
         for(let c in boardInfo.player1){
             if(boardInfo.player1[c] !== null){
