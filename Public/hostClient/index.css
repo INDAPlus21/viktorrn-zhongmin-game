@@ -1,6 +1,6 @@
 @import url('../fonts/loadfont.css');
 
-*{
+body{
     font-family: MainFont;
     font-weight: 400; 
 }
@@ -97,7 +97,8 @@ body::-webkit-scrollbar {
 
 
 .name{
-    font-size: 2.2em;
+    margin-top: 5px;
+    font-size: 2em;
     height: 20px;
     width: 100%;
 }
@@ -219,10 +220,12 @@ body::-webkit-scrollbar {
 }
 
 #playerBoard .cardSlots .card{
-    position: absolute;
-    bottom:0px;
-    margin: 0 -10px 0 0;
+    position:absolute;
+    top:0px;
+    margin: 0 0 0 -10px;
+    
 }
+
 #playerBoard #scaleDiv{
     position: absolute;
     width: 150px;

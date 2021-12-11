@@ -147,12 +147,14 @@ socket.on('connect', () => {// run this when connected
   });
 
   socket.on('playerPlayCard', (playerId, cardIndex, column) => {
+    
+    console.log("cardIndex",cardIndex);
     let i = isPlayer(playerId); // get which player it is
     let card = playerInfo['player'+i].hand[cardIndex]; // get the card that is being played
     playerInfo['player'+i].hand.splice(cardIndex, 1); // remove the card from the player's hand
 
     boardInfo['player'+i][column] = card; // add that card to the board
-    delete boardInfo['player'+i][column].cost; // cost is irrelevant to boardInfo since it's already placed out
+    //delete boardInfo['player'+i][column].cost; // cost is irrelevant to boardInfo since it's already placed out
     boardInfo['player'+i][column].age = 0; // how long the card has been on the board
 
     socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i]); // refresh the client with new data

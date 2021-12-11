@@ -100,20 +100,6 @@ export class UIHandler{
                 div.innerText = "Waiting For Turn...";
                 this.actionSlotsHTMLHandle.appendChild(div);
             break;
-
-            case 'youLost':
-                div =  document.createElement('div');
-                div.setAttribute('class','waitTingForTurn');
-                div.innerText = "You Lost...";
-                this.actionSlotsHTMLHandle.appendChild(div);
-            break;
-
-            case 'youWon':
-                div =  document.createElement('div');
-                div.setAttribute('class','waitTingForTurn');
-                div.innerText = "You Won!";
-                this.actionSlotsHTMLHandle.appendChild(div);
-            break;
         
         }
     }
@@ -259,7 +245,7 @@ export class UIHandler{
             card.onpointerdown = null;
             card.onpointerout = null;
             el.appendChild(card);
-            card.style.opacity = '0';
+            //card.style.opacity = '0';
 
             Main.getUIHandler().currentCardSelected = null;
             Main.getUIHandler().currentCardSelected = null;

@@ -54,9 +54,10 @@ socket.on('startTurn', (turn) => {
     if(turn !== 0){
         UI_Handler.displayActionSlots('chooseCard');
     }   
-    
     UI_Handler.displayActionSlots('playCards');
     UI_Handler.drawHand(playerHand);
+    $('endTurnBtn').classList.add('displaying');
+    $('handPoint').classList.add('displaying');
 });
 
 socket.on('youWin', () => {
@@ -103,10 +104,14 @@ export function chooseCard(cardType,deck){
 }
 
 export function cardPlayed(cardIndex,col){
+    playerHand.splice(cardIndex,1);
+    UI_Handler.drawHand(playerHand);
     socket.emit('playerPlayCard', roomId, socketId, cardIndex, col);
 }
 
 export function endTurn() {
+    $('endTurnBtn').classList.remove('displaying');
+    //$('handPoint').classList.remove('displaying');
     UI_Handler.displayActionSlots('waitingForTurn');
     socket.emit('playerEndTurn', roomId, socketId);
 }

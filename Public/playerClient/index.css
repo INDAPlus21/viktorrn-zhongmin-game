@@ -182,7 +182,7 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
 }
 
 #actionSlots .cardSlot:hover{
-    
+    transform: scale(1);
 }
 
 #actionSlots .waitTingForTurn{
@@ -202,6 +202,7 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
     background-color: rgba(41, 41, 41, 0);
     text-align: center;
     z-index: 3;
+    display: none;
 }
 
 #handPoint .card{
@@ -287,9 +288,18 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
     border-radius: 20px;
     bottom:20px;
     right: 20px;
+    display: none;
 }
 
 #endTurnBtn:hover{
 transform: scale(1.05);
 }
+
+.displaying {
+    display: block !important;
+}
+
+/* end screens*/
+#youWin,#youLose {text-align: center; font-size: 4em;}
+#youWin h1,#youLose h1{margin-top: 50vh;}
 
