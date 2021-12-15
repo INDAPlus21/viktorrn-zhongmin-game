@@ -57,16 +57,13 @@ export class UIHandler{
             div2.id = 'p2SlotIndex'+i;
 
             Main.$('player1Board').appendChild(div1);
-            Main.$('player2Board').appendChild(div2);
-            
+            Main.$('player2Board').appendChild(div2);  
         }
-
-        console.log(boardInfo);
 
         for(let c in boardInfo.player1){
             if(boardInfo.player1[c] !== null){
                 let card = this.getCardDiv(boardInfo.player1[c]);
-                
+                if(boardInfo.player1[c].age == 0) card.style.opacity = 0.7;
                 Main.$('p1SlotIndex'+c).appendChild(card);
             }
         }
@@ -74,6 +71,7 @@ export class UIHandler{
         for(let c in boardInfo.player2){
             if(boardInfo.player2[c] !== null){
                 let card = this.getCardDiv(boardInfo.player2[c]);
+                if(boardInfo.player2[c].age == 0) card.style.opacity = 0.7;
                 Main.$('p2SlotIndex'+c).appendChild(card);
             }
         }

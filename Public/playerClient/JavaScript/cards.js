@@ -5,7 +5,7 @@ export function getCardDiv(card){
 
     let hdiv = document.createElement('div');
     hdiv.innerText = card.name;
-    hdiv.setAttribute('class','name')
+    hdiv.classList.add('name')
     div.appendChild(hdiv);
 
     let dmg = document.createElement('div');

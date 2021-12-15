@@ -8,9 +8,7 @@ let UI_Handler = new UIHandler.UIHandler($('handPoint'),$('actionSlots'),$('card
 let DataManager = new DataManagerImport.DataManager();
 let endTurnBtn = $('endTurnBtn');
 
-let playerHand;
-let playerBoard = new Array();
-let playerBloodLevel;
+let playerData = {hand:null,board : new Array(),bloodLevel:null,deck:null}
 
 let socket = io(); // event listener/emitter
 let roomId; // room id
@@ -42,21 +40,22 @@ socket.on('startGame', () => {
     UI_Handler.displayActionSlots('waitingForTurn');
 })
 
-socket.on('syncClient', (hand,playerboard,bloodLevel) => {
+socket.on('syncClient', (hand,playerboard,bloodLevel,playerDeck) => {
     console.log("sync",hand,playerboard,bloodLevel)
-    playerHand = hand;
-    playerBoard = playerboard;
-    playerBloodLevel = bloodLevel;
+    playerData.hand = hand;
+    playerData.board = playerboard;
+    playerData.bloodLevel = bloodLevel;
+    playerData.deck = playerDeck;
 });
 
 socket.on('startTurn', (turn) => {
-    console.log("playerHand",playerHand,"start");
+    console.log("playerData",playerData,"start");
     currentlyYourTurn = true;
     if(turn !== 0){
         UI_Handler.displayActionSlots('chooseCard');
     }   
-    UI_Handler.displayActionSlots('playCards');
-    UI_Handler.drawHand(playerHand);
+    UI_Handler.displayActionSlots('playCards',[],playerData.board);
+    UI_Handler.drawHand(playerData.hand);
     $('endTurnBtn').classList.add('displaying');
     $('handPoint').classList.add('displaying');
 });
@@ -85,7 +84,7 @@ window.onload = function(){
         for(let i of DataManager.startingCards) cards.push(DataManager.getSpecificCard(i));
         UI_Handler.displayCardSelectionPage(cards);
         //UI_Handler.displayActionSlots('chooseCard',cards);
-        UI_Handler.drawHand(cards);
+        //UI_Handler.drawHand(cards);
         $('handPoint').classList.add('displaying');
         $('endTurnBtn').onpointerdown = endTurn;
     })
@@ -115,8 +114,8 @@ export function chooseCard(cardType,deck){
 }
 
 export function cardPlayed(cardIndex,col){
-    playerHand.splice(cardIndex,1);
-    UI_Handler.drawHand(playerHand);
+    playerData.hand.splice(cardIndex,1);
+    UI_Handler.drawHand(playerData.hand);
     socket.emit('playerPlayCard', roomId, socketId, cardIndex, col);
 }
 
@@ -143,8 +142,8 @@ export function getUIHandler(){
 export function getDataManager(){
     return DataManager;
 }
-export function getPlayerBoard(){
-    return playerBoard;
+export function getPlayerData(){
+    return playerData;
 }
 export function getPlayerTurn(){
     return currentlyYourTurn;

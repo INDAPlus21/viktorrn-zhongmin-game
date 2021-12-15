@@ -72,15 +72,22 @@ export class UIHandler{
 
     // for gameLogic
 
-    displayActionSlots(state,deck){
+    displayActionSlots(state,deck,board){
         Main.clearElement(this.actionSlotsHTMLHandle);
         let div;
         switch(state){
 
             case 'playCards':
                 for(let i in [1,2,3,4]){
+                    
                     let div =  document.createElement('div');
-                    div.setAttribute('class','cardSlot');
+                    div.classList.add('cardSlot');
+                    if(board != null && board[i] != null){ 
+                        let card = Card.getCardDiv(board[i]);
+                        card.setAttribute('cardIndex',i);
+                        if(card.age == 0) div.style.opacity = 0.7;
+                        div.appendChild(card);
+                    }
                     this.actionSlotsHTMLHandle.appendChild(div);
                 }
             break;
@@ -146,6 +153,26 @@ export class UIHandler{
         }
     }
 
+    suggestSacrifice(){
+        for(let i in board){
+            let el = this.actionSlotsHTMLHandle.children[i];
+            if(board[i] == null){
+                el.style.transform = 'scale(1.1)';
+                el.onpointerover = () =>{
+                    el.style.border = '10px solid rgb(220, 220, 220)';
+                    el.style.transform = 'scale(1.3)';
+                }
+                el.onpointerout = () =>{
+                    el.style.transform = 'scale(1.1)'; 
+                    el.style.border = '';
+                }
+                el.onpointerdown = () =>{
+                    
+                } 
+            }
+        }
+    }
+
     disableDropZone(){
         for(let i in this.actionSlotsHTMLHandle.children){
             let el = this.actionSlotsHTMLHandle.children[i];
@@ -169,7 +196,6 @@ export class UIHandler{
             card.setAttribute('cardIndex',i);
             //handle klick event 
             card.onpointerdown = () => {
-                console.log("card klicked",Main.getUIHandler())
                 Main.getUIHandler().selectedHandCard(card);
             }
             
@@ -206,8 +232,15 @@ export class UIHandler{
        
   
         //activate drop zone
-        if(Main.getPlayerTurn())
-            this.activateDropZone(Main.getPlayerBoard());
+        if(!Main.getPlayerTurn()) return
+        let playerData = Main.getPlayerData();
+        
+        if(playerData.bloodLevel >= card.cost)
+            this.activateDropZone(Main.getPlayerData().board);
+        else{
+            console.log("need to sac a card")
+            this.suggestSacrifice(Main.getPlayerData().board)
+        }
     }
 
     returnHandCard(){
@@ -247,7 +280,7 @@ export class UIHandler{
         displayCard.style.transform = '';
 
         Main.getUIHandler().disableDropZone();
-        Main.getPlayerBoard()[col] = 0;
+        Main.getPlayerData().board[col] = 0;
 
         var animation = setInterval((el = target,dispCard = displayCard,card = selectedCard) => { //used for display animation
             
@@ -259,6 +292,7 @@ export class UIHandler{
             card.onpointerover = null;
             card.onpointerdown = null;
             card.onpointerout = null;
+            card.style.opacity = 0.7;
             el.appendChild(card);
             //card.style.opacity = '0';
 

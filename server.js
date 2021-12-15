@@ -96,8 +96,8 @@ io.on('connection', (socket) => { // server is online
   });
 
   // event from player: player either draws a card from their deck, or a squirrel.
-  socket.on('playerDrawCard', (roomId, playerId, deck, callback) => {
-    if (deck === 'squirrel') // squirrel is infinite (for now) so no need to ask the host for the deck
+  socket.on('playerDrawCard', (roomId, playerId, drawnCard, callback) => {
+    if (drawnCard === 'squirrel') // squirrel is infinite (for now) so no need to ask the host for the deck
       callback('squirrel');
     else {
       let hostSocket = io.sockets.sockets.get(hostOf(roomId)); //this allows you to emit with callback -SO
@@ -116,7 +116,8 @@ io.on('connection', (socket) => { // server is online
     let id = playerObj.id;
     let hand = playerObj.hand;
     let blood = playerObj.blood;
-    socket.to(id).emit('syncClient', hand, board, blood);
+    let deck = playerObj.remainingDeck;
+    socket.to(id).emit('syncClient', hand, board, blood, deck);
   });
 
  // event from player: player is ending turn

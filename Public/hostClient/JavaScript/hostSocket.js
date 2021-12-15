@@ -116,10 +116,12 @@ socket.on('connect', () => {// run this when connected
         playerInfo.player2.remainingDeck = shuffle(playerInfo.player2.originalDeck);
         // start this mf
         // both players draw 4 cards to put in their hand
-        for (let i in [1,2,3,4]) {
+        for (let i in [1,2,3]) {
           drawOneCard(playerInfo.player1);
           drawOneCard(playerInfo.player2);
         }
+        playerInfo.player1.hand.push(DataManager.getSpecificCard('Squirrel'));
+        playerInfo.player2.hand.push(DataManager.getSpecificCard('Squirrel'));
         //starts with giving player 1 the cards and then prompting
         UI_Handler.displayBoard(boardInfo);
         await socket.emit('startGame', roomId, playerInfo.player1.id, playerInfo.player2.id);

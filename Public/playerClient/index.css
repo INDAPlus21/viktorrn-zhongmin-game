@@ -286,7 +286,7 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
     font-weight: bold;
     position: absolute;
     bottom: 100px;
-    right: 5px;
+    left: 5px;
     
 }
 
@@ -298,12 +298,12 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
     display: inline-block;
     width: 20px;
     height: 20px;
-    margin: 0 0 0 -5px;
+    margin: 0 -6px 0 0;
 }
 
 .description{
     position: absolute;
-    top: 60px;
+    top: 70px;
     font-size: 2em;
     width: 100%;
 }
@@ -342,6 +342,11 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
 #endTurnBtn:hover{
 transform: scale(1.05);
 }
+
+#bloodCounter{
+    position: absolute;
+}
+
 
 .displaying {
     display: block !important;
