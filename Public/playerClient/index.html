@@ -7,7 +7,7 @@
     
 </head>
 <body>
-    <section id="login" style="text-align: center;" class="onscreen">
+    <section id="login" style="text-align: center;">
         <input 
             id="serverIP" value="" placeholder="4-letter join code" type="text"
             style="margin: 300px 0 0 0; height: 30px; width: 100px; font-size: 1.2em; transform: scale(2);" 
@@ -21,14 +21,15 @@
         <div id="loginErrorText"></div>
         <div class="backgroundDiv"></div>
     </section>
-    <section id="selectStarterCards">
+    <section id="selectStarterCards" >
         <div class="backgroundDiv"></div>
         <div id="cardSelectionPage">
             <h1 id="selectCardHeader"> -Select Starting Cards- </h1>
             <div id="cardPickZone"></div>
+            <div id="selectedCards"></div>
         </div>  
     </section>
-    <section id="playArea">
+    <section id="playArea" class="onscreen">
         <div class="backgroundDiv"></div>
         <div id="actionSlots"></div>
         <div id="handPoint"></div>

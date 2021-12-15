@@ -19,7 +19,7 @@ export function getCardDiv(card){
     div.appendChild(hp);
 
     let cost = document.createElement('div');
-    cost.innerText = 'Cost: '+ card.cost;
+    cost.innerText = card.cost;
     cost.setAttribute('class','cost')
     div.appendChild(cost);
 

@@ -14,7 +14,7 @@
             "name": "Grizzly",
             "damage": 4,
             "health": 1,
-            "cost": 1
+            "cost": 3
         },{
             "name": "Rabbit",
             "damage": 0,
@@ -40,6 +40,5 @@
         "Grizzly",
         "Rabbit",
         "Geck"
-
     ]
 }

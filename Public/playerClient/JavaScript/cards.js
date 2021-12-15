@@ -19,9 +19,18 @@ export function getCardDiv(card){
     div.appendChild(hp);
 
     let cost = document.createElement('div');
-    cost.innerText = 'Cost: '+ card.cost;
-    cost.setAttribute('class','cost')
+    for(let i = 0; i < card.cost;i++){
+        let blood = document.createElement('div');
+        blood.classList.add('blood');
+        cost.appendChild(blood);
+    }
+    cost.classList.add('cost')
     div.appendChild(cost);
+
+    let description = document.createElement('div');
+    description.innerText = "effect name";
+    description.classList.add('description')
+    div.appendChild(description);
 
     return div;
 }

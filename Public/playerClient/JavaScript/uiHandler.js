@@ -13,15 +13,16 @@ export class UIHandler{
 
     cardsPlayed = null;
 
-    constructor(handHTMLHandle,actionSlotsHTMLHandle,cardSelectionPageHTMLHandle,cardPickZoneHTMLHandle){
+    constructor(handHTMLHandle,actionSlotsHTMLHandle,cardSelectionPageHTMLHandle,cardPickZoneHTMLHandle,selectedCardsHTMLHandle){
         this.handHTMLHandle = handHTMLHandle;
         this.actionSlotsHTMLHandle = actionSlotsHTMLHandle;
         this.cardSelectionPageHTMLHandle = cardSelectionPageHTMLHandle;
         this.cardPickZoneHTMLHandle = cardPickZoneHTMLHandle;
+        this.selectedCardsHTMLHandle = selectedCardsHTMLHandle;
     }
 
     //for card picking
-    displayCardSelectionPage(cards,phase){
+    displayCardSelectionPage(cards){
         this.cardsPicked = [];
         this.cardSelectionPageHTMLHandle.style.top = '0px';
         for(let i in cards){
@@ -47,8 +48,29 @@ export class UIHandler{
         card.style.opacity = 0;
     }
 
-    // for gameLogic
+    drawSelectedCards(cards){
+        Main.clearElement(this.handHTMLHandle)
+        for(let i in cards){
+            let card = Card.getCardDiv(cards[i]);
+            card.setAttribute('cardIndex',i);
+            //handle klick event
+            card.onpointerover = () => {
+                
+                card.onpointerdown = (UIHandler = this) => {
+                    console.log("card klicked",UIHandler);
+                    if(UIHandler.currentCardSelected === null) UIHandler.selectedHandCard(card);
+                }
+            }
+            //handle leave event
+            card.onpointerleave = () =>{
+                card.onpointerdown = null;
+            }
+            
+            this.handHTMLHandle.appendChild(card);
+        }
+    }
 
+    // for gameLogic
 
     displayActionSlots(state,deck){
         Main.clearElement(this.actionSlotsHTMLHandle);
@@ -145,18 +167,10 @@ export class UIHandler{
         for(let i in cards){
             let card = Card.getCardDiv(cards[i]);
             card.setAttribute('cardIndex',i);
-            //handle klick event
-            card.onpointerover = () => {
-                
-                card.onpointerdown = () => {
-                    console.log("card klicked",Main.getUIHandler())
-                    
-                    if(Main.getUIHandler().currentCardSelected === null) Main.getUIHandler().selectedHandCard(card);
-                }
-            }
-            //handle leave event
-            card.onpointerleave = () =>{
-                card.onpointerdown = null;
+            //handle klick event 
+            card.onpointerdown = () => {
+                console.log("card klicked",Main.getUIHandler())
+                Main.getUIHandler().selectedHandCard(card);
             }
             
             this.handHTMLHandle.appendChild(card);
@@ -192,7 +206,8 @@ export class UIHandler{
        
   
         //activate drop zone
-        this.activateDropZone(Main.getPlayerBoard());
+        if(Main.getPlayerTurn())
+            this.activateDropZone(Main.getPlayerBoard());
     }
 
     returnHandCard(){

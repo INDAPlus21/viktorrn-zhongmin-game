@@ -4,7 +4,7 @@ import * as DataManagerImport from '../../dataManager/dataManager.js';
 //import e from './express'; // Comment- doesnt load
 
 let currentlyYourTurn = false;
-let UI_Handler = new UIHandler.UIHandler($('handPoint'),$('actionSlots'),$('cardSelectionPage'),$('cardPickZone')); 
+let UI_Handler = new UIHandler.UIHandler($('handPoint'),$('actionSlots'),$('cardSelectionPage'),$('cardPickZone'),$('selectedCards')); 
 let DataManager = new DataManagerImport.DataManager();
 let endTurnBtn = $('endTurnBtn');
 
@@ -51,6 +51,7 @@ socket.on('syncClient', (hand,playerboard,bloodLevel) => {
 
 socket.on('startTurn', (turn) => {
     console.log("playerHand",playerHand,"start");
+    currentlyYourTurn = true;
     if(turn !== 0){
         UI_Handler.displayActionSlots('chooseCard');
     }   
@@ -70,12 +71,22 @@ socket.on('youLose', () => {
     $('youLose').classList.add('onscreen');
 });
 
+export function endTurn() {
+    $('endTurnBtn').classList.remove('displaying');
+    //$('handPoint').classList.remove('displaying');
+    currentlyYourTurn = false;
+    UI_Handler.displayActionSlots('waitingForTurn');
+    socket.emit('playerEndTurn', roomId, socketId);
+}
+
 window.onload = function(){
     DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager,(Manager = DataManager) => {
         let cards = []
         for(let i of DataManager.startingCards) cards.push(DataManager.getSpecificCard(i));
-        UI_Handler.displayCardSelectionPage(cards,"startingPhase");
-        UI_Handler.displayActionSlots('chooseCard',cards);
+        UI_Handler.displayCardSelectionPage(cards);
+        //UI_Handler.displayActionSlots('chooseCard',cards);
+        UI_Handler.drawHand(cards);
+        $('handPoint').classList.add('displaying');
         $('endTurnBtn').onpointerdown = endTurn;
     })
 }
@@ -109,13 +120,6 @@ export function cardPlayed(cardIndex,col){
     socket.emit('playerPlayCard', roomId, socketId, cardIndex, col);
 }
 
-export function endTurn() {
-    $('endTurnBtn').classList.remove('displaying');
-    //$('handPoint').classList.remove('displaying');
-    UI_Handler.displayActionSlots('waitingForTurn');
-    socket.emit('playerEndTurn', roomId, socketId);
-}
-
 //neccessary Util functions
 export function $(el) { return document.getElementById(el) };
 export function getOffset( el ) {
@@ -142,7 +146,9 @@ export function getDataManager(){
 export function getPlayerBoard(){
     return playerBoard;
 }
-
+export function getPlayerTurn(){
+    return currentlyYourTurn;
+}
 export function cloneObject(obj){
     return JSON.parse(JSON.stringify(obj));
 }
