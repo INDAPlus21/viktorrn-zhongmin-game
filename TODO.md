@@ -7,7 +7,7 @@
 
 ## Next Prio
 
-[ ] Some sort of feed back for sacc´ing cards
+[ ] Some sort of feedback for sacc´ing cards
 
 [ ] Some sort of feedback for when cards attack
 

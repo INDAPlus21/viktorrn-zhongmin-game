@@ -1,5 +1,5 @@
 import * as Main from './hostSocket.js';
-import * as Card from './cards.js';
+import * as Card from '../../dataManager/cards.js';
 export class UIHandler{
     cardPickingPhase = null;
 

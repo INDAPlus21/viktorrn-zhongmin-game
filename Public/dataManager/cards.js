@@ -28,12 +28,9 @@ export function getCardDiv(card){
     div.appendChild(cost);
 
     let description = document.createElement('div');
-    description.innerText = "effect name";
+    if(card.sigil != undefined) description.innerText = card.sigil;
     description.classList.add('description')
     div.appendChild(description);
 
     return div;
 }
-
-
-

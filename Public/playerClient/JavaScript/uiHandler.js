@@ -1,9 +1,9 @@
-import * as Card from './cards.js';
+import * as Card from '../../dataManager/cards.js';
 import * as Main from './main.js';
 
 export class UIHandler{ 
 
-    amountOfStartingCards = 4;
+    amountOfStartingCards = 6;
     cardsPicked;
     cardPickingPhase = null;
 
@@ -281,7 +281,6 @@ export class UIHandler{
     }
 
     returnHandCard(){
-        
         //animation for card
         if(!this.cardWasPlayed){
             try{

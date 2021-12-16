@@ -1,4 +1,4 @@
-import * as Card from './cards.js';
+import * as Card from '../../dataManager/cards.js';
 import * as UIHandler from './uiHandler.js';
 import * as DataManagerImport from '../../dataManager/dataManager.js';
 //import e from './express'; // Comment- doesnt load

@@ -139,10 +139,11 @@ socket.on('connect', () => {// run this when connected
     }
   });
 
-  socket.on('playerDrawCard', (playerId, callback) => {
+  socket.on('playerDrawCard', (playerId, drawnCard) => {
+    if(drawnCard == 'Squirrel'){ playerInfo['player'+i].hand.push(DataManager.getSpecificCard('Squirrel')); return; }
+    
     let remaining = playerInfo['player'+isPlayer(playerId)].remainingDeck;
     let card = remaining.shift(); // the card that was drawn - undefined if empty
-    callback(card); // send the card back for stuff like animations?
 
     let i = isPlayer(playerId);
     playerInfo['player'+i].hand.push(remaining.shift()); // get first element of deck, remove first element from deck
