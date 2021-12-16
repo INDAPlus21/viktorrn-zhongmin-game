@@ -13,12 +13,13 @@ export class UIHandler{
 
     cardsPlayed = null;
 
-    constructor(handHTMLHandle,actionSlotsHTMLHandle,cardSelectionPageHTMLHandle,cardPickZoneHTMLHandle,selectedCardsHTMLHandle){
+    constructor(handHTMLHandle,actionSlotsHTMLHandle,cardSelectionPageHTMLHandle,cardPickZoneHTMLHandle,selectedCardsHTMLHandle,playerBloodDisplayHTMLHandle){
         this.handHTMLHandle = handHTMLHandle;
         this.actionSlotsHTMLHandle = actionSlotsHTMLHandle;
         this.cardSelectionPageHTMLHandle = cardSelectionPageHTMLHandle;
         this.cardPickZoneHTMLHandle = cardPickZoneHTMLHandle;
         this.selectedCardsHTMLHandle = selectedCardsHTMLHandle;
+        this.playerBloodDisplayHTMLHandle = playerBloodDisplayHTMLHandle;
     }
 
     //for card picking
@@ -85,6 +86,7 @@ export class UIHandler{
                     if(board != null && board[i] != null){ 
                         let card = Card.getCardDiv(board[i]);
                         card.setAttribute('cardIndex',i);
+                        card.style.pointerEvents = "none";
                         if(card.age == 0) div.style.opacity = 0.7;
                         div.appendChild(card);
                     }
@@ -149,15 +151,24 @@ export class UIHandler{
                 el.onpointerdown = () =>{
                     this.playedCard(i,el);
                 } 
+            }else{
+                el.onpointerdown = null;
+                el.onpointerover = null,
+                el.onpointerout = null;
+                el.style.transform = 'scale(1.1)'; 
+                el.style.border = '';
             }
         }
     }
 
-    suggestSacrifice(){
+    suggestSacrifices(board){
+        console.log("suggest sac",board)
         for(let i in board){
+           try{
             let el = this.actionSlotsHTMLHandle.children[i];
-            if(board[i] == null){
+            if(board[i] != null){
                 el.style.transform = 'scale(1.1)';
+                console.log(el);
                 el.onpointerover = () =>{
                     el.style.border = '10px solid rgb(220, 220, 220)';
                     el.style.transform = 'scale(1.3)';
@@ -168,22 +179,49 @@ export class UIHandler{
                 }
                 el.onpointerdown = () =>{
                     
+                    Main.sacrificeCard(i);
+                    
+                    //trigger animation or effect here
+                    console.log("sacced card",el);
+                    el.firstChild.remove();
+                    this.disableDropZone(); 
                 } 
             }
+           }catch(err){
+               console.log(err)
+           } 
         }
+    
+        let timer = setInterval(()=>{
+            window.onpointerdown = this.disableDropZone; 
+            clearInterval(timer);
+        },100)
+        
     }
 
     disableDropZone(){
-        for(let i in this.actionSlotsHTMLHandle.children){
-            let el = this.actionSlotsHTMLHandle.children[i];
-            if(el.tagName == 'DIV'){
-                el.style.transform = ''; 
-                el.style.border = '';
-                el.onpointerout = null;
-                el.onpointerover = null;
-                el.onpointerdown = null;
+        try{
+            for(let i in this.actionSlotsHTMLHandle.children){
+                let el = this.actionSlotsHTMLHandle.children[i];
+                if(el.tagName == 'DIV'){
+                    el.style.transform = ''; 
+                    el.style.border = '';
+                    el.onpointerout = null;
+                    el.onpointerover = null;
+                    el.onpointerdown = null;
+                }
+                
             }
-            
+        }catch(error){console.log("error",error)}
+        
+    }
+
+    drawBloodLevel(level){
+        Main.clearElement(this.playerBloodDisplayHTMLHandle);
+        for(let i = 0; i < level; i++){
+            let div = document.createElement('div');
+            div.classList.add('blood');
+            this.playerBloodDisplayHTMLHandle.appendChild(div);
         }
     }
 
@@ -234,12 +272,11 @@ export class UIHandler{
         //activate drop zone
         if(!Main.getPlayerTurn()) return
         let playerData = Main.getPlayerData();
-        
-        if(playerData.bloodLevel >= card.cost)
+        if(playerData.bloodLevel >= playerData.hand[card.getAttribute('cardindex')].cost)
             this.activateDropZone(Main.getPlayerData().board);
         else{
+            this.disableDropZone();
             console.log("need to sac a card")
-            this.suggestSacrifice(Main.getPlayerData().board)
         }
     }
 
@@ -258,7 +295,7 @@ export class UIHandler{
                 try{
                     document.body.removeChild(Main.getUIHandler().currentDisplayedCard)
                     this.currentCardSelected.style.margin ="";
-                    this.currentCardSelected.style.visibility = ''; //visible
+                    this.currentCardSelected.style.visibility = ''; 
                     this.currentDisplayedCard = null;
                     this.currentCardSelected = null;
                 }catch{}
@@ -293,6 +330,7 @@ export class UIHandler{
             card.onpointerdown = null;
             card.onpointerout = null;
             card.style.opacity = 0.7;
+            card.style.pointerEvents = "none";
             el.appendChild(card);
             //card.style.opacity = '0';
 

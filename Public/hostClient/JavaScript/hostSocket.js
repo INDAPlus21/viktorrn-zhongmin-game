@@ -114,6 +114,7 @@ socket.on('connect', () => {// run this when connected
       // copy original deck to remaining deck for the game
         playerInfo.player1.remainingDeck = shuffle(playerInfo.player1.originalDeck);
         playerInfo.player2.remainingDeck = shuffle(playerInfo.player2.originalDeck);
+        playerInfo.player2.blood = 1;
         // start this mf
         // both players draw 4 cards to put in their hand
         for (let i in [1,2,3]) {
@@ -126,6 +127,7 @@ socket.on('connect', () => {// run this when connected
         UI_Handler.displayBoard(boardInfo);
         await socket.emit('startGame', roomId, playerInfo.player1.id, playerInfo.player2.id);
         await socket.emit('syncClient', playerInfo.player1, boardInfo.player1);
+        await socket.emit('syncClient', playerInfo.player2, boardInfo.player2);
         await socket.emit('startTurn', playerInfo.player1.id, 0);
         GAMESTATE = 'ingame';
         $('bodyPregame').classList.remove('onscreen');
@@ -153,7 +155,9 @@ socket.on('connect', () => {// run this when connected
     console.log("cardIndex",cardIndex);
     let i = isPlayer(playerId); // get which player it is
     let card = playerInfo['player'+i].hand[cardIndex]; // get the card that is being played
+    playerInfo['player'+i].blood -=  playerInfo['player'+i].hand[cardIndex].cost; //charge the cards cost
     playerInfo['player'+i].hand.splice(cardIndex, 1); // remove the card from the player's hand
+    
 
     boardInfo['player'+i][column] = card; // add that card to the board
     //delete boardInfo['player'+i][column].cost; // cost is irrelevant to boardInfo since it's already placed out
@@ -164,6 +168,24 @@ socket.on('connect', () => {// run this when connected
     UI_Handler.displayBoard(boardInfo);
   });
 
+  socket.on('playerSacrificeCard',(playerId,column) =>{
+    try{
+      console.log("player sacrificed card on col",column)
+      let i = isPlayer(playerId);
+      
+      boardInfo['player'+i][column] = null;
+      
+      if(playerInfo['player'+i].blood < 4) playerInfo['player'+i].blood += 1;
+      
+      socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i]);
+      
+      UI_Handler.displayBoard(boardInfo);
+
+    }catch(error){
+      console.log("error",error)
+    }
+  });
+
   // big calculations in here!!!!
   socket.on('playerEndTurn', async (playerId) => {
     let i = isPlayer(playerId); // get which player it is
@@ -172,13 +194,12 @@ socket.on('connect', () => {// run this when connected
     for (let k=0; k<4; k++) { // loop through all 4 columns
 
       let thisCard = boardInfo['player'+i][k]; // the card at this position
-      if (thisCard === null) {
-        console.log('null column');
-        continue; // if there is no card here, continue to the next column
-      }
+      if (thisCard === null) continue;
+        //console.log('null column');
+         // if there is no card here, continue to the next column
 
       else { // if there IS a card here
-        console.log('card: '+thisCard.name);
+        console.log('card: '+thisCard);
         if (thisCard.age > 0) { // and it can attack
           let opposingCard = boardInfo['player'+n][k]; // get the opposing card
 
@@ -190,7 +211,7 @@ socket.on('connect', () => {// run this when connected
             opposingCard.health -= thisCard.damage; // attack the opposing card
             if (opposingCard.health <= 0) boardInfo['player'+n][k] = null // set column to null if it dies from the attack
           }
-        }
+       }
         thisCard.age += 1 // age by 1
       }
     }

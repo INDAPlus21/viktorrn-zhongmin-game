@@ -4,7 +4,7 @@ import * as DataManagerImport from '../../dataManager/dataManager.js';
 //import e from './express'; // Comment- doesnt load
 
 let currentlyYourTurn = false;
-let UI_Handler = new UIHandler.UIHandler($('handPoint'),$('actionSlots'),$('cardSelectionPage'),$('cardPickZone'),$('selectedCards')); 
+let UI_Handler = new UIHandler.UIHandler($('handPoint'),$('actionSlots'),$('cardSelectionPage'),$('cardPickZone'),$('selectedCards'),$('bloodLevel')); 
 let DataManager = new DataManagerImport.DataManager();
 let endTurnBtn = $('endTurnBtn');
 
@@ -14,6 +14,19 @@ let socket = io(); // event listener/emitter
 let roomId; // room id
 let playerName;
 let socketId;
+
+window.onload = function(){
+    DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager,(Manager = DataManager) => {
+        let cards = []
+        for(let i of DataManager.startingCards) cards.push(DataManager.getSpecificCard(i));
+        UI_Handler.displayCardSelectionPage(cards);
+        //UI_Handler.displayActionSlots('chooseCard',cards);
+        //UI_Handler.drawHand(cards);
+        $('handPoint').classList.add('displaying');
+        $('endTurnBtn').onpointerdown = endTurn;
+        $('sacrificeCardBtn').onpointerdown = ()=> {UI_Handler.suggestSacrifices(getPlayerData().board);}
+    })
+}
 
 socket.on('connect', () => {// run this when connected
     socketId = socket.id; // save this
@@ -46,6 +59,7 @@ socket.on('syncClient', (hand,playerboard,bloodLevel,playerDeck) => {
     playerData.board = playerboard;
     playerData.bloodLevel = bloodLevel;
     playerData.deck = playerDeck;
+    UI_Handler.drawBloodLevel(playerData.bloodLevel);
 });
 
 socket.on('startTurn', (turn) => {
@@ -58,6 +72,7 @@ socket.on('startTurn', (turn) => {
     UI_Handler.drawHand(playerData.hand);
     $('endTurnBtn').classList.add('displaying');
     $('handPoint').classList.add('displaying');
+    $('sacrificeCardBtn').classList.add('displaying');
 });
 
 socket.on('youWin', () => {
@@ -72,22 +87,14 @@ socket.on('youLose', () => {
 
 export function endTurn() {
     $('endTurnBtn').classList.remove('displaying');
-    //$('handPoint').classList.remove('displaying');
+    $('sacrificeCardBtn').classList.remove('displaying');
     currentlyYourTurn = false;
     UI_Handler.displayActionSlots('waitingForTurn');
     socket.emit('playerEndTurn', roomId, socketId);
 }
 
-window.onload = function(){
-    DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager,(Manager = DataManager) => {
-        let cards = []
-        for(let i of DataManager.startingCards) cards.push(DataManager.getSpecificCard(i));
-        UI_Handler.displayCardSelectionPage(cards);
-        //UI_Handler.displayActionSlots('chooseCard',cards);
-        //UI_Handler.drawHand(cards);
-        $('handPoint').classList.add('displaying');
-        $('endTurnBtn').onpointerdown = endTurn;
-    })
+export function sacrificeCard(column){
+    socket.emit('playerSacrificeCard', roomId, socketId, column);
 }
 
 

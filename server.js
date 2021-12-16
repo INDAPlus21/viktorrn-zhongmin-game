@@ -133,7 +133,7 @@ io.on('connection', (socket) => { // server is online
   // did
   // event from player: player is sacrificing a card on the field and should receive 1 blood.
   socket.on('playerSacrificeCard', (roomId, playerId, column) => {
-    socket.to(hostOf(roomId)).emit('playerSacrificeCard', playerId, card, column);
+    socket.to(hostOf(roomId)).emit('playerSacrificeCard', playerId, column);
   });
 
   // event from host: the game has ended, the specified player display that they won, the other player that they lost.
