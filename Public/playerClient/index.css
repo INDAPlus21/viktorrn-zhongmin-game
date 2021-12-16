@@ -366,6 +366,7 @@ transform: scale(1.05);
     position: absolute;
     bottom:150px;
     left:75px;
+    display: none;
 }
 
 #bloodLevel .blood{

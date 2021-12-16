@@ -75,7 +75,20 @@ export class UIHandler{
                 Main.$('p2SlotIndex'+c).appendChild(card);
             }
         }
-
+        
         let scale = document.createElement('div');
+        let p1Scale = document.createElement('div');
+        let p2Scale = document.createElement('div');
+        scale.id = "scaleDiv";
+        p1Scale.id ="player1Scale";
+        p2Scale.id = "player2Scale";
+        
+        p1Scale.innerText = boardInfo.p1damage;   
+        p2Scale.innerText = boardInfo.p2damage; 
+        
+        scale.appendChild(p1Scale);
+        scale.appendChild(p2Scale);
+
+        Main.$('playerBoard').appendChild(scale);
     }
 }

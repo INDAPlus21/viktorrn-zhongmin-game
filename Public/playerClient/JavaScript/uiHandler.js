@@ -26,11 +26,13 @@ export class UIHandler{
     displayCardSelectionPage(cards){
         this.cardsPicked = [];
         this.cardSelectionPageHTMLHandle.style.top = '0px';
+        Main.$('selectCardHeader').innerText = "-Select " + (this.amountOfStartingCards) +" More Cards-"
         for(let i in cards){
             let div = Card.getCardDiv(cards[i]);
             div.id = ('pickCardIndex'+i);
             div.setAttribute('pickCardIndex',i);
             div.onpointerdown = () => {
+                Main.$('selectCardHeader').innerText = "-Select " + (this.amountOfStartingCards - this.cardsPicked.length -1) +" More Cards-"
                 this.cardsPicked.push(div.getAttribute('cardName'));
                 this.disablePickedCard(div.getAttribute('pickCardIndex'),true)
                 if(this.cardsPicked.length >= this.amountOfStartingCards) Main.doneWithStartingCards(this.cardsPicked);
@@ -73,7 +75,7 @@ export class UIHandler{
 
     // for gameLogic
 
-    displayActionSlots(state,deck,board){
+    displayActionSlots(state,deck,board,hand){
         Main.clearElement(this.actionSlotsHTMLHandle);
         let div;
         switch(state){
@@ -95,33 +97,36 @@ export class UIHandler{
             break;
 
             case 'chooseCard':
-                    let squirrel = document.createElement('div');
-                    squirrel.setAttribute('class','card');
-                    squirrel.onpointerdown = () =>{
-                        Main.clearElement(this.actionSlotsHTMLHandle);
-                        Main.chooseCard('squirrel');
-                    }
-                    let name = document.createElement('div');
-                    name.innerText = "Squirrel";
-                    name.setAttribute('class','name')
-                    squirrel.appendChild(name);
-                    this.actionSlotsHTMLHandle.appendChild(squirrel);
+                if(hand.length >= 7){
+                    this.displayActionSlots('playCards',[],board); break;
+                } 
+                let squirrel = document.createElement('div');
+                squirrel.setAttribute('class','card');
+                squirrel.onpointerdown = () =>{
+                    Main.clearElement(this.actionSlotsHTMLHandle);
+                    Main.chooseCard('Squirrel');
+                }
+                let name = document.createElement('div');
+                name.innerText = "Squirrel";
+                name.setAttribute('class','name')
+                squirrel.appendChild(name);
+                this.actionSlotsHTMLHandle.appendChild(squirrel);
 
-                    try{
-                        if(deck.length > 0){
-                            let beast =  document.createElement('div');
-                            beast.setAttribute('class','card');
-                            beast.onpointerdown = () =>{
-                                Main.clearElement(this.actionSlotsHTMLHandle);
-                                Main.chooseCard('beast');
-                            }
-                            name = document.createElement('div');
-                            name.innerText = "Beast";
-                            name.setAttribute('class','name')
-                            beast.appendChild(name);
-                            this.actionSlotsHTMLHandle.appendChild(beast);
+                try{
+                    if(deck.length > 0){
+                        let beast =  document.createElement('div');
+                        beast.setAttribute('class','card');
+                        beast.onpointerdown = () =>{
+                            Main.clearElement(this.actionSlotsHTMLHandle);
+                            Main.chooseCard('Beast');
                         }
-                    }catch(error){console.log(error)}
+                        name = document.createElement('div');
+                        name.innerText = "Beast";
+                        name.setAttribute('class','name')
+                        beast.appendChild(name);
+                        this.actionSlotsHTMLHandle.appendChild(beast);
+                    }
+                }catch(error){console.log(error)}
                     
             break;
 
@@ -272,11 +277,11 @@ export class UIHandler{
         //activate drop zone
         if(!Main.getPlayerTurn()) return
         let playerData = Main.getPlayerData();
-        if(playerData.bloodLevel >= playerData.hand[card.getAttribute('cardindex')].cost)
+        if(playerData.bloodLevel >= playerData.hand[card.getAttribute('cardindex')].cost && !Main.getPlayerPickingCard())
             this.activateDropZone(Main.getPlayerData().board);
         else{
             this.disableDropZone();
-            console.log("need to sac a card")
+            console.log("need to sac a card or youre picking cards")
         }
     }
 

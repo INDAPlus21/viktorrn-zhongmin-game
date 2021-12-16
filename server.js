@@ -97,7 +97,7 @@ io.on('connection', (socket) => { // server is online
 
   // event from player: player either draws a card from their deck, or a squirrel.
   socket.on('playerDrawCard', (roomId, playerId, drawnCard) => {
-    socket.to(hostOf(roomId)).emit('playerEndTurn', playerId, drawnCard);
+    socket.to(hostOf(roomId)).emit('playerDrawCard', playerId, drawnCard);
   });
 
   // event from host: the specified player starts their turn.
@@ -107,12 +107,12 @@ io.on('connection', (socket) => { // server is online
 
   // event from host: the player's hand is updated with the list from the host, to eliminate desync issues.
   // this is triggered in multiple places.
-  socket.on('syncClient', (playerObj, board) => {
+  socket.on('syncClient', (playerObj, board, redrawUI) => {
     let id = playerObj.id;
     let hand = playerObj.hand;
     let blood = playerObj.blood;
     let deck = playerObj.remainingDeck;
-    socket.to(id).emit('syncClient', hand, board, blood, deck);
+    socket.to(id).emit('syncClient', hand, board, blood, deck, redrawUI);
   });
 
  // event from player: player is ending turn

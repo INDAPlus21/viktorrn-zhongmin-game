@@ -14,6 +14,8 @@ let socket = io(); // event listener/emitter
 let roomId; // room id
 let playerName;
 let socketId;
+let displayPlayCardAreaOnSync = false;
+let playerPickingCard = false;
 
 window.onload = function(){
     DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager,(Manager = DataManager) => {
@@ -53,25 +55,35 @@ socket.on('startGame', () => {
     UI_Handler.displayActionSlots('waitingForTurn');
 })
 
-socket.on('syncClient', (hand,playerboard,bloodLevel,playerDeck) => {
+socket.on('syncClient', (hand,playerboard,bloodLevel,playerDeck,redrawUI) => {
     console.log("sync",hand,playerboard,bloodLevel)
     playerData.hand = hand;
     playerData.board = playerboard;
     playerData.bloodLevel = bloodLevel;
     playerData.deck = playerDeck;
-    UI_Handler.drawBloodLevel(playerData.bloodLevel);
+    console.log( "reDrawUI", redrawUI );
+    if(redrawUI){
+        UI_Handler.drawBloodLevel(playerData.bloodLevel);
+        UI_Handler.drawHand(playerData.hand);
+        if(displayPlayCardAreaOnSync) UI_Handler.displayActionSlots('playCards',[],playerData.board);
+        displayPlayCardAreaOnSync = false; 
+    }
+    
 });
 
 socket.on('startTurn', (turn) => {
     console.log("playerData",playerData,"start");
     currentlyYourTurn = true;
     if(turn !== 0){
-        UI_Handler.displayActionSlots('chooseCard');
-    }   
-    UI_Handler.displayActionSlots('playCards',[],playerData.board);
+        UI_Handler.displayActionSlots('chooseCard',playerData.deck,[],playerData.hand);
+        playerPickingCard = true;
+    }else{
+        UI_Handler.displayActionSlots('playCards',[],playerData.board);
+    }  
     UI_Handler.drawHand(playerData.hand);
     $('endTurnBtn').classList.add('displaying');
     $('handPoint').classList.add('displaying');
+    $('bloodLevel').classList.add('displaying');
     $('sacrificeCardBtn').classList.add('displaying');
 });
 
@@ -85,18 +97,6 @@ socket.on('youLose', () => {
     $('youLose').classList.add('onscreen');
 });
 
-export function endTurn() {
-    $('endTurnBtn').classList.remove('displaying');
-    $('sacrificeCardBtn').classList.remove('displaying');
-    currentlyYourTurn = false;
-    UI_Handler.displayActionSlots('waitingForTurn');
-    socket.emit('playerEndTurn', roomId, socketId);
-}
-
-export function sacrificeCard(column){
-    socket.emit('playerSacrificeCard', roomId, socketId, column);
-}
-
 
 // this function is run when the player is done selecting their starting deck and is ready to play
 export function doneWithStartingCards(cards){
@@ -109,21 +109,28 @@ export function doneWithStartingCards(cards){
     // @viktor at here, maybe change to another section that is just a blank waiting screen
 }
 
-export function chooseCard(cardType,deck){
-    switch(cardType){
-        case 'beast':
+export function sacrificeCard(column){
+    socket.emit('playerSacrificeCard', roomId, socketId, column);
+}
 
-            break;
-        case 'squirrel':
-
-            break;
-    }
+export function chooseCard(cardType){
+    socket.emit('playerDrawCard', roomId, socketId, cardType);
+    displayPlayCardAreaOnSync = true;
+    playerPickingCard = false;
 }
 
 export function cardPlayed(cardIndex,col){
     playerData.hand.splice(cardIndex,1);
     UI_Handler.drawHand(playerData.hand);
     socket.emit('playerPlayCard', roomId, socketId, cardIndex, col);
+}
+
+export function endTurn() {
+    $('endTurnBtn').classList.remove('displaying');
+    $('sacrificeCardBtn').classList.remove('displaying');
+    currentlyYourTurn = false;
+    UI_Handler.displayActionSlots('waitingForTurn');
+    socket.emit('playerEndTurn', roomId, socketId);
 }
 
 //neccessary Util functions
@@ -154,6 +161,9 @@ export function getPlayerData(){
 }
 export function getPlayerTurn(){
     return currentlyYourTurn;
+}
+export function getPlayerPickingCard(){
+    return playerPickingCard;
 }
 export function cloneObject(obj){
     return JSON.parse(JSON.stringify(obj));
