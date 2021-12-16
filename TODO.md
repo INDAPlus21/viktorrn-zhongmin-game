@@ -25,5 +25,6 @@
 
 ## Done
 
-[X] Fix sacc functionality.
-[X] Fix sleep display.
+[X] Fix sacc functionality
+
+[X] Fix sleep display
