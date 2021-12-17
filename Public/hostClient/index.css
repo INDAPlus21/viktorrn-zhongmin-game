@@ -305,10 +305,13 @@ body::-webkit-scrollbar {
 }
 
 .damageClawEffect{
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
     position: absolute;
     background-image: url('../assets/clawPNG.png');
     background-size: 150px 150px;
     z-index: 30;
+    transform: rotate(0deg);
+    transition: opacity 0.3s linear, left 0.7s cubic-bezier(0,1,1,1), top 0.7s cubic-bezier(1,0,1,1);
+    -webkit-transition: opacity 0.3s linear, left 0.7s cubic-bezier(0,1,1,1), top 0.7s cubic-bezier(1,0,1,1);
 }

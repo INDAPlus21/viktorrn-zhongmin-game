@@ -1,5 +1,6 @@
 import * as UIHandler from './uiHandler.js';
 import * as DataManagerImport from '../../dataManager/dataManager.js';
+import * as AnimationHandler from './animations.js';
 
 let socket = io(); // event listener/emitter
 let socketId; // the client's unique id for the socket connection
@@ -55,7 +56,7 @@ window.onload = async function(){
 
     $('spawnEffect').onpointerdown = () =>{
       
-      displayAttack(getCardFromBoard(1,0),getCardFromBoard(2,0),12);
+      AnimationHandler.displayAttack(getCardFromBoard(1,0),getCardFromBoard(2,0),12);
   }
   });
   
@@ -339,56 +340,6 @@ function getCardFromBoard(playerIndex,col){
   return $(`p${playerIndex}Card_${col}`);
 }
 
-async function displayAttack(attackedCard,attackerCard,damage){
-    
-    let pos = attackedCard.getBoundingClientRect();
-    //console.log("atk card",attackedCard,pos)
-    
-    let claw = document.createElement('div');
-    claw.classList.add('damageClawEffect');
-    claw.style.top = pos.top + 15 + "px";
-    claw.style.left = pos.left - 15 + "px";
-    document.body.appendChild(claw);
-    let a1 = setInterval(()=>{
-      clearInterval(a1)
-      claw.remove();
-    },500)
-
-
-
-    //damage number
-    let div = document.createElement('div');
-    div.classList.add("damageTextEffect");
-    div.style.left = (pos.left) +"px";
-    div.style.top = (pos.top) +"px";
-    div.innerText = damage;
-    document.body.appendChild(div);
-
-    let c1 = setInterval(()=>{
-      clearInterval(c1);
-      div.style.left = (pos.left -20) +"px";
-      div.style.top = (pos.top - 25) +"px";
-      div.style.transition = "top 0.2s cubic-bezier(0,0.9,1,1), left 0.2s linear";
-      div.style.transfrom = "scale(10)";
-      div.style['-webkit-transform'] = "scale(6)";
-      
-      let c2 = setInterval(()=>{
-      clearInterval(c2);
-        div.style.transition = '';
-        div.style.opacity = "0";
-        div.style.left = (pos.left - 25) +"px";
-        div.style.top = (pos.top -35) +"px";
-
-        let c3 = setInterval(()=>{
-          clearInterval(c3);
-          div.remove();
-
-        },500)
-      },200)
-    },20)
-    
-    
-}
 
 //neccessary Util functions
 export function $(el) { return document.getElementById(el) };
