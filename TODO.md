@@ -1,11 +1,7 @@
 
 # A TODO list
 
-## Top prio
-
-[ ] Fix card picking on seccond turn.
-
-## Next Prio
+## Prio
 
 [ ] Some sort of feedback for sacc´ing cards
 
@@ -13,7 +9,6 @@
 
 [ ] Add more cards
 
-[ ] Add sigils
 
 ## Cool things to have
 
@@ -28,3 +23,7 @@
 [X] Fix sacc functionality
 
 [X] Fix sleep display
+
+[X] Fix card picking on seccond turn
+
+[x] Add sigils
