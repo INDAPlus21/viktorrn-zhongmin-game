@@ -30,10 +30,15 @@ export class DataManager{
     }
 
     getGameCardTable(){
-
+        let cards = [];
+        for(let i in this.startingCards){
+            cards.push(this.getSpecificCard(this.startingCards[i]));
+        }
+        return cards;
     }
 
     getSpecificCard(name){
+        console.log()
        for(let c of this.cardLibrary){
            if(c.name == name) return this.cloneObject(c);
        }

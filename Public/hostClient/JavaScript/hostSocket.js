@@ -150,7 +150,7 @@ socket.on('connect', () => {// run this when connected
     }
    
 
-    socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i], true); // refresh the client with new data
+    socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i], true  /* this boolean makes the player client redraw their hand as well as blood */); // refresh the client with new data
     
   });
 
@@ -159,6 +159,13 @@ socket.on('connect', () => {// run this when connected
     let i = isPlayer(playerId); // get which player it is
     let card = playerInfo['player'+i].hand[cardIndex]; // get the card that is being played
     playerInfo['player'+i].blood -=  playerInfo['player'+i].hand[cardIndex].cost; //charge the cards cost
+    
+    switch(card.name){
+      case 'Warren':
+          drawSpecificCard(playerInfo['player'+i],"Rabbit");
+        break;
+    }
+    
     playerInfo['player'+i].hand.splice(cardIndex, 1); // remove the card from the player's hand
     
 
@@ -166,7 +173,10 @@ socket.on('connect', () => {// run this when connected
     //delete boardInfo['player'+i][column].cost; // cost is irrelevant to boardInfo since it's already placed out
     boardInfo['player'+i][column].age = 0; // how long the card has been on the board
 
-    socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i],true); // refresh the client with new data
+    //sigil check
+    
+
+    socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i],true  /* this boolean makes the player client redraw their hand as well as blood */); // refresh the client with new data
 
     UI_Handler.displayBoard(boardInfo);
   });
@@ -175,12 +185,21 @@ socket.on('connect', () => {// run this when connected
     try{
       console.log("player sacrificed card on col",column)
       let i = isPlayer(playerId);
-      
+      //sigil check
+      let card = boardInfo['player'+i][column];
+      let removeCard =  true;
+      switch(card.sigil){
+        case "Many Lives":
+          removeCard = false;
+          break;
+      }
+
+      if(removeCard)
       boardInfo['player'+i][column] = null;
       
       if(playerInfo['player'+i].blood < 4) playerInfo['player'+i].blood += 1;
       
-      socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i],true);
+      socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i],true  /* this boolean makes the player client redraw their hand as well as blood */);
       
       UI_Handler.displayBoard(boardInfo);
 
@@ -202,23 +221,53 @@ socket.on('connect', () => {// run this when connected
          // if there is no card here, continue to the next column
 
       else { // if there IS a card here
-        console.log('card: '+thisCard);
+        console.log('card: '+thisCard); 
         if (thisCard.age > 0) { // and it can attack
+          
           let opposingCard = boardInfo['player'+n][k]; // get the opposing card
 
-          if (opposingCard === null /*|| thisCard.sigil.includes('air')*/) {
+          let attackHitCard = false;
+          
+          if (opposingCard !== null){
+            // run sigil checks relevent to attacking
+            
+            attackHitCard = true; // asume the card hits and ajust afterwards
 
+            switch(thisCard.sigil){
+              case 'Flying':
+                if(opposingCard.sigil != 'Flying')
+                  attackHitCard = false;
+                break;
+            }
+          } 
+
+          if (attackHitCard) {
+            
+            opposingCard.health -= thisCard.damage; // attack the opposing card
+            if(opposingCard.sigil == 'Sharp Quills') thisCard.health -= 1; //Porcupine
+            if (opposingCard.health <= 0) boardInfo['player'+n][k] = null // set column to null if it dies from the attack
+            if (thisCard.health <= 0) boardInfo['player'+i][k] = null
+          } else {
+            
             boardInfo[`p${i}damage`] += thisCard.damage; // if there is no card opposing it OR if this card ignores opposing cards, attack the player
             console.log(`card: ${thisCard.name} from player ${i} dealt ${thisCard.damage}, total ${boardInfo[`p${i}damage`]}`);
-          
-          } else {
-          
-            opposingCard.health -= thisCard.damage; // attack the opposing card
-            if (opposingCard.health <= 0) boardInfo['player'+n][k] = null // set column to null if it dies from the attack
-          
+            
           }
        }
-        thisCard.age += 1 // age by 1
+        thisCard.age += 1 
+        // run sigil check relevent to age
+        if(thisCard.age > 1 && thisCard.sigil === "Fledgling"){
+          switch(thisCard.name){
+            case 'Wolf Cub':
+               boardInfo['player'+i][k] = await DataManager.getSpecificCard("Wolf");
+            break;
+            case 'Raven Egg':
+              boardInfo['player'+i][k] = await DataManager.getSpecificCard("Raven");
+            break;
+          }
+          boardInfo['player'+i][k].age = 1;
+        }
+        socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i], true /* this boolean makes the player client redraw their hand as well as blood */  ); 
       }
     }
     
@@ -244,10 +293,25 @@ socket.on('connect', () => {// run this when connected
 
 // SEPARATOR - You are now entering Not Socket
 
+function drawSpecificCard(playerObj, cardName){
+  playerObj.hand.push(DataManager.getSpecificCard(cardName));
+  let i = isPlayer(playerObj.id);
+  socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i],true);
+}
+
 function drawOneCard(playerObj) {
   if (playerObj.remainingDeck.length > 0)
   playerObj.hand.push(playerObj.remainingDeck.shift());
   // shift() takes one element from the array and pushes it into the player's hand
+}
+
+
+function getCardFromBoard(playerIndex,col){
+  return $(`p${playerIndex}Card_${col}`);
+}
+
+function displayAttack(attackedCard,damage){
+  let div = document.createElement('div');
 }
 
 //neccessary Util functions
