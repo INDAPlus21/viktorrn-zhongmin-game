@@ -86,15 +86,25 @@ body::-webkit-scrollbar {
     pointer-events: none;
 }
 
-.card{
+.card,.highlightCard{
     background-color: rgb(92, 84, 56);
     width:120px;
     height:180px;
     border-radius: 20px;
     border: 10px solid black;
+    
+}
+.card{
     vertical-align: top;
+    transition: opacity 1s cubic-bezier(0,1,0.5,1);
+    -webkit-transition: opacity 1s cubic-bezier(0,1,0.5,1);
 }
 
+.highlightCard{
+    position: absolute;
+    text-align: center;
+    z-index: 10;
+}
 
 .name{
     font-size: 2em;
@@ -147,6 +157,8 @@ body::-webkit-scrollbar {
     font-size: 2em;
     width: 100%;
 }
+
+
 
 #BigBoiTextDisplay{
     z-index: 11;
@@ -244,9 +256,6 @@ body::-webkit-scrollbar {
     margin: 0 0 0 -10px;
 }
 
-.cardSlots{
-    
-}
 
 #playerBoard #scaleDiv{
     position: absolute;
@@ -312,6 +321,6 @@ body::-webkit-scrollbar {
     background-size: 150px 150px;
     z-index: 30;
     transform: rotate(0deg);
-    transition: opacity 0.3s linear, left 0.7s cubic-bezier(0,1,1,1), top 0.7s cubic-bezier(1,0,1,1);
-    -webkit-transition: opacity 0.3s linear, left 0.7s cubic-bezier(0,1,1,1), top 0.7s cubic-bezier(1,0,1,1);
+    transition: opacity 0.3s linear, left 0.7s cubic-bezier(0,1,0.5,1), top 0.7s cubic-bezier(1,0,0.5,1);
+    -webkit-transition: opacity 0.3s linear, left 0.7s cubic-bezier(0,1,0.5,1), top 0.7s cubic-bezier(1,0,0.5,1);
 }

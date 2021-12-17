@@ -22,20 +22,14 @@ export class UIHandler{
         }
     }
 
-    hideCardSelectionPage(){
-        this.cardSelectionPageHTMLHandle.style.top = '-100%';
-    }
-
-    cardPicked(){
-
-    }
-
     // card display
     getCardDiv(card){
         let div = Card.getCardDiv(card);
         div.setAttribute('class','card');
         return div;
     }
+
+
 
     displayBoard(boardInfo){
         
@@ -63,8 +57,10 @@ export class UIHandler{
         for(let c in boardInfo.player1){
             if(boardInfo.player1[c] !== null){
                 let card = this.getCardDiv(boardInfo.player1[c]);
+                let age = boardInfo.player1[c].age
                 card.id = "p1Card_"+c;
-                if(boardInfo.player1[c].age == 0) card.style.opacity = 0.7;
+                card.setAttribute('age',age);
+                if(age == 0) card.style.opacity = 0.7;
                 Main.$('p1SlotIndex'+c).appendChild(card);
             }
         }
@@ -72,8 +68,10 @@ export class UIHandler{
         for(let c in boardInfo.player2){
             if(boardInfo.player2[c] !== null){
                 let card = this.getCardDiv(boardInfo.player2[c]);
+                let age = boardInfo.player2[c].age
                 card.id = "p2Card_"+c;
-                if(boardInfo.player2[c].age == 0) card.style.opacity = 0.7;
+                card.setAttribute('age',age);
+                if(age == 0) card.style.opacity = 0.7;
                 Main.$('p2SlotIndex'+c).appendChild(card);
             }
         }
@@ -92,5 +90,17 @@ export class UIHandler{
         scale.appendChild(p2Scale);
 
         Main.$('playerBoard').appendChild(scale);
+    }
+
+    updateCard(oldCard,cardData){
+        let newCard = Card.getCardDiv(cardData);
+        newCard.id = oldCard.id;
+        if(oldCard.getAttribute("age") == 0) newCard.style.opacity = "0.7";
+        let parent = oldCard.parent;
+        parent.replaceChild(newCard,oldCard);
+    }
+
+    killCard(card){
+
     }
 }

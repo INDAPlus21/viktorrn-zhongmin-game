@@ -56,7 +56,7 @@ window.onload = async function(){
 
     $('spawnEffect').onpointerdown = () =>{
       
-      AnimationHandler.displayAttack(getCardFromBoard(1,0),getCardFromBoard(2,0),12);
+      AnimationHandler.displayAttack(getCardFromBoard(2,0),getCardFromBoard(1,0),12,2);
   }
   });
   
