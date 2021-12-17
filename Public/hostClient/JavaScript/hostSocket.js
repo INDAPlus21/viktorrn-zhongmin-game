@@ -33,7 +33,7 @@ let DataManager = new DataManagerImport.DataManager();
 
 window.onload = async function(){
   DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager,()=>{
-    let dummyBoard = {
+   /* let dummyBoard = {
       player1: [
         DataManager.getSpecificCard("Wolf"),
         null,
@@ -57,7 +57,7 @@ window.onload = async function(){
     $('spawnEffect').onpointerdown = () =>{
       
       AnimationHandler.displayAttack(getCardFromBoard(2,0),getCardFromBoard(1,0),12,2);
-  }
+  }*/
   });
   
 }
@@ -274,7 +274,14 @@ socket.on('connect', () => {// run this when connected
           if (attackHitCard) {
             
             opposingCard.health -= thisCard.damage; // attack the opposing card
-            if(opposingCard.sigil == 'Sharp Quills') thisCard.health -= 1; //Porcupine
+            await AnimationHandler.displayAttack(getCardFromBoard(i,k),getCardFromBoard(n,k),thisCard.damage,i);
+            await new Promise(r => setTimeout(r, 500));
+
+            if(opposingCard.sigil == 'Sharp Quills') {
+              thisCard.health -= 1
+              await AnimationHandler.displayAttack(getCardFromBoard(n,k),getCardFromBoard(i,k),1,n);
+              await new Promise(r => setTimeout(r, 100));
+            }; //Porcupine
             if (opposingCard.health <= 0) boardInfo['player'+n][k] = null // set column to null if it dies from the attack
             if (thisCard.health <= 0) boardInfo['player'+i][k] = null
           } else {
