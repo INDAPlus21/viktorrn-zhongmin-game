@@ -12,6 +12,7 @@ export async function displayAttack(attackerCard,attackedCard,damage,playerIndex
     dispCard.classList.add('highlightCard');
     dispCard.style.left = pos2.left+"px";
     dispCard.style.top = pos2.top+"px";
+    dispCard.style.zIndex = "4";
     dispCard.style.transition = "top 0.3s cubic-bezier(0,3,.6,1), transform 0.3s cubic-bezier(0,2,.5,1)"
     document.body.appendChild(dispCard);
 
@@ -38,8 +39,34 @@ export async function displayAttack(attackerCard,attackedCard,damage,playerIndex
         },500)
     },10)
     
-
     await new Promise(r => setTimeout(r, 700));
+
+    let pos = attackedCard.getBoundingClientRect();
+    let dispCard2 = attackedCard.cloneNode(true);
+    dispCard2.classList.add('highlightCard');
+    dispCard2.style.left = pos.left+"px";
+    dispCard2.style.top = pos.top+"px";
+    dispCard2.style.transition = "top 0.3s cubic-bezier(0,1,.25,2), left 0.3s cubic-bezier(0,1,.25,1.5)";
+    dispCard2.style.zIndex = "3";
+    document.body.appendChild(dispCard2);
+    attackedCard.style.visibility = 'hidden';
+
+    let d1 = setInterval(()=>{
+        clearInterval(d1);
+        dispCard2.style.left = pos.left+ dir*20 + "px";
+        dispCard2.style.top = pos.top + dir*20 + "px";
+        let d2 = setInterval(()=>{
+            clearInterval(d2);
+            dispCard2.style.left = pos.left + "px";
+            dispCard2.style.top = pos.top + "px";
+            let d3 = setInterval(()=>{
+                clearInterval(d3);
+                dispCard2.remove();
+                attackedCard.style.visibility = '';
+            },300)
+        },300)
+    },10)
+
 
     let claw = document.createElement('div');
     claw.classList.add('damageClawEffect');
@@ -61,7 +88,7 @@ export async function displayAttack(attackerCard,attackedCard,damage,playerIndex
     },10)
 
     //damage number
-    let pos = attackedCard.getBoundingClientRect();
+  
 
     let div = document.createElement('div');
     div.classList.add("damageTextEffect");
