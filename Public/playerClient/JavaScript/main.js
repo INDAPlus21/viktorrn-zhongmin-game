@@ -20,10 +20,11 @@ let playerPickingCard = false;
 window.onload = function(){
     DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager,(Manager = DataManager) => {
         let cards = []
-        for(let i of DataManager.startingCards) cards.push(DataManager.getSpecificCard(i));
+        let cardLib = shuffle(DataManager.getGameCardTable());  
+        for(let i = 0; i < 10; i++){
+            cards.push(cardLib[i]);
+        }
         UI_Handler.displayCardSelectionPage(cards);
-        //UI_Handler.displayActionSlots('chooseCard',cards);
-        //UI_Handler.drawHand(cards);
         $('handPoint').classList.add('displaying');
         $('endTurnBtn').onpointerdown = endTurn;
         $('sacrificeCardBtn').onpointerdown = ()=> {UI_Handler.suggestSacrifices(getPlayerData().board);}
@@ -110,6 +111,7 @@ export function doneWithStartingCards(cards){
 }
 
 export function sacrificeCard(column){
+
     socket.emit('playerSacrificeCard', roomId, socketId, column);
 }
 
@@ -123,15 +125,35 @@ export function cardPlayed(cardIndex,col){
     playerData.hand.splice(cardIndex,1);
     UI_Handler.drawHand(playerData.hand);
     socket.emit('playerPlayCard', roomId, socketId, cardIndex, col);
+    
 }
 
 export function endTurn() {
     $('endTurnBtn').classList.remove('displaying');
     $('sacrificeCardBtn').classList.remove('displaying');
     currentlyYourTurn = false;
+    displayPlayCardAreaOnSync = true;
     UI_Handler.displayActionSlots('waitingForTurn');
     socket.emit('playerEndTurn', roomId, socketId);
 }
+
+function shuffle (array) {
+    let currentIndex = array.length,  randomIndex;
+  
+    // While there remain elements to shuffle...
+    while (currentIndex != 0) {
+  
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+  
+    return array;
+  }
 
 //neccessary Util functions
 export function $(el) { return document.getElementById(el) };

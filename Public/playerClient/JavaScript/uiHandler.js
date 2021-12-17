@@ -3,7 +3,7 @@ import * as Main from './main.js';
 
 export class UIHandler{ 
 
-    amountOfStartingCards = 6;
+    amountOfStartingCards = 7;
     cardsPicked;
     cardPickingPhase = null;
 
@@ -144,6 +144,7 @@ export class UIHandler{
         for(let i in board){
             let el = this.actionSlotsHTMLHandle.children[i];
             if(board[i] == null){
+                console.log(board[i])
                 el.style.transform = 'scale(1.1)';
                 el.onpointerover = () =>{
                     el.style.border = '10px solid rgb(220, 220, 220)';
@@ -160,37 +161,43 @@ export class UIHandler{
                 el.onpointerdown = null;
                 el.onpointerover = null,
                 el.onpointerout = null;
-                el.style.transform = 'scale(1.1)'; 
+                el.style.transform = ''; 
                 el.style.border = '';
             }
         }
     }
 
     suggestSacrifices(board){
-        console.log("suggest sac",board)
         for(let i in board){
            try{
             let el = this.actionSlotsHTMLHandle.children[i];
             if(board[i] != null){
-                el.style.transform = 'scale(1.1)';
-                console.log(el);
-                el.onpointerover = () =>{
-                    el.style.border = '10px solid rgb(220, 220, 220)';
-                    el.style.transform = 'scale(1.3)';
+                console.log(el.firstChild)
+                if(el.firstChild.getAttribute('alreadySacrificed') == null){
+                    el.style.transform = 'scale(1.1)';
+                    el.onpointerover = () =>{
+                        el.style.border = '10px solid rgb(220, 220, 220)';
+                        el.style.transform = 'scale(1.3)';
+                    }
+                    el.onpointerout = () =>{
+                        el.style.transform = 'scale(1.1)'; 
+                        el.style.border = '';
+                    }
+                    el.onpointerdown = () =>{
+                        
+                        Main.sacrificeCard(i);
+                        
+                        //trigger animation or effect here
+                        console.log("sacced card",el);
+                        if(board[i].sigil == "Many Lives"){
+                            el.firstChild.setAttribute('alreadySacrificed',true);
+                        }else{
+                            el.firstChild.remove();
+                        }
+                        
+                        this.disableDropZone(); 
+                    } 
                 }
-                el.onpointerout = () =>{
-                    el.style.transform = 'scale(1.1)'; 
-                    el.style.border = '';
-                }
-                el.onpointerdown = () =>{
-                    
-                    Main.sacrificeCard(i);
-                    
-                    //trigger animation or effect here
-                    console.log("sacced card",el);
-                    el.firstChild.remove();
-                    this.disableDropZone(); 
-                } 
             }
            }catch(err){
                console.log(err)

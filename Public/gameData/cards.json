@@ -21,6 +21,13 @@
             "age": 0,
             "sigil": ""
         },
+        { "name": "Wolf Cub",
+            "damage": 1,
+            "health": 1,
+            "cost": 1,
+            "age": 0,
+            "sigil": "Fledgling"
+        },
         {   "name": "Grizzly",
             "damage": 4,
             "health": 6,
@@ -71,11 +78,11 @@
             "sigil": "Rabbit Hole"
         },
         {   "name": "Porcupine",
-            "damage": 0,
-            "health": 1,
-            "cost": 0,
+            "damage": 1,
+            "health": 2,
+            "cost": 1,
             "age": 0,
-            "sigil": ""
+            "sigil": "Sharp Quills"
         },
         {   "name": "Sparrow",
             "damage": 1,
@@ -109,9 +116,9 @@
         "Cat",
         "Warren",
         "Porcupine",
-        "Random",
         "Sparrow",
         "Raven",
-        "Raven Egg"
+        "Raven Egg",
+        "Wolf Cub"
     ]
 }
