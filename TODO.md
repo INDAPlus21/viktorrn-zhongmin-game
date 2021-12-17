@@ -5,7 +5,9 @@
 
 [ ] Some sort of feedback for sacc´ing cards
 
-[ ] Some sort of feedback for when cards attack
+[ ] Fix wierd thing when the player i attacked directly
+
+[ ] Fix wierd bug when cards that have no damage attack
 
 [ ] Add more cards
 
@@ -27,3 +29,5 @@
 [X] Fix card picking on seccond turn
 
 [x] Add sigils
+
+[X] Some sort of feedback for when cards attack

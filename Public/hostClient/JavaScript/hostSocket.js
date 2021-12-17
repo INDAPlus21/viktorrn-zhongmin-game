@@ -273,21 +273,25 @@ socket.on('connect', () => {// run this when connected
 
           if (attackHitCard) {
             
-            opposingCard.health -= thisCard.damage; // attack the opposing card
-            await AnimationHandler.displayAttack(getCardFromBoard(i,k),getCardFromBoard(n,k),thisCard.damage,i);
-            await new Promise(r => setTimeout(r, 500));
+            if(thisCard.damage > 0){
+              opposingCard.health -= thisCard.damage; // attack the opposing card
+              await AnimationHandler.displayAttack(getCardFromBoard(i,k),getCardFromBoard(n,k),thisCard.damage,i,true);
+              await new Promise(r => setTimeout(r, 500));
+            }
+           
 
             if(opposingCard.sigil == 'Sharp Quills') {
               thisCard.health -= 1
-              await AnimationHandler.displayAttack(getCardFromBoard(n,k),getCardFromBoard(i,k),1,n);
+              await AnimationHandler.displayAttack(getCardFromBoard(n,k),getCardFromBoard(i,k),1,n,true);
               await new Promise(r => setTimeout(r, 100));
             }; //Porcupine
             if (opposingCard.health <= 0) boardInfo['player'+n][k] = null // set column to null if it dies from the attack
             if (thisCard.health <= 0) boardInfo['player'+i][k] = null
           } else {
             
+            await AnimationHandler.displayAttack(getCardFromBoard(i,k),$('p'+n+"SlotIndex"+k),thisCard.damage,i,false);
             boardInfo[`p${i}damage`] += thisCard.damage; // if there is no card opposing it OR if this card ignores opposing cards, attack the player
-            console.log(`card: ${thisCard.name} from player ${i} dealt ${thisCard.damage}, total ${boardInfo[`p${i}damage`]}`);
+            //console.log(`card: ${thisCard.name} from player ${i} dealt ${thisCard.damage}, total ${boardInfo[`p${i}damage`]}`);
             
           }
        }
@@ -312,7 +316,7 @@ socket.on('connect', () => {// run this when connected
 
     await new Promise(r => setTimeout(r, 1000)); // wait 1 sec
 
-    console.log("starting player "+n+"'s turn");
+    //console.log("starting player "+n+"'s turn");
 
     // testing for win condition (must tip the scale by 7 to win)
     if (boardInfo.p1damage -6 > boardInfo.p2damage) {

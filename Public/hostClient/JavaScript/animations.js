@@ -1,4 +1,4 @@
-export async function displayAttack(attackerCard,attackedCard,damage,playerIndex){
+export async function displayAttack(attackerCard,attackedCard,damage,playerIndex,strikingCard){
    
     let dir;
     if(playerIndex == 1) dir = 1;
@@ -48,6 +48,8 @@ export async function displayAttack(attackerCard,attackedCard,damage,playerIndex
         let pos = attackedCard.getBoundingClientRect();
         let dispCard2 = attackedCard.cloneNode(true);
         dispCard2.classList.add('highlightCard');
+        
+        if(!strikingCard) dispCard2.style.visibility = 'hidden';
         dispCard2.style.left = pos.left+"px";
         dispCard2.style.top = pos.top+"px";
         dispCard2.style.transition = "top 0.3s cubic-bezier(0,1,.25,2), left 0.3s cubic-bezier(0,1,.25,1.5)";

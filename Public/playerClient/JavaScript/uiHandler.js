@@ -42,6 +42,7 @@ export class UIHandler{
     }
 
     hideCardSelectionPage(){
+        Main.clearElement(Main.$('cardPickZone'));
         this.cardSelectionPageHTMLHandle.style.top = '-100%';
     }
 
