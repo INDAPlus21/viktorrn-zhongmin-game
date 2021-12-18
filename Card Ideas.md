@@ -52,6 +52,7 @@
 
     Queen Spider  3/4:3 [ Predator ]
 
+### 4 Cost
 
     Black Star ?/?:4    [ Anti Matter ]
 
@@ -112,3 +113,7 @@
 ### High Block
 
     Blocks all incoming attacks
+
+### Death
+
+    can only be drawn as the last card
