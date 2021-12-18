@@ -3,13 +3,13 @@
 
 ## Prio
 
-[ ] Some sort of feedback for sacc´ing cards
+[ ] Make decicions for how card picking is gonna work
 
 [ ] Add the new Cards and factions
 
 [ ] Decide colors for the faction cards
 
-[ ] Move damage display
+[ ] Some sort of feedback for sacc´ing cards
 
 
 ## Cool things to have
@@ -21,6 +21,8 @@
 [ ] Assets for the game
 
 ## Done
+
+[X] Move damage display
 
 [X] Fix sacc functionality
 
