@@ -7,7 +7,7 @@ the primary resource is souls <- (dev prio)
 
 the seccondary resource i bones <- (expand thingy)
 
-To play anything you need a free slot, you have 4 playslots, and to win you need to do 7 or more damage mor than your opponent. When a Card is played it wont attakc untill after your next turn
+To play anything you need a free slot, you have 4 playslots, and to win you need to do 7 or more damage mor than your opponent. When a Card is played it wont attakc untill after your next turn. Cards attack only the card opposing them and if their is none, they attack the opposing player directly. 
 
 ## things you can play are:
 

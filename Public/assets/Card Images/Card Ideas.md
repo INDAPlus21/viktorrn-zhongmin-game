@@ -11,6 +11,7 @@ damage      Health      Cost    Amulet
 ## Cards
 
 ### Evil Tree 0/2:0
+### Toad      0/3:0     [ High block ]
 
 
 ### Frank 1/2:1     
@@ -101,3 +102,7 @@ damage      Health      Cost    Amulet
 ### Predator
 
     Attacks whatever card is the weakest
+
+### High Block
+
+    Blocks all incoming attacks
