@@ -23,6 +23,8 @@ damage      Health      Cost    Amulet
 
 ### Dark monk 1/?       [ Shadow ]
 
+### Bow Man 1+X:1       [ Tempo ]
+
 
 ### Fallen Angle 2/2:2  [ Flying ]
 
@@ -91,6 +93,10 @@ damage      Health      Cost    Amulet
 ### Mirror
 
     Mirrors the stats of oponent card and adds 1/1
+
+### Tempo
+
+    Adds one damage for each attack performed
 
 ### Predator
 
