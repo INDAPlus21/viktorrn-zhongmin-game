@@ -1,8 +1,8 @@
 
 # Card Design Ideas
 
-damage      Health      Cost    Amulet
-    X    /    Y     :    Z       [ A ]
+##  damage      Health      Cost    Amulet
+##     X    /    Y     :    Z       [ A ]
 
 ## base resource: Souls
 ## Sac card: Human 0/1
