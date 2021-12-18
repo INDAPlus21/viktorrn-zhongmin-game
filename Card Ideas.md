@@ -11,9 +11,11 @@
 
 ### 0 Cost
 
-    Evil Tree 0/2:0
+    Evil Tree 0/2:0     [ High block ]
 
     Toad      0/3:0     [ High block ]
+
+    Undead  0/3:0       [ Rebirth ]
 
 ### 1 Cost
 
@@ -25,9 +27,13 @@
 
     Sparrow 1/2:1       [ Flying ]
 
-    Dark monk 1/?       [ Shadow ]
+    Dark monk 1/?:1     [ Shadow ]
 
-    Bow Man 1+X:1       [ Tempo ]
+    Bow Man 1+X/1:1     [ Tempo ]
+
+    Skeleton 
+
+    Coffin
 
 ### 2 Cost
 
@@ -40,6 +46,8 @@
     Phoenix 0/5:2       [ Rebirth ]
 
     Brain Jack X/X:2    [ Mirror ]
+
+    Armory 0/4:2        [ Valiant Heart ]
 
 ### 3 Cost
 
@@ -55,7 +63,7 @@
 
     Black Star ?/?:4    [ Anti Matter ]
 
-    The Reaper 7/7:4    [ Death ]
+    The Reaper 7/7:13-X    [ Death ]
 
 
 
@@ -115,4 +123,8 @@
 
 ### Death
 
-    can only be drawn as the last card
+    gets cheaper the more of your cards that has died
+
+### Valiant heart
+
+    gives all human cards shield once
