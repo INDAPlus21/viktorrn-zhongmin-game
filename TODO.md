@@ -5,11 +5,11 @@
 
 [ ] Some sort of feedback for sacc´ing cards
 
-[ ] Fix wierd thing when the player i attacked directly
+[ ] Add the new Cards and factions
 
-[ ] Fix wierd bug when cards that have no damage attack
+[ ] Decide colors for the faction cards
 
-[ ] Add more cards
+[ ] Move damage display
 
 
 ## Cool things to have
@@ -31,3 +31,7 @@
 [x] Add sigils
 
 [X] Some sort of feedback for when cards attack
+
+[X] Fix wierd thing when the player i attacked directly
+
+[X] Fix wierd bug when cards that have no damage attack

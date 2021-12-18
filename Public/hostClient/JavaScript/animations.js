@@ -1,4 +1,4 @@
-export async function displayAttack(attackerCard,attackedCard,damage,playerIndex,strikingCard){
+export async function displayAttack(attackingCard,attackedCard,attackedCardData,damage,playerIndex,strikingCard){
    
     let dir;
     if(playerIndex == 1) dir = 1;
@@ -6,10 +6,10 @@ export async function displayAttack(attackerCard,attackedCard,damage,playerIndex
 
     //console.log("atk card",attackedCard,pos)
     try{
-        let pos2 = attackerCard.getBoundingClientRect();
-        let dispCard = attackerCard.cloneNode(true);
+        let pos2 = attackingCard.getBoundingClientRect();
+        let dispCard = attackingCard.cloneNode(true);
     
-        attackerCard.style.visibility = 'hidden';
+        attackingCard.style.visibility = 'hidden';
         dispCard.classList.add('highlightCard');
         dispCard.style.left = pos2.left+"px";
         dispCard.style.top = pos2.top+"px";
@@ -33,7 +33,7 @@ export async function displayAttack(attackerCard,attackedCard,damage,playerIndex
                         let a5 = setInterval(()=>{
                             clearInterval(a5);
                             dispCard.remove();
-                            attackerCard.style.visibility = '';
+                            attackingCard.style.visibility = '';
                         },200)
                     },500)
                 },270)
@@ -49,7 +49,11 @@ export async function displayAttack(attackerCard,attackedCard,damage,playerIndex
         let dispCard2 = attackedCard.cloneNode(true);
         dispCard2.classList.add('highlightCard');
         
-        if(!strikingCard) dispCard2.style.visibility = 'hidden';
+        // card that moves upon being hit
+        if(strikingCard == false){
+            dispCard2.style.visibility = 'hidden';
+            dispCard2.style.opacity = "0";
+        } 
         dispCard2.style.left = pos.left+"px";
         dispCard2.style.top = pos.top+"px";
         dispCard2.style.transition = "top 0.3s cubic-bezier(0,1,.25,2), left 0.3s cubic-bezier(0,1,.25,1.5)";
@@ -61,6 +65,10 @@ export async function displayAttack(attackerCard,attackedCard,damage,playerIndex
             clearInterval(d1);
             dispCard2.style.left = pos.left+ dir*20 + "px";
             dispCard2.style.top = pos.top + dir*20 + "px";
+            if(attackedCardData != null){
+                dispCard2.children[2].innerText = attackedCardData.health;
+                attackedCard.children[2].innerText = attackedCardData.health;
+            } 
             let d2 = setInterval(()=>{
                 clearInterval(d2);
                 dispCard2.style.left = pos.left + "px";
@@ -69,11 +77,12 @@ export async function displayAttack(attackerCard,attackedCard,damage,playerIndex
                     clearInterval(d3);
                     dispCard2.remove();
                     attackedCard.style.visibility = '';
+                    
                 },300)
             },300)
         },10)
 
-
+        // claw effect
         let claw = document.createElement('div');
         claw.classList.add('damageClawEffect');
         claw.style.top = pos.top + "px";
@@ -95,7 +104,7 @@ export async function displayAttack(attackerCard,attackedCard,damage,playerIndex
 
         //damage number
     
-
+        // damage
         let div = document.createElement('div');
         div.classList.add("damageTextEffect");
         div.style.left = (pos.left) +"px";

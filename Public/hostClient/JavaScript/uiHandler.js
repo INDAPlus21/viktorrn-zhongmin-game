@@ -31,7 +31,7 @@ export class UIHandler{
 
 
 
-    displayBoard(boardInfo){
+    displayBoard(boardInfo,columnAmount){
         
         Main.clearElement(Main.$('playerBoard'))
         let p1Slot =  document.createElement('div');
@@ -41,7 +41,7 @@ export class UIHandler{
         Main.$('playerBoard').appendChild(p1Slot);
         Main.$('playerBoard').appendChild(p2Slot);
         
-        for(let i in [1,2,3,4]){
+        for(let i = 0; i< columnAmount; i++){
             let div1 = document.createElement('div');
             div1.classList.add('cardSlots')
             div1.id = 'p1SlotIndex'+i;

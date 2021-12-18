@@ -7,6 +7,8 @@ let socketId; // the client's unique id for the socket connection
 let roomId; // room id
 let playerInfo = new Object();
 
+let columnAmount = 5;
+
 let GAMESTATE = 'lobby';
 
 let boardInfo = {
@@ -14,9 +16,11 @@ let boardInfo = {
     null,
     null,
     null,
+    null,
     null
   ],
   player2: [
+    null,
     null,
     null,
     null,
@@ -154,7 +158,7 @@ socket.on('connect', () => {// run this when connected
         playerInfo.player1.hand.push(DataManager.getSpecificCard('Squirrel'));
         playerInfo.player2.hand.push(DataManager.getSpecificCard('Squirrel'));
         //starts with giving player 1 the cards and then prompting
-        UI_Handler.displayBoard(boardInfo);
+        UI_Handler.displayBoard(boardInfo,columnAmount);
         await socket.emit('startGame', roomId, playerInfo.player1.id, playerInfo.player2.id);
         await socket.emit('syncClient', playerInfo.player1, boardInfo.player1);
         await socket.emit('syncClient', playerInfo.player2, boardInfo.player2);
@@ -208,12 +212,12 @@ socket.on('connect', () => {// run this when connected
 
     socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i],true  /* this boolean makes the player client redraw their hand as well as blood */); // refresh the client with new data
 
-    UI_Handler.displayBoard(boardInfo);
+    UI_Handler.displayBoard(boardInfo,columnAmount);
   });
 
   socket.on('playerSacrificeCard',(playerId,column) =>{
     try{
-      console.log("player sacrificed card on col",column)
+      //console.log("player sacrificed card on col",column)
       let i = isPlayer(playerId);
       //sigil check
       let card = boardInfo['player'+i][column];
@@ -231,7 +235,7 @@ socket.on('connect', () => {// run this when connected
       
       socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i],true  /* this boolean makes the player client redraw their hand as well as blood */);
       
-      UI_Handler.displayBoard(boardInfo);
+      UI_Handler.displayBoard(boardInfo,columnAmount);
 
     }catch(error){
       console.log("error",error)
@@ -240,21 +244,21 @@ socket.on('connect', () => {// run this when connected
 
   // big calculations in here!!!!
   socket.on('playerEndTurn', async (playerId) => {
-    let i = isPlayer(playerId); // get which player it is
-    let n = i===1 ? 2 : 1; // get the number of the opposite player
+    let atkingPlayer = isPlayer(playerId); // get which player it is
+    let atkedPlayer = atkingPlayer===1 ? 2 : 1; // get the number of the opposite player
 
-    for (let k=0; k<4; k++) { // loop through all 4 columns
+    for (let col=0; col<columnAmount; col++) { // loop through all 4 columns
 
-      let thisCard = boardInfo['player'+i][k]; // the card at this position
+      let thisCard = boardInfo['player'+atkingPlayer][col]; // the card at this position
       if (thisCard === null) continue;
         //console.log('null column');
          // if there is no card here, continue to the next column
 
       else { // if there IS a card here
-        console.log('card: '+thisCard); 
+        
         if (thisCard.age > 0) { // and it can attack
           
-          let opposingCard = boardInfo['player'+n][k]; // get the opposing card
+          let opposingCard = boardInfo['player'+atkedPlayer][col]; // get the opposing card
 
           let attackHitCard = false;
           
@@ -275,44 +279,51 @@ socket.on('connect', () => {// run this when connected
             
             if(thisCard.damage > 0){
               opposingCard.health -= thisCard.damage; // attack the opposing card
-              await AnimationHandler.displayAttack(getCardFromBoard(i,k),getCardFromBoard(n,k),thisCard.damage,i,true);
+              await AnimationHandler.displayAttack(getCardFromBoard(atkingPlayer,col),getCardFromBoard(atkedPlayer,col),opposingCard,thisCard.damage,atkingPlayer,true);
               await new Promise(r => setTimeout(r, 500));
             }
            
 
             if(opposingCard.sigil == 'Sharp Quills') {
               thisCard.health -= 1
-              await AnimationHandler.displayAttack(getCardFromBoard(n,k),getCardFromBoard(i,k),1,n,true);
+              await AnimationHandler.displayAttack(getCardFromBoard(atkedPlayer,col),getCardFromBoard(atkingPlayer,col),thisCard,1,atkedPlayer,true);
               await new Promise(r => setTimeout(r, 100));
             }; //Porcupine
-            if (opposingCard.health <= 0) boardInfo['player'+n][k] = null // set column to null if it dies from the attack
-            if (thisCard.health <= 0) boardInfo['player'+i][k] = null
+
+            let thisCardWasKilled = false;
+
+            if (opposingCard.health <= 0) boardInfo['player'+atkedPlayer][col] = null // set column to null if it dies from the attack
+            if (thisCard.health <= 0){
+              boardInfo['player'+atkingPlayer][col] = null
+              thisCardWasKilled = true;
+            } 
           } else {
             
-            await AnimationHandler.displayAttack(getCardFromBoard(i,k),$('p'+n+"SlotIndex"+k),thisCard.damage,i,false);
-            boardInfo[`p${i}damage`] += thisCard.damage; // if there is no card opposing it OR if this card ignores opposing cards, attack the player
+            await AnimationHandler.displayAttack(getCardFromBoard(atkingPlayer,col),$('p'+atkedPlayer+"SlotIndex"+col),null,thisCard.damage,atkingPlayer,false);
+            boardInfo[`p${atkingPlayer}damage`] += thisCard.damage; // if there is no card opposing it OR if this card ignores opposing cards, attack the player
             //console.log(`card: ${thisCard.name} from player ${i} dealt ${thisCard.damage}, total ${boardInfo[`p${i}damage`]}`);
             
           }
        }
         thisCard.age += 1 
         // run sigil check relevent to age
+        
         if(thisCard.age > 1 && thisCard.sigil === "Fledgling"){
           switch(thisCard.name){
             case 'Wolf Cub':
-               boardInfo['player'+i][k] = await DataManager.getSpecificCard("Wolf");
+               boardInfo['player'+atkingPlayer][col] = await DataManager.getSpecificCard("Wolf");
             break;
             case 'Raven Egg':
-              boardInfo['player'+i][k] = await DataManager.getSpecificCard("Raven");
+              boardInfo['player'+atkingPlayer][col] = await DataManager.getSpecificCard("Raven");
             break;
           }
-          boardInfo['player'+i][k].age = 1;
+          boardInfo['player'+atkingPlayer][col].age = 1;
         }
-        socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i], true /* this boolean makes the player client redraw their hand as well as blood */  ); 
+        socket.emit('syncClient', playerInfo['player'+atkingPlayer], boardInfo['player'+atkingPlayer], true /* this boolean makes the player client redraw their hand as well as blood */  ); 
       }
     }
     
-    UI_Handler.displayBoard(boardInfo);
+    UI_Handler.displayBoard(boardInfo,columnAmount);
 
     await new Promise(r => setTimeout(r, 1000)); // wait 1 sec
 
@@ -324,10 +335,10 @@ socket.on('connect', () => {// run this when connected
     } else if (boardInfo.p2damage -6 > boardInfo.p1damage) {
       socket.emit('endGame', playerInfo.player2.id, playerInfo.player1.id);
     } else { // no win condition was reached
-      if (i===2) boardInfo.turn += 1 // if the player is player2 then a round has passed
+      if (atkingPlayer===2) boardInfo.turn += 1 // if the player is player2 then a round has passed
       // the opposing player's turn starts
-      socket.emit('syncClient', playerInfo['player'+n], boardInfo['player'+n],true);
-      socket.emit('startTurn', playerInfo['player'+n].id, boardInfo.turn);
+      socket.emit('syncClient', playerInfo['player'+atkedPlayer], boardInfo['player'+atkedPlayer],true);
+      socket.emit('startTurn', playerInfo['player'+atkedPlayer].id, boardInfo.turn);
     }
   });
 });

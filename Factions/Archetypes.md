@@ -46,6 +46,10 @@
 
     Blocks the first incoming attack
 
+### Marching 
+
+    Creature moves to free space to their side
+
 
 ## Beasts, fast aggro deck built around sacrifices
 
@@ -97,28 +101,64 @@
 
 ## Darklord, buffing stronger units and playing fother
 
-    Evil Minion 2/1:1
+    Skeleton X/1:0      [ Undead Army ]
     
-    Evil Tree 0/2:0     [ High block ]
+    Evil Tree 0/2:0     [ High Block ]
 
     Dark monk 1/?:1     [ Shadow ]
 
-    Blade Dancer 1/2:2  [ Manic ]
-
     Apostel 1/2:1       [ Rebirth ]
+
+    Evil Minion 2/1:1
+
+    Blade Dancer 1/2:2  [ Manic ]
 
 ## Darklord Catalyst cards
 
-    Bone King 3/4:3     [ Dead Army ]
+    Bone King 1/4:3     [ Undead Leader ]
+
+    The Reaper 7/7:13-X [ Death ]
 
 ## Amulets
+
+### Undead Army
+
+    Skeleton +1/0 for each skeleton on the board
+
+### Undead Leader
+
+    Spawn Skeleton on random free slot at the end of turn
+
+### High Block
+
+    Blocks flying cards
+
+### Shadow
+
+    Cant take damage by enemy card
+
+### Death
+
+    gets cheaper the more of your cards that has died
 
 
 
 ## Mix cards
 
-    Toad      0/3:0     [ High block ]
+    Toad      0/3:0     [ High Block ]
 
     Minotaur 3/5:3
 
-    Black Star  ?/?:3
+    Black Hole  ?/?:4   [ Black Hole ]
+
+## Amulets
+
+### High Block
+
+    Blocks flying cards
+
+### Black Hole
+
+    Kills whatever attacks it, after it kills 4 creatures it explodes killing everything on the board
+
+

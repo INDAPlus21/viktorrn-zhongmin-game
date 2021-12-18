@@ -82,7 +82,7 @@ export class UIHandler{
         switch(state){
 
             case 'playCards':
-                for(let i in [1,2,3,4]){
+                for(let i in [1,2,3,4,5]){
                     
                     let div =  document.createElement('div');
                     div.classList.add('cardSlot');

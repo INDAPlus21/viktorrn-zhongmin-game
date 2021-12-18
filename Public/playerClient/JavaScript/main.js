@@ -62,7 +62,6 @@ socket.on('syncClient', (hand,playerboard,bloodLevel,playerDeck,redrawUI) => {
     playerData.board = playerboard;
     playerData.bloodLevel = bloodLevel;
     playerData.deck = playerDeck;
-    console.log( "reDrawUI", redrawUI );
     if(redrawUI){
         UI_Handler.drawBloodLevel(playerData.bloodLevel);
         UI_Handler.drawHand(playerData.hand);
