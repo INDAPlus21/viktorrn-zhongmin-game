@@ -8,6 +8,7 @@ let roomId; // room id
 let playerInfo = new Object();
 
 let columnAmount = 4;
+let playerMaxHealth = 15;
 
 let GAMESTATE = 'lobby';
 
@@ -25,8 +26,8 @@ let boardInfo = {
     null
   ],
   turn: 0,
-  p1damage: 0,
-  p2damage: 0
+  p1damage: playerMaxHealth,
+  p2damage: playerMaxHealth
 }
 
 let UI_Handler = new UIHandler.UIHandler($('cardSelectionPage'),$('cardPickZone'));
@@ -195,27 +196,7 @@ socket.on('connect', () => {// run this when connected
     
     card.age = 0;
     //check your cards
-    for(let a of card.amulets){
-      switch(a){
-        case"Shield":
-          if(card.shieldBroken == undefined){
-            card.shieldBroken = false;
-          }
-          break;
-        case 'Mirror':
-          if(boardInfo['player'+n][column] != null){
-            card.health = boardInfo['player'+n][column].health;
-            card.damage = boardInfo['player'+n][column].damage;
-          }else{
-            card.health = 2;
-            card.damage = 2;
-          }
-          break;
-        case 'Marching':
-          card.moveDirection = 1;
-          break;
-      }
-    }
+    card = await runOnPlayedAmulets(card,boardInfo['player'+i],boardInfo['player'+n],column,false)
     
     playerInfo['player'+i].hand.splice(cardIndex, 1); // remove the card from the player's hand
 
@@ -226,6 +207,37 @@ socket.on('connect', () => {// run this when connected
 
     UI_Handler.displayBoard(boardInfo,columnAmount);
   });
+
+  async function runOnPlayedAmulets(card,playerBoard,opposingBoard,column,wasMirrorAmulet){
+    for(let a of card.amulets){
+      switch(a){
+        case"Shield":
+          if(card.shieldBroken == undefined){
+            card.shieldBroken = false;
+          }
+          break;
+        case 'Mirror':
+          if(opposingBoard[column] != null){
+            card.health = opposingBoard[column].health;
+            card.damage = opposingBoard[column].damage;
+            card.amulets = opposingBoard[column].amulets;
+            if(wasMirrorAmulet === false) runOnPlayedAmulets(card,playerBoard,opposingBoard,column,true);
+          }else{
+            card.health = 2;
+            card.damage = 2;
+            card.amulets = [];
+          }
+          break;
+        case 'Marching':
+          card.moveDirection = 1;
+          break;
+        case 'Rush':
+          card.age = 1;  
+          break;
+      }
+    }
+    return card;
+  }
 
   socket.on('playerSacrificeCard', async (playerId,column) =>{
     try{
@@ -267,6 +279,7 @@ socket.on('connect', () => {// run this when connected
       if (thisCard === null) continue;
         //console.log('null column');
          // if there is no card here, continue to the next column
+      if(thisCard.lastTurnMoved === boardInfo.turn) continue;
       else { // if there IS a card here
         
         if (thisCard.age > 0) { // and it can attack
@@ -280,13 +293,23 @@ socket.on('connect', () => {// run this when connected
             
           } 
 
-          if (attackHitCard && thisCard.damage > 0) {
+          let damage = thisCard.damage;
+            for(let a of thisCard.amulets){
+              switch(a){
+                case "Drunk":
+                  damage = 1+Math.floor(Math.random()*3);
+                  break;
+              }
+                
+            }  
+
+          if (attackHitCard && damage > 0) {
            
             let damage = thisCard.damage;
             for(let a of thisCard.amulets){
               switch(a){
                 case "Drunk":
-                  damage = Math.floor(Math.random()*4);
+                  damage = 1+Math.floor(Math.random()*3);
                   break;
               }
                 
@@ -303,34 +326,42 @@ socket.on('connect', () => {// run this when connected
 
             if (opposingCard.health <= 0) boardInfo['player'+atkedPlayer][col] = null // set column to null if it dies from the attack
         
-          } else {
+          } else if(damage > 0) {
             
-            await AnimationHandler.displayAttack(getCardFromBoard(atkingPlayer,col),$('p'+atkedPlayer+"SlotIndex"+col),null,thisCard.damage,atkingPlayer,false);
-            boardInfo[`p${atkingPlayer}damage`] += thisCard.damage; // if there is no card opposing it OR if this card ignores opposing cards, attack the player
+            await AnimationHandler.displayAttack(getCardFromBoard(atkingPlayer,col),$('p'+atkedPlayer+"SlotIndex"+col),null,damage,atkingPlayer,false);
+            boardInfo[`p${atkedPlayer}damage`] -= damage; // if there is no card opposing it OR if this card ignores opposing cards, attack the player
             //console.log(`card: ${thisCard.name} from player ${i} dealt ${thisCard.damage}, total ${boardInfo[`p${i}damage`]}`);
             
+            }
           }
-       }
-        thisCard.age += 1 
+        
         //post attack amulet
-        for(let a of thisCard.amulets){
-          switch(a){
-            case 'Marching':
-                if(boardInfo['player'+atkingPlayer][col + thisCard.moveDirection] === null){
-                  boardInfo['player'+atkingPlayer][col + thisCard.moveDirection] = thisCard;
-                  boardInfo['player'+atkingPlayer][col] = null;
-                } else {
-                  card.moveDirection = -card.moveDirection;
-                }
-
-              break;
-              case 'Tempo':
-                thisCard.damage += 1;
+        if(thisCard.age > 0){
+          for(let a of thisCard.amulets){
+            switch(a){
+              case 'Marching':
+                thisCard.lastTurnMoved = boardInfo.turn;
+                console.log(boardInfo['player'+atkingPlayer][col + thisCard.moveDirection])
+                  if(boardInfo['player'+atkingPlayer][col + thisCard.moveDirection] !== null ){
+                    thisCard.moveDirection = -thisCard.moveDirection;
+                  }
+                  if(boardInfo['player'+atkingPlayer][col + thisCard.moveDirection] === null ){
+                    boardInfo['player'+atkingPlayer][col + thisCard.moveDirection] = thisCard;
+                    boardInfo['player'+atkingPlayer][col] = null;
+                  }
+  
                 break;
+                case 'Tempo':
+  
+                  thisCard.damage += 1;
+                  break;
+            }
+            
           }
-          
         }
-        //socket.emit('syncClient', playerInfo['player'+atkingPlayer], boardInfo['player'+atkingPlayer], true /* this boolean makes the player client redraw their hand as well as blood */  ); 
+        
+        thisCard.age += 1 
+        socket.emit('syncClient', playerInfo['player'+atkingPlayer], boardInfo['player'+atkingPlayer], true /* this boolean makes the player client redraw their hand as well as blood */  ); 
       }
     }
     
@@ -341,9 +372,9 @@ socket.on('connect', () => {// run this when connected
     //console.log("starting player "+n+"'s turn");
 
     // testing for win condition (must tip the scale by 7 to win)
-    if (boardInfo.p1damage -6 > boardInfo.p2damage) {
+    if (boardInfo.p2damage <= 0) {
       socket.emit('endGame', playerInfo.player1.id, playerInfo.player2.id);
-    } else if (boardInfo.p2damage -6 > boardInfo.p1damage) {
+    } else if (boardInfo.p1damage <= 0) {
       socket.emit('endGame', playerInfo.player2.id, playerInfo.player1.id);
     } else { // no win condition was reached
       if (atkingPlayer===2) boardInfo.turn += 1 // if the player is player2 then a round has passed

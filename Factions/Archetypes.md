@@ -6,23 +6,23 @@
 
 ## Humans, defensive cards: playing slow/ control deck all arounder
 
-    Frank 1/2:1
+    {C}Frank 1/2:1
 
-    Foot Soldier 1/1:1  [ Marching ]
+    {C}Foot Soldier 1/1:1  [ Marching ]
 
-    Bow Man 1+X/1:1     [ Tempo ]
+    {C}Bow Man 1+X/1:2     [ Tempo ]
 
-    Drunk   X/3:2       [ Drunk ]
+    {C}Drunk   X/3:2       [ Drunk ]
 
-    Brain Jack X/X:2    [ Mirror ]
+    {R}Brain Jack X/X:1    [ Mirror ]  
 
-    Black Knight 2/4:3  [ Shield ]
+    {C}Black Knight 2/4:3  [ Shield ]
 
-    Cannon  6/2:3       
+    {R}Cannon  6/2:3       
 
 ### Human catalyst cards
 
-    Armoury 0/4:3       [ Valiant Hearts ]
+    {R}Armoury 0/4:3       [ Valiant Hearts ]
 
 ## Amulets
 
@@ -145,11 +145,11 @@
 
 ## Mix cards
 
-    Toad      0/3:0     [ High Block ]
+    {C}Toad      0/3:0     [ High Block ]
 
-    Minotaur 3/5:3
+    {R}Minotaur 3/5:3      [ Rush ]
 
-    Black Hole  ?/?:4   [ Black Hole ]
+    {R}Black Hole  ?/?:4   [ Black Hole ]
 
 ## Amulets
 

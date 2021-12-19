@@ -68,7 +68,7 @@ socket.on('syncClient', (hand,playerboard,bloodLevel,playerDeck,redrawUI) => {
     if(redrawUI){
         UI_Handler.drawBloodLevel(playerData.bloodLevel);
         UI_Handler.drawHand(playerData.hand);
-        if(displayPlayCardAreaOnSync) UI_Handler.displayActionSlots('playCards',[],playerData.board);
+        if(displayPlayCardAreaOnSync) UI_Handler.displayActionSlots('playCards',[],playerData.board,[],columnAmount);
         displayPlayCardAreaOnSync = false; 
     }
     

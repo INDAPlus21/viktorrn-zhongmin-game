@@ -111,7 +111,7 @@ export class UIHandler{
                 name.innerText = "Human";
                 name.setAttribute('class','name')
                 human.appendChild(name);
-                this.actionSlotsHTMLHandle.appendChild(Human);
+                this.actionSlotsHTMLHandle.appendChild(human);
 
                 try{
                     if(deck.length > 0){

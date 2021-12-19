@@ -9,7 +9,6 @@
                 ,"damage":1
                 ,"health":2
                 ,"cost":1
-                ,"age":0
                 ,"amulets":[""]
                 ,"imgSrc":""
             }
@@ -17,15 +16,13 @@
                 ,"damage":1
                 ,"health":1
                 ,"cost":1
-                ,"age":0
                 ,"amulets":["Marching"]
                 ,"imgSrc":""
             }
             ,{  "name":"Bow Man"
                 ,"damage":1
                 ,"health":1
-                ,"cost":1
-                ,"age":0
+                ,"cost":2
                 ,"amulets":["Tempo"]
                 ,"imgSrc":""
             }
@@ -33,60 +30,51 @@
                 ,"damage":"?"
                 ,"health":3
                 ,"cost":2
-                ,"age":0
                 ,"amulets":["Drunk"]
-                ,"imgSrc":""
-            }
-            ,{  "name":"Brain Jack"
-                ,"damage":"X"
-                ,"health":"X"
-                ,"cost":2
-                ,"age":0
-                ,"amulets":["Mirror"]
                 ,"imgSrc":""
             }
             ,{  "name":"Black Knight"
                 ,"damage":2
                 ,"health":4
                 ,"cost":3
-                ,"age":0
                 ,"amulets":["Shield"]
+                ,"imgSrc":""
+            }
+            ,{  "name":"Cannon"
+                ,"damage":6
+                ,"health":2
+                ,"cost":3
+                ,"amulets":[""]
                 ,"imgSrc":""
             }
             ,{  "name":"Human"
                 ,"damage":0
                 ,"health":1
                 ,"cost":0
-                ,"age":0
                 ,"amulets":[""]
                 ,"imgSrc":""
             }
         ]
         ,"rareCards":
         [
-            {  "name":"Cannon"
-                ,"damage":6
-                ,"health":2
-                ,"cost":3
-                ,"age":0
-                ,"amulets":[""]
-                ,"imgSrc":""
-            }
-            ,{  "name":"Armoury"
+            
+            {  "name":"Armoury"
                 ,"damage":0
                 ,"health":4
                 ,"cost":3
-                ,"age":0
                 ,"amulets":["Valiant Hearts"]
+                ,"imgSrc":""
+            }
+            ,{  "name":"Brain Jack"
+                ,"damage":"X"
+                ,"health":"X"
+                ,"cost":1
+                ,"amulets":["Mirror"]
                 ,"imgSrc":""
             }
         ]
     },
-    {
-        "faction":"Neutral",
-        "regularCards":[]
-        ,"rareCards":[]
-    },
+  
     {
         "faction":"Beasts",
         "regularCards":[]
@@ -96,6 +84,41 @@
         "faction":"Darklings",
         "regularCards":[]
         ,"rareCards":[]
+    },
+    {
+        "faction":"Neutral",
+        "regularCards":[
+            {  "name":"Toad"
+                ,"damage":0
+                ,"health":3
+                ,"cost":0
+                ,"amulets":["High Block"]
+                ,"imgSrc":""
+            }
+            ,{  "name":"Minotaur"
+                ,"damage":3
+                ,"health":5
+                ,"cost":3
+                ,"amulets":["Rush"]
+                ,"imgSrc":""
+            }
+        ]
+        ,"rareCards":[
+            {  "name":"Black Hole"
+                ,"damage":"?"
+                ,"health":"?"
+                ,"cost":4
+                ,"amulets":["Black Hole"]
+                ,"imgSrc":""
+            }
+        ]
     }
     ]
+,"startingCards":[
+    "Toad"
+    ,"Minotaur"
+    ,"Bow Man"
+    ,"Drunk"
+    ,"Brain Jack"
+]
 }

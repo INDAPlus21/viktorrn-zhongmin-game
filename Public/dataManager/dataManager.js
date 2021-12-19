@@ -28,7 +28,6 @@ export class DataManager{
                     lib.rareCards.push(card);
                 }
             }
-            console.log("lib",lib)
             for(let c in result.startingCards){
                 lib.startingCards.push(result.startingCards[c]);
             }
@@ -47,14 +46,14 @@ export class DataManager{
 
     getGameCardTable(){
         let cards = [];
-        for(let i in this.cardLibrary){
-            cards.push(this.cloneObject(this.cardLibrary[i]))
+        for(let c of this.startingCards){
+            cards.push(this.getSpecificCard(c))
         }
         return cards;
     }
 
     getRandomRegularCard(cost){
-        
+
     }
 
     getRandomRareCard(cost){
