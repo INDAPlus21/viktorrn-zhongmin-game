@@ -16,12 +16,15 @@ let playerName;
 let socketId;
 let displayPlayCardAreaOnSync = false;
 let playerPickingCard = false;
+let columnAmount = 4;
 
 window.onload = function(){
     DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager,(Manager = DataManager) => {
+
         let cards = []
         let cardLib = shuffle(DataManager.getGameCardTable());  
         for(let i = 0; i < 10; i++){
+            if(cardLib[i] != undefined)
             cards.push(cardLib[i]);
         }
         UI_Handler.displayCardSelectionPage(cards);
@@ -78,7 +81,7 @@ socket.on('startTurn', (turn) => {
         UI_Handler.displayActionSlots('chooseCard',playerData.deck,[],playerData.hand);
         playerPickingCard = true;
     }else{
-        UI_Handler.displayActionSlots('playCards',[],playerData.board);
+        UI_Handler.displayActionSlots('playCards',[],playerData.board,[],columnAmount);
     }  
     UI_Handler.drawHand(playerData.hand);
     $('endTurnBtn').classList.add('displaying');

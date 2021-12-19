@@ -7,7 +7,7 @@ let socketId; // the client's unique id for the socket connection
 let roomId; // room id
 let playerInfo = new Object();
 
-let columnAmount = 5;
+let columnAmount = 4;
 
 let GAMESTATE = 'lobby';
 
@@ -16,11 +16,9 @@ let boardInfo = {
     null,
     null,
     null,
-    null,
     null
   ],
   player2: [
-    null,
     null,
     null,
     null,
@@ -155,8 +153,8 @@ socket.on('connect', () => {// run this when connected
           drawOneCard(playerInfo.player1);
           drawOneCard(playerInfo.player2);
         }
-        playerInfo.player1.hand.push(DataManager.getSpecificCard('Squirrel'));
-        playerInfo.player2.hand.push(DataManager.getSpecificCard('Squirrel'));
+        playerInfo.player1.hand.push(DataManager.getSpecificCard('Human'));
+        playerInfo.player2.hand.push(DataManager.getSpecificCard('Human'));
         //starts with giving player 1 the cards and then prompting
         UI_Handler.displayBoard(boardInfo,columnAmount);
         await socket.emit('startGame', roomId, playerInfo.player1.id, playerInfo.player2.id);
@@ -176,8 +174,8 @@ socket.on('connect', () => {// run this when connected
   socket.on('playerDrawCard', (playerId, drawnCard) => {
     let i = isPlayer(playerId);
     console.log("player Drew card",drawnCard)
-    if(drawnCard == 'Squirrel'){ 
-      playerInfo['player'+i].hand.push(DataManager.getSpecificCard('Squirrel'));}
+    if(drawnCard == 'Human'){ 
+      playerInfo['player'+i].hand.push(DataManager.getSpecificCard('Human'));}
     else{
       let card = playerInfo['player'+i].remainingDeck.shift();
       playerInfo['player'+i].hand.push(card); 
@@ -188,44 +186,60 @@ socket.on('connect', () => {// run this when connected
     
   });
 
-  socket.on('playerPlayCard', (playerId, cardIndex, column) => {
+  socket.on('playerPlayCard', async (playerId, cardIndex, column) => {
     
     let i = isPlayer(playerId); // get which player it is
     let card = playerInfo['player'+i].hand[cardIndex]; // get the card that is being played
+    let n = i===1 ? 2 : 1;
     playerInfo['player'+i].blood -=  playerInfo['player'+i].hand[cardIndex].cost; //charge the cards cost
     
-    switch(card.name){
-      case 'Warren':
-          drawSpecificCard(playerInfo['player'+i],"Rabbit");
-        break;
+    card.age = 0;
+    //check your cards
+    for(let a of card.amulets){
+      switch(a){
+        case"Shield":
+          if(card.shieldBroken == undefined){
+            card.shieldBroken = false;
+          }
+          break;
+        case 'Mirror':
+          if(boardInfo['player'+n][column] != null){
+            card.health = boardInfo['player'+n][column].health;
+            card.damage = boardInfo['player'+n][column].damage;
+          }else{
+            card.health = 2;
+            card.damage = 2;
+          }
+          break;
+        case 'Marching':
+          card.moveDirection = 1;
+          break;
+      }
     }
     
     playerInfo['player'+i].hand.splice(cardIndex, 1); // remove the card from the player's hand
-    
 
     boardInfo['player'+i][column] = card; // add that card to the board
     //delete boardInfo['player'+i][column].cost; // cost is irrelevant to boardInfo since it's already placed out
-    boardInfo['player'+i][column].age = 0; // how long the card has been on the board
-
-    //sigil check
-    
 
     socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i],true  /* this boolean makes the player client redraw their hand as well as blood */); // refresh the client with new data
 
     UI_Handler.displayBoard(boardInfo,columnAmount);
   });
 
-  socket.on('playerSacrificeCard',(playerId,column) =>{
+  socket.on('playerSacrificeCard', async (playerId,column) =>{
     try{
       //console.log("player sacrificed card on col",column)
       let i = isPlayer(playerId);
       //sigil check
       let card = boardInfo['player'+i][column];
       let removeCard =  true;
-      switch(card.sigil){
-        case "Many Lives":
-          removeCard = false;
-          break;
+      for(let a of card.amulets){
+        switch(a){
+          case "Rebirth":
+            removeCard = false;
+            break;
+        }
       }
 
       if(removeCard)
@@ -253,50 +267,42 @@ socket.on('connect', () => {// run this when connected
       if (thisCard === null) continue;
         //console.log('null column');
          // if there is no card here, continue to the next column
-
       else { // if there IS a card here
         
         if (thisCard.age > 0) { // and it can attack
           
           let opposingCard = boardInfo['player'+atkedPlayer][col]; // get the opposing card
-
           let attackHitCard = false;
           
           if (opposingCard !== null){
             // run sigil checks relevent to attacking
+            attackHitCard = true; // asume the card hits a card and ajust afterwards
             
-            attackHitCard = true; // asume the card hits and ajust afterwards
-
-            switch(thisCard.sigil){
-              case 'Flying':
-                if(opposingCard.sigil != 'Flying')
-                  attackHitCard = false;
-                break;
-            }
           } 
 
-          if (attackHitCard) {
-            
-            if(thisCard.damage > 0){
-              opposingCard.health -= thisCard.damage; // attack the opposing card
-              await AnimationHandler.displayAttack(getCardFromBoard(atkingPlayer,col),getCardFromBoard(atkedPlayer,col),opposingCard,thisCard.damage,atkingPlayer,true);
-              await new Promise(r => setTimeout(r, 500));
-            }
+          if (attackHitCard && thisCard.damage > 0) {
            
+            let damage = thisCard.damage;
+            for(let a of thisCard.amulets){
+              switch(a){
+                case "Drunk":
+                  damage = Math.floor(Math.random()*4);
+                  break;
+              }
+                
+            }   
+    
+            if(opposingCard.shieldBroken != undefined && opposingCard.shieldBroken == false){
+              opposingCard.shieldBroken = true;
+              damage = 0;
+            }
 
-            if(opposingCard.sigil == 'Sharp Quills') {
-              thisCard.health -= 1
-              await AnimationHandler.displayAttack(getCardFromBoard(atkedPlayer,col),getCardFromBoard(atkingPlayer,col),thisCard,1,atkedPlayer,true);
-              await new Promise(r => setTimeout(r, 100));
-            }; //Porcupine
-
-            let thisCardWasKilled = false;
+            opposingCard.health -= damage;
+            await AnimationHandler.displayAttack(getCardFromBoard(atkingPlayer,col),getCardFromBoard(atkedPlayer,col),opposingCard,damage,atkingPlayer,true);
+            await new Promise(r => setTimeout(r, 500));
 
             if (opposingCard.health <= 0) boardInfo['player'+atkedPlayer][col] = null // set column to null if it dies from the attack
-            if (thisCard.health <= 0){
-              boardInfo['player'+atkingPlayer][col] = null
-              thisCardWasKilled = true;
-            } 
+        
           } else {
             
             await AnimationHandler.displayAttack(getCardFromBoard(atkingPlayer,col),$('p'+atkedPlayer+"SlotIndex"+col),null,thisCard.damage,atkingPlayer,false);
@@ -306,20 +312,25 @@ socket.on('connect', () => {// run this when connected
           }
        }
         thisCard.age += 1 
-        // run sigil check relevent to age
-        
-        if(thisCard.age > 1 && thisCard.sigil === "Fledgling"){
-          switch(thisCard.name){
-            case 'Wolf Cub':
-               boardInfo['player'+atkingPlayer][col] = await DataManager.getSpecificCard("Wolf");
-            break;
-            case 'Raven Egg':
-              boardInfo['player'+atkingPlayer][col] = await DataManager.getSpecificCard("Raven");
-            break;
+        //post attack amulet
+        for(let a of thisCard.amulets){
+          switch(a){
+            case 'Marching':
+                if(boardInfo['player'+atkingPlayer][col + thisCard.moveDirection] === null){
+                  boardInfo['player'+atkingPlayer][col + thisCard.moveDirection] = thisCard;
+                  boardInfo['player'+atkingPlayer][col] = null;
+                } else {
+                  card.moveDirection = -card.moveDirection;
+                }
+
+              break;
+              case 'Tempo':
+                thisCard.damage += 1;
+                break;
           }
-          boardInfo['player'+atkingPlayer][col].age = 1;
+          
         }
-        socket.emit('syncClient', playerInfo['player'+atkingPlayer], boardInfo['player'+atkingPlayer], true /* this boolean makes the player client redraw their hand as well as blood */  ); 
+        //socket.emit('syncClient', playerInfo['player'+atkingPlayer], boardInfo['player'+atkingPlayer], true /* this boolean makes the player client redraw their hand as well as blood */  ); 
       }
     }
     
@@ -356,7 +367,6 @@ function drawOneCard(playerObj) {
   playerObj.hand.push(playerObj.remainingDeck.shift());
   // shift() takes one element from the array and pushes it into the player's hand
 }
-
 
 function getCardFromBoard(playerIndex,col){
   return $(`p${playerIndex}Card_${col}`);

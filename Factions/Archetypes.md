@@ -8,7 +8,7 @@
 
     Frank 1/2:1
 
-    Foot Soldier 1/1    [ Marching ]
+    Foot Soldier 1/1:1  [ Marching ]
 
     Bow Man 1+X/1:1     [ Tempo ]
 
@@ -18,15 +18,15 @@
 
     Black Knight 2/4:3  [ Shield ]
 
-    Cannon  5/2:4       
+    Cannon  6/2:3       
 
 ### Human catalyst cards
 
-    Armory 0/4:2        [ Valiant hearts ]
+    Armoury 0/4:3       [ Valiant Hearts ]
 
 ## Amulets
 
-### Valiant heart
+### Valiant Hearts
 
     gives all human recceive shield
 

@@ -3,16 +3,32 @@ export class DataManager{
 
     constructor(){
         this.cardLibrary = new Array();
+        this.regularCards = new Array();
+        this.rareCards = new Array();
         this.startingCards = new Array();
-        this.sigilLibrary = new Array();
     }
 
     parseCardDataFromJSON(filePath,lib,callback){
         fetch(filePath).then(result => result.json())
         .then(result => {
             for(let i in result.cards){
-                lib.cardLibrary.push(result.cards[i]);
+                for(let c in result.cards[i].regularCards){
+                    let card = result.cards[i].regularCards[c];
+                    card.faction = result.cards[i].faction;
+                    card.rarity = "regular";
+                    lib.cardLibrary.push(card);
+                    lib.regularCards.push(card);
+                    
+                }
+                for(let c in result.cards[i].rareCards){
+                    let card = result.cards[i].rareCards[c];
+                    card.faction = result.cards[i].faction;
+                    card.rarity = "rare";
+                    lib.cardLibrary.push(card);
+                    lib.rareCards.push(card);
+                }
             }
+            console.log("lib",lib)
             for(let c in result.startingCards){
                 lib.startingCards.push(result.startingCards[c]);
             }
@@ -31,10 +47,18 @@ export class DataManager{
 
     getGameCardTable(){
         let cards = [];
-        for(let i in this.startingCards){
-            cards.push(this.getSpecificCard(this.startingCards[i]));
+        for(let i in this.cardLibrary){
+            cards.push(this.cloneObject(this.cardLibrary[i]))
         }
         return cards;
+    }
+
+    getRandomRegularCard(cost){
+        
+    }
+
+    getRandomRareCard(cost){
+        
     }
 
     getSpecificCard(name){

@@ -28,7 +28,11 @@ export function getCardDiv(card){
     div.appendChild(cost);
 
     let description = document.createElement('div');
-    if(card.sigil != undefined) description.innerText = card.sigil;
+    let msg = "";
+    for(let a of card.amulets){
+        msg += a + " ";
+    } 
+    description.innerText = msg;
     description.classList.add('description')
     div.appendChild(description);
 

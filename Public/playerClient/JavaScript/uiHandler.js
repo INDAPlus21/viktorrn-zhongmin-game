@@ -3,7 +3,7 @@ import * as Main from './main.js';
 
 export class UIHandler{ 
 
-    amountOfStartingCards = 7;
+    amountOfStartingCards = 3;
     cardsPicked;
     cardPickingPhase = null;
 
@@ -76,13 +76,13 @@ export class UIHandler{
 
     // for gameLogic
 
-    displayActionSlots(state,deck,board,hand){
+    displayActionSlots(state,deck,board,hand,columnAmount){
         Main.clearElement(this.actionSlotsHTMLHandle);
         let div;
         switch(state){
 
             case 'playCards':
-                for(let i in [1,2,3,4,5]){
+                for(let i = 0; i<columnAmount; i++){
                     
                     let div =  document.createElement('div');
                     div.classList.add('cardSlot');
@@ -101,31 +101,31 @@ export class UIHandler{
                 if(hand.length >= 7){
                     this.displayActionSlots('playCards',[],board); break;
                 } 
-                let squirrel = document.createElement('div');
-                squirrel.setAttribute('class','card');
-                squirrel.onpointerdown = () =>{
+                let human = document.createElement('div');
+                human.setAttribute('class','card');
+                human.onpointerdown = () =>{
                     Main.clearElement(this.actionSlotsHTMLHandle);
-                    Main.chooseCard('Squirrel');
+                    Main.chooseCard('Human');
                 }
                 let name = document.createElement('div');
-                name.innerText = "Squirrel";
+                name.innerText = "Human";
                 name.setAttribute('class','name')
-                squirrel.appendChild(name);
-                this.actionSlotsHTMLHandle.appendChild(squirrel);
+                human.appendChild(name);
+                this.actionSlotsHTMLHandle.appendChild(Human);
 
                 try{
                     if(deck.length > 0){
-                        let beast =  document.createElement('div');
-                        beast.setAttribute('class','card');
-                        beast.onpointerdown = () =>{
+                        let creature =  document.createElement('div');
+                        creature.setAttribute('class','card');
+                        creature.onpointerdown = () =>{
                             Main.clearElement(this.actionSlotsHTMLHandle);
-                            Main.chooseCard('Beast');
+                            Main.chooseCard('Creature');
                         }
                         name = document.createElement('div');
-                        name.innerText = "Beast";
+                        name.innerText = "Creature";
                         name.setAttribute('class','name')
-                        beast.appendChild(name);
-                        this.actionSlotsHTMLHandle.appendChild(beast);
+                        creature.appendChild(name);
+                        this.actionSlotsHTMLHandle.appendChild(creature);
                     }
                 }catch(error){console.log(error)}
                     
@@ -190,11 +190,13 @@ export class UIHandler{
                         
                         //trigger animation or effect here
                         console.log("sacced card",el);
-                        if(board[i].sigil == "Many Lives"){
-                            el.firstChild.setAttribute('alreadySacrificed',true);
-                        }else{
-                            el.firstChild.remove();
+                        let rebirth = false;
+                        for(let a of board[i].amulets){
+                            if(a == "Rebirth") rebirth = true;
                         }
+
+                        if(rebirth) el.firstChild.setAttribute('alreadySacrificed',true);
+                        else el.firstChild.remove();
                         
                         this.disableDropZone(); 
                     } 
