@@ -2,6 +2,10 @@
 @import url('../colorPalette.css');
 @import url('../cardDesign.css');
 
+*{
+    color:var(--text)
+}
+
 body{
     font-family: MainFont;
     font-weight: 400; 
@@ -18,7 +22,7 @@ h1{
     font-family: MainFont;
     position: absolute;
     z-index: 12;
-    background-color: rgb(102, 102, 102);
+    background-color: var(--backgroundColor);
     width: 100%;
     height: 100%;
     margin: 0;
@@ -182,7 +186,7 @@ body::-webkit-scrollbar {
 #playerBoard .cardSlots{
     display: inline-block;
     width: 120px;
-    height: 180px;
+    height: 200px;
     margin:0 20px 0 20px;
 
     border-radius: 20px;
