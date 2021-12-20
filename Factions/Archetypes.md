@@ -10,7 +10,7 @@
 
     {C}Foot Soldier 1/1:1  [ Marching ]
 
-    {C}Bow Man 1+X/1:2     [ Tempo ]
+    {C}Bow Man 2/2:2       [ Reach ]
 
     {C}Drunk   X/3:2       [ Drunk ]
 

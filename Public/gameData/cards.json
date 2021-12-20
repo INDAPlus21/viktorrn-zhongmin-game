@@ -20,10 +20,10 @@
                 ,"imgSrc":""
             }
             ,{  "name":"Bow Man"
-                ,"damage":1
-                ,"health":1
+                ,"damage":2
+                ,"health":2
                 ,"cost":2
-                ,"amulets":["Tempo"]
+                ,"amulets":["Reach"]
                 ,"imgSrc":""
             }
             ,{  "name":"Drunk"
@@ -120,5 +120,13 @@
     ,"Bow Man"
     ,"Drunk"
     ,"Brain Jack"
+]
+,"amuletDescriptions":[
+    {   "name":"Shield"
+        ,"description":"Completly blocks the first incoming attack"
+    }
+    ,{   "name":"Shield"
+        ,"description":"Completly blocks the first incoming attack"
+    }
 ]
 }
