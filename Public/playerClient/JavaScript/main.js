@@ -28,6 +28,8 @@ window.onload = function(){
             cards.push(cardLib[i]);
         }
         UI_Handler.displayCardSelectionPage(cards);
+        
+        $('itemPage').appendChild(Card.getCardDiv(cards[0]))
         $('handPoint').classList.add('displaying');
         $('endTurnBtn').onpointerdown = endTurn;
         $('sacrificeCardBtn').onpointerdown = ()=> {UI_Handler.suggestSacrifices(getPlayerData().board);}

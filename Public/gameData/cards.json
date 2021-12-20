@@ -1,8 +1,7 @@
 {
 "cards": 
     [
-    {
-        "faction":"Humanity"
+    {   "faction":"Humanity" 
         ,"regularCards":
         [
             {   "name":"Frank"
@@ -85,13 +84,12 @@
         "regularCards":[]
         ,"rareCards":[]
     },
-    {
-        "faction":"Neutral",
+    {   "faction":"Neutral",
         "regularCards":[
             {  "name":"Toad"
                 ,"damage":0
                 ,"health":3
-                ,"cost":0
+                ,"cost":1
                 ,"amulets":["High Block"]
                 ,"imgSrc":""
             }

@@ -99,7 +99,7 @@
 
 
 
-## Darklord, buffing stronger units and playing fother
+## Darklings, buffing stronger units and playing fother
 
     Skeleton X/1:0      [ Undead Army ]
     
@@ -145,7 +145,7 @@
 
 ## Mix cards
 
-    {C}Toad      0/3:0     [ High Block ]
+    {C}Toad      0/3:1     [ High Block ]
 
     {R}Minotaur 3/5:3      [ Rush ]
 

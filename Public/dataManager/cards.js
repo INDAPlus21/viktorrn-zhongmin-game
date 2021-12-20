@@ -1,7 +1,34 @@
 export function getCardDiv(card){
+    console.log("Card",card.rarity)
     let div = document.createElement('div');
     div.setAttribute('class','card');
     div.setAttribute('cardName',card.name);
+   
+    let image = document.createElement('div');
+    image.classList.add('image');
+    div.appendChild(image);
+
+    let imageSword = document.createElement('div');
+    imageSword.classList.add('damageIcon');
+    div.appendChild(imageSword);
+
+    let imagehealth = document.createElement('div');
+    imagehealth.classList.add('healthIcon');
+    div.appendChild(imagehealth);
+
+    let factionSymbol = document.createElement('div');
+    factionSymbol.classList.add('factionSymbol');
+    switch(card.faction){
+        case 'Humanity':
+            factionSymbol.innerText = "H";
+            break;
+
+        default:
+            factionSymbol.innerText = "N";
+            break;
+    }
+
+    div.appendChild(factionSymbol);
 
     let hdiv = document.createElement('div');
     hdiv.innerText = card.name;
@@ -32,9 +59,16 @@ export function getCardDiv(card){
     for(let a of card.amulets){
         msg += a + " ";
     } 
-    description.innerText = msg;
+    //description.innerText = msg;
     description.classList.add('description')
     div.appendChild(description);
+
+    if(card.rarity === "rare") {
+        let bg = document.createElement('div');
+        bg.classList.add('rareCardBackground');
+        div.appendChild(bg);
+      }
+  
 
     return div;
 }

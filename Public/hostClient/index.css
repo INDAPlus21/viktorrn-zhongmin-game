@@ -1,4 +1,6 @@
 @import url('../fonts/loadfont.css');
+@import url('../colorPalette.css');
+@import url('../cardDesign.css');
 
 body{
     font-family: MainFont;
@@ -86,14 +88,7 @@ body::-webkit-scrollbar {
     pointer-events: none;
 }
 
-.card,.highlightCard{
-    background-color: rgb(92, 84, 56);
-    width:120px;
-    height:180px;
-    border-radius: 20px;
-    border: 10px solid black;
-    
-}
+
 .card{
     vertical-align: top;
     transition: opacity 1s cubic-bezier(0,1,0.5,1);
@@ -106,57 +101,6 @@ body::-webkit-scrollbar {
     z-index: 10;
 }
 
-.name{
-    font-size: 2em;
-    height: 20px;
-    width: 100%;
-}
-
-.damage{
-    bottom: 20px;
-    font-size: 2.5em;
-    font-weight: bold;
-    position: absolute;
-    bottom: 5px;
-    left: 10px;
-    color: rgb(110, 30, 30);
-}
-
-.health{
-    font-size: 2.5em;
-    font-weight: bold;
-    position: absolute;
-    bottom: 5px;
-    right: 10px;
-    color: rgb(88, 149, 69);
-}
-
-.cost{
-    font-size: 2em;
-    font-weight: bold;
-    position: absolute;
-    bottom: 100px;
-    left: 5px;
-    
-}
-
-.cost .blood{
-    width: 10px;
-    background-color: rgb(105, 24, 24);
-    border-radius: 3px;
-    border: 3px solid black;
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    margin: 0 -6px 0 0;
-}
-
-.description{
-    position: absolute;
-    top: 70px;
-    font-size: 2em;
-    width: 100%;
-}
 
 
 
