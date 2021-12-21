@@ -27,15 +27,70 @@ window.onload = function(){
             if(cardLib[i] != undefined)
             cards.push(cardLib[i]);
         }
-        UI_Handler.displayCardSelectionPage(cards);
+        //UI_Handler.displayCardSelectionPage(cards);
         
-        $('itemPage').appendChild(Card.getCardDiv(cards[0]))
+        //$('itemPage').appendChild(Card.getCardDiv(cards[0]))
+        displayCards(2);
+
         $('handPoint').classList.add('displaying');
         $('endTurnBtn').onpointerdown = endTurn;
         $('sacrificeCardBtn').onpointerdown = ()=> {UI_Handler.suggestSacrifices(getPlayerData().board);}
+
+
     })
 }
 
+//code for card picking
+
+
+function displayCards(stage){
+    clearElement($('itemPage'))
+    let rareCards = DataManager.getAllRareCards();
+    let regularCards = DataManager.getAllRegularCards();
+    
+    switch(stage){
+        case 1:
+            let shf1 = document.createElement('div');
+            shf1.classList.add('shelf');
+      
+
+            for(let i in [1,2]){
+                let c = Card.getCardDiv(rareCards.shift());
+                
+                shf1.appendChild(c);
+                if(i==0){
+                    let text = document.createElement('div')
+                    text.innerText = "or";
+                    text.classList.add('shelfTextDiv');
+                    shf1.appendChild(text)
+                }
+            }
+            $('itemPage').appendChild(shf1);
+
+            break;
+        case 2:
+           
+            let shf2 = document.createElement('div');
+            shf2.classList.add('shelf');          
+            for(let i in [1,2,3,4,5,6]){
+                if(regularCards.length > 0){
+                    let c = Card.getCardDiv(regularCards.shift());
+                    shf2.appendChild(c);
+                }
+
+            }
+
+            $('itemPage').appendChild(shf2);
+            break;
+       
+    }
+}
+
+function cardSelected(stage,cardName){
+
+}
+
+//end of card picking
 socket.on('connect', () => {// run this when connected
     socketId = socket.id; // save this
     console.log("I'm online! with id " + socketId);

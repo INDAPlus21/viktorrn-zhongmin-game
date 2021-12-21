@@ -52,8 +52,24 @@ export class DataManager{
         return cards;
     }
 
-    getRandomRegularCard(cost){
+    getAllRegularCards(){
+        let cards = [];
+        for(let c of this.regularCards){
+            cards.push(this.cloneObject(c))
+        }
+        return cards;
+    }
 
+    getAllRareCards(){
+        let cards = [];
+        for(let c of this.rareCards){
+            cards.push(this.cloneObject(c))
+        }
+        return cards;
+    }
+
+    getRandomRegularCard(cost){
+       
     }
 
     getRandomRareCard(cost){
