@@ -76,8 +76,66 @@
   
     {
         "faction":"Beasts",
-        "regularCards":[]
-        ,"rareCards":[]
+        "regularCards":[
+            {  "name":"Undead"
+                ,"damage":0
+                ,"health":3
+                ,"cost":1
+                ,"amulets":["Rebirth"]
+                ,"imgSrc":""
+            }
+            ,{  "name":"Blood Beast"
+                ,"damage":1
+                ,"health":1
+                ,"cost":1
+                ,"amulets":["Rush"]
+                ,"imgSrc":""
+            }
+            ,{  "name":"Sparrow"
+                ,"damage":1
+                ,"health":2
+                ,"cost":1
+                ,"amulets":["Flying"]
+                ,"imgSrc":""
+            }
+            ,{  "name":"Phoenix"
+                ,"damage":0
+                ,"health":5
+                ,"cost":2
+                ,"amulets":["Rebirth"]
+                ,"imgSrc":""
+            }
+            ,{  "name":"Queen Spider"
+                ,"damage":3
+                ,"health":4
+                ,"cost":4
+                ,"amulets":["Predator"]
+                ,"imgSrc":""
+            }
+        ]
+        ,"rareCards":[
+            {  "name":"Hydra"
+                ,"damage":1
+                ,"health":5
+                ,"cost":2
+                ,"amulets":["Swarm"]
+                ,"imgSrc":""
+            }
+            ,{  "name":"The Tamer"
+                ,"damage":1
+                ,"health":5
+                ,"cost":2
+                ,"amulets":["Hound Master"]
+                ,"imgSrc":""
+            }
+            ,{  "name":"Blood Moon"
+                ,"damage":0
+                ,"health":4
+                ,"cost":3
+                ,"amulets":["Blood Moon"]
+                ,"imgSrc":""
+            }
+        ]
     },
     {
         "faction":"Darklings",
