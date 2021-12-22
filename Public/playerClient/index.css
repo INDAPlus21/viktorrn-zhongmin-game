@@ -202,7 +202,7 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
 #actionSlots .cardSlot .card{
     position: absolute;
     top:0px;
-    margin: -10px -60px;
+    margin: -5px -60px;
 
     transition: top 0.5s linear, opacity 1s linear;
     -webkit-transition: opacity 1s linear;

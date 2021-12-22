@@ -200,7 +200,8 @@ socket.on('syncClient', (hand,playerboard,bloodLevel,playerDeck,redrawUI) => {
 });
 
 socket.on('startTurn', (turn) => {
-    console.log("playerData",playerData,"start");
+    //console.log("playerData",playerData,"start");
+    //UI_Handler.returnHandCard()
     currentlyYourTurn = true;
     if(turn !== 0){
         UI_Handler.displayActionSlots('chooseCard',playerData.deck,[],playerData.hand);

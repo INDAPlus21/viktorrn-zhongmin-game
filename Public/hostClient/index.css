@@ -145,6 +145,22 @@ section.onscreen {
     transform: translateX(-50%);
 }
 
+#player1Board .cardSlots{
+    background-image: url('../assets/ArrowDown.png');
+    background-size: 160px;
+    background-position:-25px 20px;
+    background-repeat: no-repeat;
+    background-blend-mode: soft-light;
+}
+
+#player2Board .cardSlots{
+    background-image: url('../assets/ArrowUp.png');
+    background-size: 160px;
+    background-position:-25px 20px;
+    background-repeat: no-repeat;
+    
+}
+
 #playerBoard .cardSlots{
     display: inline-block;
     width: 120px;
@@ -157,12 +173,13 @@ section.onscreen {
     transition: border 1s, transform 0.3s;
     transition-timing-function: cubic-bezier(0,.95,.25,1);
     
+    
 }
 
 #playerBoard .cardSlots .card{
     position:absolute;
     top:0px;
-    margin: 0 0 0 -10px;
+    margin: 0 0 0 -5px;
 }
 
 

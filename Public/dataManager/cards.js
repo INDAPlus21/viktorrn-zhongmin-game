@@ -76,6 +76,9 @@ export function getCardDiv(card){
             case 'Marching':
                 msg += "MA "
                 break;
+            case 'Valiant Hearts':
+                msg += "VH";
+                break;
             default:
                 msg+="";
                 break;

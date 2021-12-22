@@ -41,11 +41,6 @@ export class UIHandler{
         }
     }
 
-    hideCardSelectionPage(){
-        Main.clearElement(Main.$('cardPickZone'));
-        this.cardSelectionPageHTMLHandle.style.top = '-100%';
-    }
-
     disablePickedCard(card_index,youPicked){
         let card = Main.$('pickCardIndex'+card_index);
         card.onpointerdown = null;
@@ -258,6 +253,8 @@ export class UIHandler{
 
     selectedHandCard(card){
         //animate card klicked
+    if(Main.getPlayerPickingCard()) return
+
         if(this.currentCardSelected == null){
             let pos = Main.getOffset(card); //get pos from original element to use for display animation
             let copy = card.cloneNode(true); //clones card element to create a display copy
@@ -286,12 +283,13 @@ export class UIHandler{
   
         //activate drop zone
         if(!Main.getPlayerTurn()) return
+
         let playerData = Main.getPlayerData();
         if(playerData.bloodLevel >= playerData.hand[card.getAttribute('cardindex')].cost && !Main.getPlayerPickingCard())
             this.activateDropZone(Main.getPlayerData().board);
         else{
             this.disableDropZone();
-            console.log("need to sac a card or youre picking cards")
+            console.log("need to sac a card or youre picking cards");
         }
     }
 
@@ -320,6 +318,8 @@ export class UIHandler{
         //deactivate dropzone
         this.disableDropZone();
     }
+
+ 
 
     playedCard(col,target){
         Main.getUIHandler().cardWasPlayed = true;

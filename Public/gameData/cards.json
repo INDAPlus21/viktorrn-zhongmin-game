@@ -59,8 +59,8 @@
             
             {  "name":"Armoury"
                 ,"damage":0
-                ,"health":5
-                ,"cost":3
+                ,"health":4
+                ,"cost":2
                 ,"amulets":["Valiant Hearts"]
                 ,"imgSrc":""
             }
@@ -121,9 +121,11 @@
     ,"Frank"
     ,"Soldier"
     ,"Black Knight"
+
 ]
 ,"startingRareCards":[
     "Minotaur"
+    ,"Armoury"
     ,"Brain Jack"
 ]
 ,"amuletDescriptions":[

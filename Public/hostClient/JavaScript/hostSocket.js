@@ -234,6 +234,15 @@ socket.on('connect', () => {// run this when connected
         case 'Rush':
           card.age = 1;  
           break;
+        case "Valiant Hearts":
+          for(let c in playerBoard){
+            console.log(playerBoard[c])
+            if(playerBoard[c] != null && c != column && playerBoard[c].faction == "Humanity" )
+              if(playerBoard[c].shieldBroken == undefined){
+                playerBoard[c].shieldBroken = false;
+              }
+          }
+          break;
       }
     }
     return card;
