@@ -36,15 +36,15 @@ let DataManager = new DataManagerImport.DataManager();
 
 window.onload = async function(){
   DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager,()=>{
-   /* let dummyBoard = {
+   /*let dummyBoard = {
       player1: [
-        DataManager.getSpecificCard("Wolf"),
+        DataManager.getSpecificCard("Drunk"),
         null,
         null,
         null
       ],
       player2: [
-        DataManager.getSpecificCard("Wolf"),
+        DataManager.getSpecificCard("Drunk"),
         null,
         null,
         null

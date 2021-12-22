@@ -18,19 +18,25 @@ let displayPlayCardAreaOnSync = false;
 let playerPickingCard = false;
 let columnAmount = 4;
 
+let cardsSlected;
+let cardsLeftToSelect;
+
 window.onload = function(){
     DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager,(Manager = DataManager) => {
 
-        let cards = []
+        /*let cards = []
         let cardLib = shuffle(DataManager.getGameCardTable());  
-        for(let i = 0; i < 10; i++){
+        for(let i = 0; i < 4; i++){
             if(cardLib[i] != undefined)
             cards.push(cardLib[i]);
         }
+        //UI_Handler.drawHand(cards);
+        //UI_Handler.displayActionSlots('playCards',[],[null,null,null,null],[],columnAmount);
         //UI_Handler.displayCardSelectionPage(cards);
-        
+        */
         //$('itemPage').appendChild(Card.getCardDiv(cards[0]))
-        displayCards(2);
+        cardsSlected = [];
+        displayCardShop(1);
 
         $('handPoint').classList.add('displaying');
         $('endTurnBtn').onpointerdown = endTurn;
@@ -43,20 +49,29 @@ window.onload = function(){
 //code for card picking
 
 
-function displayCards(stage){
+function displayCardShop(stage){
     clearElement($('itemPage'))
-    let rareCards = DataManager.getAllRareCards();
-    let regularCards = DataManager.getAllRegularCards();
+    let rareCards = shuffle( DataManager.getAllStartingRareCards() );
+    let regularCards = shuffle (DataManager.getAllStartingRegularCards() );
     
     switch(stage){
         case 1:
             let shf1 = document.createElement('div');
             shf1.classList.add('shelf');
+            cardsLeftToSelect = 1;
       
 
             for(let i in [1,2]){
                 let c = Card.getCardDiv(rareCards.shift());
                 
+                c.onpointerdown = () =>{
+                    let cd = {cardName:c.getAttribute('cardName'),cardDiv:c.cloneNode(true)}
+                    cardsSlected.push(cd);
+                    drawDeck(cardsSlected);
+                    stage+=1;
+                    displayCardShop(stage);
+                }
+
                 shf1.appendChild(c);
                 if(i==0){
                     let text = document.createElement('div')
@@ -69,25 +84,77 @@ function displayCards(stage){
 
             break;
         case 2:
-           
             let shf2 = document.createElement('div');
-            shf2.classList.add('shelf');          
+            cardsLeftToSelect = 5;
+            shf2.classList.add('shelf'); 
+            
+            let shf3 = document.createElement('div');
+            shf3.classList.add('shelf');
+            
+            let text = document.createElement('div');
+            text.classList.add('shelfHeader');
+            text.id = "text";
+            text.innerText = "You Need to select "+cardsLeftToSelect + " more cards"
+            shf3.appendChild(text);
+
             for(let i in [1,2,3,4,5,6]){
                 if(regularCards.length > 0){
                     let c = Card.getCardDiv(regularCards.shift());
+                    c.setAttribute('timesSelected',0);
+                    c.onpointerdown=()=>{
+                        cardsLeftToSelect -= 1;
+                        $('text').innerText = "You Need to select "+cardsLeftToSelect + " more cards";
+                        console.log("cardsLeft",cardsLeftToSelect);
+                        c.style.transform = "scale(1.1)";
+                        
+                        let timer = setInterval(()=>{
+                            c.style.transform = '';
+                            clearInterval(timer);
+                        },300)
+
+                        let cd = {cardName:c.getAttribute('cardName'),cardDiv:c.cloneNode(true)}
+                        cardsSlected.push(cd);
+                        
+                        drawDeck(cardsSlected);
+
+                        if(c.getAttribute('timesSelected') < 1){
+                            c.setAttribute('timesSelected',1);
+
+                        }else{
+                            c.style.opacity = '0';
+                        }
+
+                       
+
+                        if(cardsLeftToSelect <= 0){
+                            stage+=1;
+                            displayCardShop(stage);
+                        }
+                    }
                     shf2.appendChild(c);
                 }
 
             }
-
+            $('itemPage').appendChild(shf3);
             $('itemPage').appendChild(shf2);
             break;
-       
+
+        case 3:
+            doneWithStartingCards(cardsSlected);
+            break;
+
+        case 4:
+
+            break;
     }
 }
 
-function cardSelected(stage,cardName){
-
+function drawDeck(cards){
+    clearElement($('cardShopDeck'));
+    for(let i of cards){
+        i.cardDiv.style.transform = '';
+        $('cardShopDeck').appendChild(i.cardDiv);
+    }
 }
 
 //end of card picking
@@ -104,14 +171,15 @@ $('joinServerBtn').onmousedown = () =>{
         if (verdict==='fail') $('loginErrorText').innerHTML = reason;
         else {
             $('login').classList.remove('onscreen');
-            $('selectStarterCards').classList.add('onscreen');
+            $('cardShop').classList.add('onscreen');
+            
         }
     });
 }
 
 socket.on('startGame', () => {
     //UI_Handler.hideCardSelectionPage();
-    $('selectStarterCards').classList.remove('onscreen');
+    //$('selectStarterCards').classList.remove('onscreen');
     $('playArea').classList.add('onscreen');
     UI_Handler.displayActionSlots('waitingForTurn');
 })
@@ -160,10 +228,11 @@ socket.on('youLose', () => {
 
 // this function is run when the player is done selecting their starting deck and is ready to play
 export function doneWithStartingCards(cards){
-    UI_Handler.hideCardSelectionPage();
+    //UI_Handler.hideCardSelectionPage();
+    $('cardShop').classList.remove('onscreen')
     let deck = [];
     for(let i in cards){
-        deck.push(DataManager.getSpecificCard(cards[i]))
+        deck.push(DataManager.getSpecificCard(cards[i].cardName))
     }
     socket.emit('ready', roomId, socketId, deck);
     // @viktor at here, maybe change to another section that is just a blank waiting screen

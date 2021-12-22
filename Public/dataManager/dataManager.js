@@ -5,7 +5,8 @@ export class DataManager{
         this.cardLibrary = new Array();
         this.regularCards = new Array();
         this.rareCards = new Array();
-        this.startingCards = new Array();
+        this.startingRareCards = new Array();
+        this.startingRegularCards = new Array();
     }
 
     parseCardDataFromJSON(filePath,lib,callback){
@@ -17,8 +18,7 @@ export class DataManager{
                     card.faction = result.cards[i].faction;
                     card.rarity = "regular";
                     lib.cardLibrary.push(card);
-                    lib.regularCards.push(card);
-                    
+                    lib.regularCards.push(card);    
                 }
                 for(let c in result.cards[i].rareCards){
                     let card = result.cards[i].rareCards[c];
@@ -28,9 +28,13 @@ export class DataManager{
                     lib.rareCards.push(card);
                 }
             }
-            for(let c in result.startingCards){
-                lib.startingCards.push(result.startingCards[c]);
+            for(let c of result.startingRegularCards){
+                lib.startingRegularCards.push(c);
             }
+            for(let c of result.startingRareCards){
+                lib.startingRareCards.push(c);
+            }
+            console.log(lib)
             callback();
             return true;
         })
@@ -68,12 +72,20 @@ export class DataManager{
         return cards;
     }
 
-    getRandomRegularCard(cost){
-       
+    getAllStartingRareCards(){
+        let cards = [];
+        for(let c of this.startingRareCards){
+            cards.push(this.getSpecificCard(c))
+        }
+        return cards;
     }
 
-    getRandomRareCard(cost){
-        
+    getAllStartingRegularCards(){
+        let cards = [];
+        for(let c of this.startingRegularCards){
+            cards.push(this.getSpecificCard(c))
+        }
+        return cards;
     }
 
     getSpecificCard(name){

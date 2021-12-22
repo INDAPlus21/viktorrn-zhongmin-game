@@ -83,8 +83,8 @@ export class UIHandler{
         p1Scale.id ="player1Scale";
         p2Scale.id = "player2Scale";
         
-        p1Scale.innerText = boardInfo.p1damage;   
-        p2Scale.innerText = boardInfo.p2damage; 
+        p1Scale.innerText = boardInfo.p2damage;   
+        p2Scale.innerText = boardInfo.p1damage; 
         
         scale.appendChild(p1Scale);
         scale.appendChild(p2Scale);

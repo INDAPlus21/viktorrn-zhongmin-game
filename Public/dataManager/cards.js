@@ -1,5 +1,4 @@
 export function getCardDiv(card){
-    console.log("Card",card.rarity)
     let div = document.createElement('div');
     div.setAttribute('class','card');
     div.setAttribute('cardName',card.name);
@@ -57,9 +56,34 @@ export function getCardDiv(card){
     let description = document.createElement('div');
     let msg = "";
     for(let a of card.amulets){
-        msg += a + " ";
+        switch(a){
+            case 'Rush':
+                msg += "RS";
+                break;
+            case 'High Block':
+                msg += "HB ";
+                break;
+            
+            case 'Shield':
+                msg += "SH ";
+                break;
+            case 'Drunk':
+                msg += "DR ";
+                break;
+            case 'Mirror':
+                msg += "MR ";
+                break;
+            case 'Marching':
+                msg += "MA "
+                break;
+            default:
+                msg+="";
+                break;
+        }
+        
+        
     } 
-    //description.innerText = msg;
+    description.innerText = msg;
     description.classList.add('description')
     div.appendChild(description);
 

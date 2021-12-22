@@ -50,49 +50,6 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
 
 /*Card styling*/
 
-/*UI for joing server*/
-
-#joinServerPage{
-    position: absolute;
-    z-index: 10;
-    top:0;
-    left:0;
-    width: 100%;
-    height: 100%;
-    background-color: rgb(102, 102, 102,0);
-    -webkit-box-shadow: inset 0px 0px 500px 100px #000000; 
-    box-shadow: inset 0px 0px 500px 100px #000000;
-    background-color: rgb(92, 92, 92);
-    text-align: center;
-}
-
-#joinServerPage div{
-    position: relative;
-    background-color: red;
-    width:500px;
-    height: 100px;
-    left:50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-}
-
-#joinServerPage input{
-    width: 100px;
-    height:100%;
-  
-    font-size: 1.5em;  
-}
-
-#joinServerPage button{
-    padding:160px;
-    font-size: 3em;  
-}
-
-#joinServerPage #loginErrorText{
-    margin: 30px 0 0 0;
-    width: 100%;
-    font-size: 2em;
-}
 
 /*The Card shop*/
 #cardShop{
@@ -114,7 +71,7 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
 
 #cardShop #itemPage .shelf{
     position: relative;
-    margin: 30px 0;
+    margin: 50px 0;
     width:100%;
 }
 
@@ -129,7 +86,6 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
     position: relative;
     font-size: 4em;
     line-height: 200px;
-    height: 200px;
     width:30px;
     display: inline !important;  
 }
@@ -137,21 +93,23 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
 #cardShop #itemPage .shelf .card{
     position: relative !important;
     display: inline-block !important;
-    margin: 0 20px 0 20px;
+    margin: 0 20px 40px 20px;
 }
 
-#cardShop #itemPage #deck .card{
+#cardShop #cardShopDeck{
  position: absolute;
  text-align: center;
- bottom:20px;
+ left:0;
+ bottom: 20px;
  width: 100%;
  z-index: 10;
 }
 
-#cardShop #itemPage #deck .card{
+#cardShop #cardShopDeck .card{
     position: relative !important;
     display: inline-block !important;
     margin: 0 20px 0 20px;
+
 }
 
 #cardShop .card{
@@ -221,9 +179,8 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
     height: 200px;
     margin:0 20px 0 20px;
 
-    border-radius: 20px;
-    border: 10px solid rgb(78, 78, 78);
-    background-color: rgb(129, 128, 126);
+    border-radius: 5px;
+    border: 5px solid var(--actionSlotColor);
 
     transition: border 1s, transform 0.3s;
     transition-timing-function: cubic-bezier(0,.95,.25,1);
@@ -340,9 +297,15 @@ transform: scale(1.05);
 }
 
 #bloodLevel .blood{
-    background-color: rgb(105, 24, 24);
-    border-radius: 5px;
-    border: 5px solid black;
+    background-color: var(--bloodColor);
+    background-size: 50px;
+
+    
+    mask-image: url('../assets/blood.svg');
+    mask-size: 50px;
+    -webkit-mask-image: url('../assets/blood.svg');
+    -webkit-mask-size: 50px;
+
     width: 50px;
     height: 50px;
     margin: 5px 0 0 0;

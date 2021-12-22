@@ -7,16 +7,16 @@
     
 </head>
 <body>
-    <section id="login" style="text-align: center;">
+    <section id="login" style="text-align: center;" class="onscreen">
         <input 
             id="serverIP" value="" placeholder="4-letter join code" type="text"
-            style="margin: 300px 0 0 0; height: 30px; width: 100px; font-size: 1.2em; transform: scale(2);" 
+            style="margin: 300px 0 0 0; height: 30px; width: 100px; font-size: 1.2em; transform: scale(2); color: #000;" 
         ></input><br>
         <input 
             id="loginPlayerName" value="" placeholder="Username" type="text"
-            style="margin: 60px 0; height: 30px; width: 100px; font-size: 1.2em; transform: scale(2);" 
+            style="margin: 60px 0; height: 30px; width: 100px; font-size: 1.2em; transform: scale(2); color: #000;" 
         ></input><br>
-        <button id="joinServerBtn" style="height:30px; width: 100px; font-size: 1.2em; transform: scale(2);">Join Server</button>
+        <button id="joinServerBtn" style="height:30px; width: 100px; font-size: 1.2em; transform: scale(2); color: #000;">Join Server</button>
         <br>
         <div id="loginErrorText"></div>
         <div class="backgroundDiv"></div>
@@ -29,15 +29,13 @@
             <div id="selectedCards"></div>
         </div>  
     </section>
-    <section id="cardShop" class="onscreen">
+    <section id="cardShop" >
         <div class="backgroundDiv"></div>
         <h1 id="cardShopHeader">-Choose Wisely-</h1>
         <div id="itemPage"></div>
-        <div id="deck">
-            
-        </div>
+        <div id="cardShopDeck"></div>
     </section>
-    <section id="playArea">
+    <section id="playArea" >
         <div class="backgroundDiv"></div>
         <div id="actionSlots"></div>
         <div id="handPoint"></div>
