@@ -46,42 +46,6 @@ export async function displayAttack(attackingCard,attackedCard,attackedCardData,
 
     try{
         let pos = attackedCard.getBoundingClientRect();
-        let dispCard2 = attackedCard.cloneNode(true);
-        dispCard2.classList.add('highlightCard');
-        
-        // card that moves upon being hit
-        if(strikingCard == false){
-            dispCard2.style.visibility = 'hidden';
-            dispCard2.style.opacity = "0";
-        } 
-        dispCard2.style.left = pos.left+"px";
-        dispCard2.style.top = pos.top+"px";
-        dispCard2.style.transition = "top 0.3s cubic-bezier(0,1,.25,2), left 0.3s cubic-bezier(0,1,.25,1.5)";
-        dispCard2.style.zIndex = "3";
-        document.body.appendChild(dispCard2);
-        attackedCard.style.visibility = 'hidden';
-
-        let d1 = setInterval(()=>{
-            clearInterval(d1);
-            dispCard2.style.left = pos.left+ dir*20 + "px";
-            dispCard2.style.top = pos.top + dir*20 + "px";
-            if(attackedCardData != null){
-                dispCard2.children[2].innerText = attackedCardData.health;
-                attackedCard.children[2].innerText = attackedCardData.health;
-            } 
-            let d2 = setInterval(()=>{
-                clearInterval(d2);
-                dispCard2.style.left = pos.left + "px";
-                dispCard2.style.top = pos.top + "px";
-                let d3 = setInterval(()=>{
-                    clearInterval(d3);
-                    dispCard2.remove();
-                    attackedCard.style.visibility = '';
-                    
-                },300)
-            },300)
-        },10)
-
         // claw effect
         let claw = document.createElement('div');
         claw.classList.add('damageClawEffect');
@@ -134,6 +98,45 @@ export async function displayAttack(attackingCard,attackedCard,attackedCardData,
             },500)
         },200)
         },20)
+
+
+        if(strikingCard == false) return;
+        
+        let dispCard2 = attackedCard.cloneNode(true);
+        dispCard2.classList.add('highlightCard');
+        
+        
+
+        // card that moves upon being hit
+        
+        dispCard2.style.left = pos.left+"px";
+        dispCard2.style.top = pos.top+"px";
+        dispCard2.style.transition = "top 0.3s cubic-bezier(0,1,.25,2), left 0.3s cubic-bezier(0,1,.25,1.5)";
+        dispCard2.style.zIndex = "3";
+        document.body.appendChild(dispCard2);
+        attackedCard.style.visibility = 'hidden';
+
+        let d1 = setInterval(()=>{
+            clearInterval(d1);
+            dispCard2.style.left = pos.left+ dir*20 + "px";
+            dispCard2.style.top = pos.top + dir*20 + "px";
+            if(attackedCardData != null){
+                dispCard2.children[6].innerText = attackedCardData.health;
+                attackedCard.children[6].innerText = attackedCardData.health;
+            } 
+            let d2 = setInterval(()=>{
+                clearInterval(d2);
+                dispCard2.style.left = pos.left + "px";
+                dispCard2.style.top = pos.top + "px";
+                let d3 = setInterval(()=>{
+                    clearInterval(d3);
+                    dispCard2.remove();
+                    attackedCard.style.visibility = '';
+                    
+                },300)
+            },300)
+        },10)
+
     }catch{}
     
 }

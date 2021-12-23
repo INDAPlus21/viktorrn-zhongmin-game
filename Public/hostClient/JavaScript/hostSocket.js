@@ -115,7 +115,7 @@ socket.on('connect', () => {// run this when connected
     if (answer[1] === null) { // if none of the above failure conditions match, let the player in
       callback(answer); // tell the player they will be joining
 
-      let playerObj = {name:playerName, id:playerId, originalDeck:[], remainingDeck:[], hand:[], blood:0}
+      let playerObj = {name:playerName, id:playerId, originalDeck:[], remainingDeck:[], hand:[], statusEffects:[], blood:0}
 
       if (playerInfo.player1 === undefined) {
         playerInfo.player1 = playerObj;
@@ -197,6 +197,25 @@ socket.on('connect', () => {// run this when connected
     card.age = 0;
     //check your cards
     card = await runOnPlayedAmulets(card,boardInfo['player'+i],boardInfo['player'+n],column,false)
+
+    // check if player has effects
+    for(let e of boardInfo['player'+i])
+    switch(e){
+      case 'Valiant Hearts':
+          if(card.shieldBroken == undefined){
+            card.shieldBroken = false;
+          }
+        break;
+    }
+
+    //trigger status cards
+    for(let a of card.amulets){
+      switch(a){
+        case 'Valiant Hearts':
+            boardInfo['player'+i].statusEffects.push('Valiant Hearts');
+          break;
+      }
+    }    
     
     playerInfo['player'+i].hand.splice(cardIndex, 1); // remove the card from the player's hand
 
@@ -236,7 +255,6 @@ socket.on('connect', () => {// run this when connected
           break;
         case "Valiant Hearts":
           for(let c in playerBoard){
-            console.log(playerBoard[c])
             if(playerBoard[c] != null && c != column && playerBoard[c].faction == "Humanity" )
               if(playerBoard[c].shieldBroken == undefined){
                 playerBoard[c].shieldBroken = false;
@@ -295,34 +313,37 @@ socket.on('connect', () => {// run this when connected
           
           let opposingCard = boardInfo['player'+atkedPlayer][col]; // get the opposing card
           let attackHitCard = false;
-          
-          if (opposingCard !== null){
-            // run sigil checks relevent to attacking
-            attackHitCard = true; // asume the card hits a card and ajust afterwards
-            
-          } 
+          let opponentHasFlying = false;
 
-          let damage = thisCard.damage;
-            for(let a of thisCard.amulets){
-              switch(a){
-                case "Drunk":
-                  damage = 1+Math.floor(Math.random()*3);
+          if (opposingCard !== null){
+            attackHitCard = true;
+            
+            for(let a of opposingCard.amulets){
+              switch(a){        
+                case 'Flying':
+                  attackHitCard = false;
+                  opponentHasFlying = true;
                   break;
               }
-                
             }  
 
+          }
+
+          let damage = thisCard.damage;
+          //checks for this card
+          for(let a of thisCard.amulets){
+            switch(a){
+              case "Drunk":
+                damage = 1+Math.floor(Math.random()*3);
+                break;
+              case 'Flying':
+              case 'Reach':
+                if(opponentHasFlying) attackHitCard = true;
+                break;
+            }
+          }          
+
           if (attackHitCard && damage > 0) {
-           
-            let damage = thisCard.damage;
-            for(let a of thisCard.amulets){
-              switch(a){
-                case "Drunk":
-                  damage = 1+Math.floor(Math.random()*3);
-                  break;
-              }
-                
-            }   
     
             if(opposingCard.shieldBroken != undefined && opposingCard.shieldBroken == false){
               opposingCard.shieldBroken = true;
@@ -333,7 +354,10 @@ socket.on('connect', () => {// run this when connected
             await AnimationHandler.displayAttack(getCardFromBoard(atkingPlayer,col),getCardFromBoard(atkedPlayer,col),opposingCard,damage,atkingPlayer,true);
             await new Promise(r => setTimeout(r, 500));
 
-            if (opposingCard.health <= 0) boardInfo['player'+atkedPlayer][col] = null // set column to null if it dies from the attack
+            if (opposingCard.health <= 0){
+              cardDied(playerInfo['player'+atkedPlayer],boardInfo['player'+atkedPlayer],col);
+              boardInfo['player'+atkedPlayer][col] = null;
+            }  // set column to null if it dies from the attack
         
           } else if(damage > 0) {
             
@@ -361,7 +385,6 @@ socket.on('connect', () => {// run this when connected
   
                 break;
                 case 'Tempo':
-  
                   thisCard.damage += 1;
                   break;
             }
@@ -394,7 +417,30 @@ socket.on('connect', () => {// run this when connected
   });
 });
 
+
+
 // SEPARATOR - You are now entering Not Socket
+
+function cardDied(playerObj,playerBoard,column){
+  let card = playerBoard[column];
+  for(let a of card.amulets){
+    switch(a){
+      case 'Valiant Hearts':
+        let other = false;
+        for(let c of playerBoard){
+          if(c == null)continue;
+          for(let a of c.amulets){
+            if('Valiant Hearts') other = true;
+          }
+        }
+        if(other) return;
+        for(let e in playerObj.statusEffects){
+          if(playerObj.statusEffects[e] = 'Valiant Hearts') playerObj.statusEffects.splice(e,1);
+        }
+        break;
+    }
+  }
+}
 
 function drawSpecificCard(playerObj, cardName){
   playerObj.hand.push(DataManager.getSpecificCard(cardName));

@@ -22,7 +22,7 @@
 
 ### Human catalyst cards
 
-    {R}Armoury 0/4:3       [ Valiant Hearts ]
+    {R}Armoury 0/4:2       [ Valiant Hearts ]
 
 ## Amulets
 
@@ -38,9 +38,9 @@
 
     Deal between 0-3 damage 
 
-### Tempo
+### Reach
 
-    +1/0 after each attack performed
+    Can hit flying Cards
 
 ### Shield
 
