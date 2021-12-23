@@ -53,15 +53,15 @@
 
 ## Beasts, fast aggro deck built around sacrifices
 
-    Undead  0/3:0       [ Rebirth ]
+    {C}Undead  0/3:1       [ Rebirth ]
 
-    Blood Beast 1/1:1   [ Rush ]
+    {C}Blood Beast 1/1:1   [ Rush ]
 
-    Sparrow 1/2:1       [ Flying ]
+    {C}Sparrow 1/2:1       [ Flying ]
 
-    Phoenix 0/5:2       [ Rebirth ]
+    {C}Phoenix 0/5:2       [ Rebirth ]
 
-    Hydra   1/5:3       [ Swarm ]
+    {C}Hydra   1/5:3       [ Swarm ]
 
     Queen Spider  3/4:3 [ Predator ]
 

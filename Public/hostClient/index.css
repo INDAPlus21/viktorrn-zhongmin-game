@@ -220,6 +220,24 @@ section.onscreen {
     top:-110px;
 }
 
+#playerBoard #player1Name{
+    position: absolute;
+    top: -50px;
+    left:50%;
+    font-size: 2em;
+    transform: translate(-50%);
+    z-index: 15;
+}
+
+#playerBoard #player2Name{
+    position: absolute;
+    bottom:-50px;
+    font-size: 2em;
+    left:50%;
+    transform: translate(-50%);
+    z-index: 15;
+}
+
 /*Effect*/
 
 .damageTextEffect{

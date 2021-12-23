@@ -82,6 +82,12 @@ export function getCardDiv(card){
             case 'Reach':
                 msg += "RH";
                 break;
+            case 'Rebirth':
+                msg += "RB";
+                break;
+            case 'Flying':
+                msg += "FL";
+                break;
             default:
                 msg+="";
                 break;

@@ -6,7 +6,6 @@ import * as DataManagerImport from '../../dataManager/dataManager.js';
 let currentlyYourTurn = false;
 let UI_Handler = new UIHandler.UIHandler($('handPoint'),$('actionSlots'),$('cardSelectionPage'),$('cardPickZone'),$('selectedCards'),$('bloodLevel')); 
 let DataManager = new DataManagerImport.DataManager();
-let endTurnBtn = $('endTurnBtn');
 
 let playerData = {hand:null,board : new Array(),bloodLevel:null,deck:null}
 
@@ -17,6 +16,7 @@ let socketId;
 let displayPlayCardAreaOnSync = false;
 let playerPickingCard = false;
 let columnAmount = 4;
+let currentTurn;
 
 let cardsSlected;
 let cardsLeftToSelect;
@@ -24,17 +24,6 @@ let cardsLeftToSelect;
 window.onload = function(){
     DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager,(Manager = DataManager) => {
 
-        /*let cards = []
-        let cardLib = shuffle(DataManager.getGameCardTable());  
-        for(let i = 0; i < 4; i++){
-            if(cardLib[i] != undefined)
-            cards.push(cardLib[i]);
-        }
-        //UI_Handler.drawHand(cards);
-        //UI_Handler.displayActionSlots('playCards',[],[null,null,null,null],[],columnAmount);
-        //UI_Handler.displayCardSelectionPage(cards);
-        */
-        //$('itemPage').appendChild(Card.getCardDiv(cards[0]))
         cardsSlected = [];
         displayCardShop(1);
 
@@ -44,6 +33,78 @@ window.onload = function(){
 
 
     })
+
+    socket.on('connect', () => {
+        socketId = socket.id; 
+        //console.log("I'm online! with id " + socketId);
+    });
+    $('joinServerBtn').onmousedown = () =>{
+        roomId = ($('serverIP').value).toLowerCase();
+        playerName = $('loginPlayerName').value;
+    
+        socket.emit('joinRoom', roomId, playerName, socketId, (verdict, reason) => {
+            if (verdict==='fail') $('loginErrorText').innerHTML = reason;
+            else {
+                $('login').classList.remove('onscreen');
+                $('cardShop').classList.add('onscreen');
+                $('playerName').innerText = playerName;
+
+                //cardsSlected = [{cardName:"Frank"},{cardName:"Frank"},{cardName:"Armoury"},{cardName:"Undead"}];
+                //displayCardShop(3);
+            }
+        });
+    }
+    
+    socket.on('startGame', () => {
+        UI_Handler.displayActionSlots('waitingForTurn');
+        $('handPoint').classList.add('displaying');
+        $('bloodLevel').classList.add('displaying');
+    })
+    
+    socket.on('syncClient', (hand,playerboard,bloodLevel,playerDeck,redrawUI) => {
+        console.log("sync",hand,playerboard,bloodLevel)
+        playerData.hand = hand;
+        playerData.board = playerboard;
+        playerData.bloodLevel = bloodLevel;
+        playerData.deck = playerDeck;
+        if(redrawUI){
+            UI_Handler.drawBloodLevel(playerData.bloodLevel);
+            UI_Handler.drawHand(playerData.hand);
+            if(displayPlayCardAreaOnSync) UI_Handler.displayActionSlots('playCards',[],playerData.board,[],columnAmount);
+            displayPlayCardAreaOnSync = false; 
+        }
+        
+    });
+    
+    socket.on('startTurn', (turn) => {
+        //console.log("playerData",playerData,"start");
+        UI_Handler.returnHandCard()
+        currentlyYourTurn = true;
+        currentTurn = turn;
+        if(turn !== 0){
+            UI_Handler.displayActionSlots('chooseCard',playerData.deck,[],playerData.hand);
+            playerPickingCard = true;
+        }else{
+            UI_Handler.displayActionSlots('playCards',[],playerData.board,[],columnAmount);
+        }  
+        UI_Handler.drawHand(playerData.hand);
+        $('endTurnBtn').classList.add('displaying');
+        $('sacrificeCardBtn').classList.add('displaying');
+        
+    });
+    
+    socket.on('youWin', () => {
+        $('playArea').classList.remove('onscreen');
+        $('youWin').classList.add('onscreen');
+    });
+    
+    socket.on('youLose', () => {
+        $('playArea').classList.remove('onscreen');
+        $('youLose').classList.add('onscreen');
+    });
+
+
+
 }
 
 //code for card picking
@@ -121,6 +182,7 @@ function displayCardShop(stage){
                             c.setAttribute('timesSelected',1);
 
                         }else{
+                            c.onpointerdown = null;
                             c.style.opacity = '0';
                         }
 
@@ -158,79 +220,15 @@ function drawDeck(cards){
 }
 
 //end of card picking
-socket.on('connect', () => {// run this when connected
-    socketId = socket.id; // save this
-    console.log("I'm online! with id " + socketId);
-});
 
-$('joinServerBtn').onmousedown = () =>{
-    roomId = ($('serverIP').value).toLowerCase();
-    playerName = $('loginPlayerName').value;
-
-    socket.emit('joinRoom', roomId, playerName, socketId, (verdict, reason) => {
-        if (verdict==='fail') $('loginErrorText').innerHTML = reason;
-        else {
-            $('login').classList.remove('onscreen');
-            $('cardShop').classList.add('onscreen');
-            
-        }
-    });
-}
-
-socket.on('startGame', () => {
-    //UI_Handler.hideCardSelectionPage();
-    //$('selectStarterCards').classList.remove('onscreen');
-    $('playArea').classList.add('onscreen');
-    UI_Handler.displayActionSlots('waitingForTurn');
-})
-
-socket.on('syncClient', (hand,playerboard,bloodLevel,playerDeck,redrawUI) => {
-    console.log("sync",hand,playerboard,bloodLevel)
-    playerData.hand = hand;
-    playerData.board = playerboard;
-    playerData.bloodLevel = bloodLevel;
-    playerData.deck = playerDeck;
-    if(redrawUI){
-        UI_Handler.drawBloodLevel(playerData.bloodLevel);
-        UI_Handler.drawHand(playerData.hand);
-        if(displayPlayCardAreaOnSync) UI_Handler.displayActionSlots('playCards',[],playerData.board,[],columnAmount);
-        displayPlayCardAreaOnSync = false; 
-    }
-    
-});
-
-socket.on('startTurn', (turn) => {
-    //console.log("playerData",playerData,"start");
-    UI_Handler.returnHandCard()
-    currentlyYourTurn = true;
-    if(turn !== 0){
-        UI_Handler.displayActionSlots('chooseCard',playerData.deck,[],playerData.hand);
-        playerPickingCard = true;
-    }else{
-        UI_Handler.displayActionSlots('playCards',[],playerData.board,[],columnAmount);
-    }  
-    UI_Handler.drawHand(playerData.hand);
-    $('endTurnBtn').classList.add('displaying');
-    $('handPoint').classList.add('displaying');
-    $('bloodLevel').classList.add('displaying');
-    $('sacrificeCardBtn').classList.add('displaying');
-});
-
-socket.on('youWin', () => {
-    $('playArea').classList.remove('onscreen');
-    $('youWin').classList.add('onscreen');
-});
-
-socket.on('youLose', () => {
-    $('playArea').classList.remove('onscreen');
-    $('youLose').classList.add('onscreen');
-});
 
 
 // this function is run when the player is done selecting their starting deck and is ready to play
 export function doneWithStartingCards(cards){
-    //UI_Handler.hideCardSelectionPage();
-    $('cardShop').classList.remove('onscreen')
+    $('cardShop').classList.remove('onscreen');
+    $('playArea').classList.add('onscreen');
+    UI_Handler.displayActionSlots('waitingForOtherPlayer');
+    
     let deck = [];
     for(let i in cards){
         deck.push(DataManager.getSpecificCard(cards[i].cardName))
@@ -240,8 +238,8 @@ export function doneWithStartingCards(cards){
 }
 
 export function sacrificeCard(column){
-
     socket.emit('playerSacrificeCard', roomId, socketId, column);
+    displayPlayCardAreaOnSync = true;
 }
 
 export function chooseCard(cardType){
@@ -253,6 +251,7 @@ export function chooseCard(cardType){
 export function cardPlayed(cardIndex,col){
     playerData.hand.splice(cardIndex,1);
     UI_Handler.drawHand(playerData.hand);
+    displayPlayCardAreaOnSync = true;
     socket.emit('playerPlayCard', roomId, socketId, cardIndex, col);
     
 }
@@ -262,7 +261,7 @@ export function endTurn() {
     $('sacrificeCardBtn').classList.remove('displaying');
     currentlyYourTurn = false;
     displayPlayCardAreaOnSync = true;
-    UI_Handler.displayActionSlots('waitingForTurn');
+    //UI_Handler.displayActionSlots('waitingForTurn');
     socket.emit('playerEndTurn', roomId, socketId);
 }
 
@@ -312,6 +311,9 @@ export function getPlayerData(){
 }
 export function getPlayerTurn(){
     return currentlyYourTurn;
+}
+export function getCurrentturn(){
+    return currentTurn;
 }
 export function getPlayerPickingCard(){
     return playerPickingCard;

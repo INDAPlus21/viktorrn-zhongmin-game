@@ -47,6 +47,14 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
     display: none;
   }
 
+#playerName{
+    position: absolute;
+    z-index:10;
+    font-size: 2em;
+    left:20px;
+    top:20px;
+    
+}
 
 /*Card styling*/
 
@@ -247,7 +255,7 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
 #handPoint .card:hover{
     top:-20px;
     margin: 0 45px 0 -15px;
-    z-index: 1;
+    z-index: 6;
 }
 
 
@@ -294,6 +302,7 @@ transform: scale(1.05);
     bottom:150px;
     left:75px;
     display: none;
+    z-index: 12;
 }
 
 #bloodLevel .blood{

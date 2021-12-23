@@ -7,8 +7,6 @@
 
 [ ] Show when its your turn more clearly
 
-[ ] Bug where if You have a highlighted card at the beginnig of your, you cant do shit
-
 [ ] Assets for the game
 
 ## Cool things to have
@@ -41,3 +39,5 @@
 [X] Add the new Cards and factions
 
 [X] Decide colors for the faction cards
+
+[X] Bug where if You have a highlighted card at the beginnig of your, you cant do shit
