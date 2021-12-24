@@ -1,5 +1,6 @@
 import * as Main from './hostSocket.js';
 import * as Card from '../../dataManager/cards.js';
+import { $ } from '../../playerClient/JavaScript/main.js';
 export class UIHandler{
     cardPickingPhase = null;
 
@@ -31,7 +32,7 @@ export class UIHandler{
 
 
 
-    displayBoard(boardInfo,columnAmount){
+    displayBoard(boardInfo,columnAmount,playerInfo){
         
         Main.clearElement(Main.$('playerBoard'))
         let p1Slot =  document.createElement('div');
@@ -60,6 +61,10 @@ export class UIHandler{
                 let age = boardInfo.player1[c].age
                 card.id = "p1Card_"+c;
                 card.setAttribute('age',age);
+                //console.log("card",boardInfo.player1[c],"player")
+                if(boardInfo.player1[c].shieldBroken != undefined && boardInfo.player1[c].shieldBroken == false){
+                    card.style.borderBottom = "5px solid #6C80FF";
+                }
                 if(age == 0) card.style.opacity = 0.7;
                 Main.$('p1SlotIndex'+c).appendChild(card);
             }
@@ -71,6 +76,10 @@ export class UIHandler{
                 let age = boardInfo.player2[c].age
                 card.id = "p2Card_"+c;
                 card.setAttribute('age',age);
+                //console.log("card",boardInfo.player2[c])
+                if(boardInfo.player2[c].shieldBroken != undefined && boardInfo.player2[c].shieldBroken == false){
+                    card.style.borderTop = "5px solid #6C80FF";
+                }
                 if(age == 0) card.style.opacity = 0.7;
                 Main.$('p2SlotIndex'+c).appendChild(card);
             }
@@ -83,13 +92,24 @@ export class UIHandler{
         p1Scale.id ="player1Scale";
         p2Scale.id = "player2Scale";
         
-        p1Scale.innerText = boardInfo.p1damage;   
-        p2Scale.innerText = boardInfo.p2damage; 
+        p1Scale.innerText = boardInfo.p2damage;   
+        p2Scale.innerText = boardInfo.p1damage; 
         
         scale.appendChild(p1Scale);
         scale.appendChild(p2Scale);
 
         Main.$('playerBoard').appendChild(scale);
+
+        let p1Name = document.createElement('div');
+        p1Name.id= 'player1Name';
+        p1Name.innerText = "-"+ playerInfo.player1.name +"-"
+        let p2Name = document.createElement('div');
+        p2Name.id= 'player2Name';
+        p2Name.innerText = "-"+ playerInfo.player2.name +"-"
+        
+        Main.$('playerBoard').appendChild(p1Name);
+        Main.$('playerBoard').appendChild(p2Name);
+        
     }
 
     updateCard(oldCard,cardData){

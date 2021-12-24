@@ -22,7 +22,7 @@
 
 ### Human catalyst cards
 
-    {R}Armoury 0/4:3       [ Valiant Hearts ]
+    {R}Armoury 0/4:2       [ Valiant Hearts ]
 
 ## Amulets
 
@@ -38,9 +38,9 @@
 
     Deal between 0-3 damage 
 
-### Tempo
+### Reach
 
-    +1/0 after each attack performed
+    Can hit flying Cards
 
 ### Shield
 
@@ -53,15 +53,15 @@
 
 ## Beasts, fast aggro deck built around sacrifices
 
-    Undead  0/3:0       [ Rebirth ]
+    {C}Undead  0/3:1       [ Rebirth ]
 
-    Blood Beast 1/1:1   [ Rush ]
+    {C}Blood Beast 1/1:1   [ Rush ]
 
-    Sparrow 1/2:1       [ Flying ]
+    {C}Sparrow 1/2:1       [ Flying ]
 
-    Phoenix 0/5:2       [ Rebirth ]
+    {C}Phoenix 0/5:2       [ Rebirth ]
 
-    Hydra   1/5:3       [ Swarm ]
+    {C}Hydra   1/5:3       [ Swarm ]
 
     Queen Spider  3/4:3 [ Predator ]
 
@@ -99,7 +99,7 @@
 
 
 
-## Darklord, buffing stronger units and playing fother
+## Darklings, buffing stronger units and playing fother
 
     Skeleton X/1:0      [ Undead Army ]
     
@@ -145,7 +145,7 @@
 
 ## Mix cards
 
-    {C}Toad      0/3:0     [ High Block ]
+    {C}Toad      0/3:1     [ High Block ]
 
     {R}Minotaur 3/5:3      [ Rush ]
 

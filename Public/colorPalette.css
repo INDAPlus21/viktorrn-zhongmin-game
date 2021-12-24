@@ -1,8 +1,14 @@
 :root{
-    --backgroundPurple:#1b1c2c;
-    --cardBackgroundColor:#5c1e70;
-    --soulColor:#427866;
-    --text:#040404;
+    --backgroundColor:#0e0c0c;
+    --actionSlotColor:rgb(131, 130, 130);
+    
+    --cardBackgroundColor:#2a2929;
+    --cardBackgroundFadeColor:#4e4c4c;
+    --cardBackgrongdFadeDarkColor:#070606;
+    --cardBorderColor:#000000;
+    --bloodColor:#c20a0a;
+
+    --text:#ffffff;
 }
 
 /*

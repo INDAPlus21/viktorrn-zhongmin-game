@@ -36,15 +36,15 @@ let DataManager = new DataManagerImport.DataManager();
 
 window.onload = async function(){
   DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager,()=>{
-   /* let dummyBoard = {
+   /*let dummyBoard = {
       player1: [
-        DataManager.getSpecificCard("Wolf"),
+        DataManager.getSpecificCard("Drunk"),
         null,
         null,
         null
       ],
       player2: [
-        DataManager.getSpecificCard("Wolf"),
+        DataManager.getSpecificCard("Drunk"),
         null,
         null,
         null
@@ -139,7 +139,7 @@ socket.on('connect', () => {// run this when connected
     if (answer[1] === null) { // if none of the above failure conditions match, let the player in
       callback(answer); // tell the player they will be joining
 
-      let playerObj = {name:playerName, id:playerId, originalDeck:[], remainingDeck:[], hand:[], blood:0}
+      let playerObj = {name:playerName, id:playerId, originalDeck:[], remainingDeck:[], hand:[], statusEffects:[], blood:0}
 
       if (playerInfo.player1 === undefined) {
         playerInfo.player1 = playerObj;
@@ -169,8 +169,8 @@ socket.on('connect', () => {// run this when connected
     
       if (playerInfo.player1.originalDeck.length > 0 && playerInfo.player2.originalDeck.length > 0) {
       // copy original deck to remaining deck for the game
-        playerInfo.player1.remainingDeck = shuffle(playerInfo.player1.originalDeck);
-        playerInfo.player2.remainingDeck = shuffle(playerInfo.player2.originalDeck);
+        playerInfo.player1.remainingDeck = shuffle(cloneObject(playerInfo.player1.originalDeck));
+        playerInfo.player2.remainingDeck = shuffle(cloneObject(playerInfo.player2.originalDeck));
         playerInfo.player2.blood = 1;
         // start this mf
         // both players draw 4 cards to put in their hand
@@ -181,10 +181,10 @@ socket.on('connect', () => {// run this when connected
         playerInfo.player1.hand.push(DataManager.getSpecificCard('Human'));
         playerInfo.player2.hand.push(DataManager.getSpecificCard('Human'));
         //starts with giving player 1 the cards and then prompting
-        UI_Handler.displayBoard(boardInfo,columnAmount);
+        UI_Handler.displayBoard(boardInfo,columnAmount,playerInfo);
         await socket.emit('startGame', roomId, playerInfo.player1.id, playerInfo.player2.id);
-        await socket.emit('syncClient', playerInfo.player1, boardInfo.player1);
-        await socket.emit('syncClient', playerInfo.player2, boardInfo.player2);
+        await socket.emit('syncClient', playerInfo.player1, boardInfo.player1,true);
+        await socket.emit('syncClient', playerInfo.player2, boardInfo.player2,true);
         await socket.emit('startTurn', playerInfo.player1.id, 0);
         GAMESTATE = 'ingame';
         $('bodyPregame').classList.remove('onscreen');
@@ -224,6 +224,30 @@ socket.on('connect', () => {// run this when connected
     card.age = 0;
     //check your cards
     card = await runOnPlayedAmulets(card,boardInfo['player'+i],boardInfo['player'+n],column,false)
+
+    // check if player has effects
+    for(let e of playerInfo['player'+i].statusEffects){
+      console.log("check if player has valiant hearts")
+      switch(e){
+        case 'Valiant Hearts':
+          if(card.faction == "Humanity"){
+            if(card.shieldBroken == undefined){
+              card.shieldBroken = false;
+            }
+          }
+          break;
+      }
+    }
+    
+
+    //trigger status cards
+    for(let a of card.amulets){
+      switch(a){
+        case 'Valiant Hearts':
+            playerInfo['player'+i].statusEffects.push('Valiant Hearts');
+          break;
+      }
+    }    
     
     playerInfo['player'+i].hand.splice(cardIndex, 1); // remove the card from the player's hand
 
@@ -231,8 +255,8 @@ socket.on('connect', () => {// run this when connected
     //delete boardInfo['player'+i][column].cost; // cost is irrelevant to boardInfo since it's already placed out
 
     socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i],true  /* this boolean makes the player client redraw their hand as well as blood */); // refresh the client with new data
-
-    UI_Handler.displayBoard(boardInfo,columnAmount);
+    console.log("player",playerInfo['player'+i])
+    UI_Handler.displayBoard(boardInfo,columnAmount,playerInfo);
   });
 
   async function runOnPlayedAmulets(card,playerBoard,opposingBoard,column,wasMirrorAmulet){
@@ -261,6 +285,15 @@ socket.on('connect', () => {// run this when connected
         case 'Rush':
           card.age = 1;  
           break;
+        case "Valiant Hearts":
+          card.shieldBroken = true;
+          for(let c in playerBoard){
+            if(playerBoard[c] != null && c != column && playerBoard[c].faction == "Humanity" && playerBoard[c].name)
+              if(playerBoard[c].shieldBroken == undefined){
+                playerBoard[c].shieldBroken = false;
+              }
+          }
+          break;
       }
     }
     return card;
@@ -273,22 +306,27 @@ socket.on('connect', () => {// run this when connected
       //sigil check
       let card = boardInfo['player'+i][column];
       let removeCard =  true;
+      card.lastSacrificedOnTurn = boardInfo.turn;
       for(let a of card.amulets){
         switch(a){
           case "Rebirth":
-            removeCard = false;
+            card.health -=1;
+            if(card.health > 0)
+              removeCard = false;
             break;
         }
       }
 
-      if(removeCard)
-      boardInfo['player'+i][column] = null;
+      if(removeCard){
+        await cardRemoved(playerInfo['player'+i],boardInfo['player'+i],column);
+        boardInfo['player'+i][column] = null;
+      }
       
       if(playerInfo['player'+i].blood < 4) playerInfo['player'+i].blood += 1;
       
       socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i],true  /* this boolean makes the player client redraw their hand as well as blood */);
       
-      UI_Handler.displayBoard(boardInfo,columnAmount);
+      UI_Handler.displayBoard(boardInfo,columnAmount,playerInfo);
 
     }catch(error){
       console.log("error",error)
@@ -313,34 +351,41 @@ socket.on('connect', () => {// run this when connected
           
           let opposingCard = boardInfo['player'+atkedPlayer][col]; // get the opposing card
           let attackHitCard = false;
-          
-          if (opposingCard !== null){
-            // run sigil checks relevent to attacking
-            attackHitCard = true; // asume the card hits a card and ajust afterwards
-            
-          } 
+          let opponentCanBlockAir = false;
 
-          let damage = thisCard.damage;
-            for(let a of thisCard.amulets){
-              switch(a){
-                case "Drunk":
-                  damage = 1+Math.floor(Math.random()*3);
+          if (opposingCard !== null){
+            attackHitCard = true;
+            
+            for(let a of opposingCard.amulets){
+              switch(a){        
+                case 'Flying':
+                  attackHitCard = false;
+                  opponentCanBlockAir = true;
+                  break;
+                case 'High Block':
+                  opponentCanBlockAir = true;
                   break;
               }
-                
             }  
 
+          }
+
+          let damage = thisCard.damage;
+          //checks for this card
+          for(let a of thisCard.amulets){
+            switch(a){
+              case "Drunk":
+                damage = 1+Math.floor(Math.random()*3);
+                break;
+              case 'Flying':
+                attackHitCard = false;
+              case 'Reach':
+                if(opponentCanBlockAir) attackHitCard = true;
+                break;
+            }
+          }          
+
           if (attackHitCard && damage > 0) {
-           
-            let damage = thisCard.damage;
-            for(let a of thisCard.amulets){
-              switch(a){
-                case "Drunk":
-                  damage = 1+Math.floor(Math.random()*3);
-                  break;
-              }
-                
-            }   
     
             if(opposingCard.shieldBroken != undefined && opposingCard.shieldBroken == false){
               opposingCard.shieldBroken = true;
@@ -351,7 +396,10 @@ socket.on('connect', () => {// run this when connected
             await AnimationHandler.displayAttack(getCardFromBoard(atkingPlayer,col),getCardFromBoard(atkedPlayer,col),opposingCard,damage,atkingPlayer,true);
             await new Promise(r => setTimeout(r, 500));
 
-            if (opposingCard.health <= 0) boardInfo['player'+atkedPlayer][col] = null // set column to null if it dies from the attack
+            if (opposingCard.health <= 0){
+              await cardRemoved(playerInfo['player'+atkedPlayer],boardInfo['player'+atkedPlayer],col);
+              boardInfo['player'+atkedPlayer][col] = null;
+            }  // set column to null if it dies from the attack
         
           } else if(damage > 0) {
             
@@ -378,27 +426,18 @@ socket.on('connect', () => {// run this when connected
                   }
   
                 break;
-                case 'Tempo':
-  
-                  thisCard.damage += 1;
-                  break;
             }
-            
           }
         }
-        
         thisCard.age += 1 
         socket.emit('syncClient', playerInfo['player'+atkingPlayer], boardInfo['player'+atkingPlayer], true /* this boolean makes the player client redraw their hand as well as blood */  ); 
       }
     }
     
-    UI_Handler.displayBoard(boardInfo,columnAmount);
+    UI_Handler.displayBoard(boardInfo,columnAmount,playerInfo);
 
     await new Promise(r => setTimeout(r, 1000)); // wait 1 sec
 
-    //console.log("starting player "+n+"'s turn");
-
-    // testing for win condition (must tip the scale by 7 to win)
     if (boardInfo.p2damage <= 0) {
       socket.emit('endGame', playerInfo.player1.id, playerInfo.player2.id);
     } else if (boardInfo.p1damage <= 0) {
@@ -413,6 +452,30 @@ socket.on('connect', () => {// run this when connected
 });
 
 // SEPARATOR - You are now entering Not Socket
+
+async function cardRemoved(playerObj,playerBoard,column){
+  let card = playerBoard[column];
+  for(let a of card.amulets){
+    switch(a){
+      case 'Valiant Hearts':
+        console.log("found valiant heart")
+        let other = false;
+        for(let c in playerBoard){
+          if(playerBoard[c] == null || c == column)continue;
+          for(let a of playerBoard[c].amulets){
+            if(a == 'Valiant Hearts') other = true;
+          }
+        }
+        if(other) return;
+        console.log("Removing it")
+        for(let e in playerObj.statusEffects){
+          console.log("removed valiant heart")
+          if(playerObj.statusEffects[e] = 'Valiant Hearts') playerObj.statusEffects.splice(e,1);
+        }
+        break;
+    }
+  }
+}
 
 function drawSpecificCard(playerObj, cardName){
   playerObj.hand.push(DataManager.getSpecificCard(cardName));

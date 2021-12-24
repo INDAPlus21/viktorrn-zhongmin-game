@@ -3,10 +3,6 @@ import * as Main from './main.js';
 
 export class UIHandler{ 
 
-    amountOfStartingCards = 3;
-    cardsPicked;
-    cardPickingPhase = null;
-
     currentCardSelected = null;
     currentDisplayedCard = null;
     cardWasPlayed = false;
@@ -20,58 +16,6 @@ export class UIHandler{
         this.cardPickZoneHTMLHandle = cardPickZoneHTMLHandle;
         this.selectedCardsHTMLHandle = selectedCardsHTMLHandle;
         this.playerBloodDisplayHTMLHandle = playerBloodDisplayHTMLHandle;
-    }
-
-    //for card picking
-    displayCardSelectionPage(cards){
-        this.cardsPicked = [];
-        this.cardSelectionPageHTMLHandle.style.top = '0px';
-        Main.$('selectCardHeader').innerText = "-Select " + (this.amountOfStartingCards) +" More Cards-"
-        for(let i in cards){
-            let div = Card.getCardDiv(cards[i]);
-            div.id = ('pickCardIndex'+i);
-            div.setAttribute('pickCardIndex',i);
-            div.onpointerdown = () => {
-                Main.$('selectCardHeader').innerText = "-Select " + (this.amountOfStartingCards - this.cardsPicked.length -1) +" More Cards-"
-                this.cardsPicked.push(div.getAttribute('cardName'));
-                this.disablePickedCard(div.getAttribute('pickCardIndex'),true)
-                if(this.cardsPicked.length >= this.amountOfStartingCards) Main.doneWithStartingCards(this.cardsPicked);
-            };
-            this.cardPickZoneHTMLHandle.appendChild(div)
-        }
-    }
-
-    hideCardSelectionPage(){
-        Main.clearElement(Main.$('cardPickZone'));
-        this.cardSelectionPageHTMLHandle.style.top = '-100%';
-    }
-
-    disablePickedCard(card_index,youPicked){
-        let card = Main.$('pickCardIndex'+card_index);
-        card.onpointerdown = null;
-        card.style.opacity = 0;
-    }
-
-    drawSelectedCards(cards){
-        Main.clearElement(this.handHTMLHandle)
-        for(let i in cards){
-            let card = Card.getCardDiv(cards[i]);
-            card.setAttribute('cardIndex',i);
-            //handle klick event
-            card.onpointerover = () => {
-                
-                card.onpointerdown = (UIHandler = this) => {
-                    console.log("card klicked",UIHandler);
-                    if(UIHandler.currentCardSelected === null) UIHandler.selectedHandCard(card);
-                }
-            }
-            //handle leave event
-            card.onpointerleave = () =>{
-                card.onpointerdown = null;
-            }
-            
-            this.handHTMLHandle.appendChild(card);
-        }
     }
 
     // for gameLogic
@@ -90,6 +34,9 @@ export class UIHandler{
                         let card = Card.getCardDiv(board[i]);
                         card.setAttribute('cardIndex',i);
                         card.style.pointerEvents = "none";
+                        if(board[i].shieldBroken != undefined && board[i].shieldBroken == false){
+                            card.style.borderTop = "5px solid #6C80FF";
+                        }
                         if(card.age == 0) div.style.opacity = 0.7;
                         div.appendChild(card);
                     }
@@ -98,9 +45,8 @@ export class UIHandler{
             break;
 
             case 'chooseCard':
-                if(hand.length >= 7){
-                    this.displayActionSlots('playCards',[],board); break;
-                } 
+                if(hand.length >= 7) this.displayActionSlots('playCards',[],board); 
+                 
                 let human = document.createElement('div');
                 human.setAttribute('class','card');
                 human.onpointerdown = () =>{
@@ -135,6 +81,13 @@ export class UIHandler{
                 div =  document.createElement('div');
                 div.setAttribute('class','waitTingForTurn');
                 div.innerText = "Waiting For Turn...";
+                this.actionSlotsHTMLHandle.appendChild(div);
+            break;
+
+            case 'waitingForOtherPlayer':
+                div =  document.createElement('div');
+                div.setAttribute('class','waitTingForTurn');
+                div.innerText = "Waiting On Other Player...";
                 this.actionSlotsHTMLHandle.appendChild(div);
             break;
         
@@ -173,8 +126,8 @@ export class UIHandler{
            try{
             let el = this.actionSlotsHTMLHandle.children[i];
             if(board[i] != null){
-                console.log(el.firstChild)
-                if(el.firstChild.getAttribute('alreadySacrificed') == null){
+                
+                if(board[i].lastSacrificedOnTurn != Main.getCurrentturn()){
                     el.style.transform = 'scale(1.1)';
                     el.onpointerover = () =>{
                         el.style.border = '10px solid rgb(220, 220, 220)';
@@ -195,8 +148,7 @@ export class UIHandler{
                             if(a == "Rebirth") rebirth = true;
                         }
 
-                        if(rebirth) el.firstChild.setAttribute('alreadySacrificed',true);
-                        else el.firstChild.remove();
+                        if(!rebirth) el.firstChild.remove();
                         
                         this.disableDropZone(); 
                     } 
@@ -258,6 +210,8 @@ export class UIHandler{
 
     selectedHandCard(card){
         //animate card klicked
+    if(Main.getPlayerPickingCard()) return
+
         if(this.currentCardSelected == null){
             let pos = Main.getOffset(card); //get pos from original element to use for display animation
             let copy = card.cloneNode(true); //clones card element to create a display copy
@@ -286,12 +240,13 @@ export class UIHandler{
   
         //activate drop zone
         if(!Main.getPlayerTurn()) return
+
         let playerData = Main.getPlayerData();
         if(playerData.bloodLevel >= playerData.hand[card.getAttribute('cardindex')].cost && !Main.getPlayerPickingCard())
             this.activateDropZone(Main.getPlayerData().board);
         else{
             this.disableDropZone();
-            console.log("need to sac a card or youre picking cards")
+            console.log("need to sac a card or youre picking cards");
         }
     }
 
@@ -320,6 +275,8 @@ export class UIHandler{
         //deactivate dropzone
         this.disableDropZone();
     }
+
+ 
 
     playedCard(col,target){
         Main.getUIHandler().cardWasPlayed = true;

@@ -1,0 +1,186 @@
+@import url('./fonts/loadfont.css');
+@import url('./colorPalette.css');
+
+
+
+.card, .highlightCard{
+    font-family: MainFont;
+    background-color: var(--cardBackgroundColor);
+    background-image: radial-gradient(var(--cardBackgroundFadeColor),var(--backgroundColor),var(--cardBackgrongdFadeDarkColor));
+    background-position: -30px -20px;
+    background-size: 180px 260px;
+    background-repeat: no-repeat;
+
+    width:120px;
+    height:200px;
+    border-radius: 5px;
+    border: 1px solid var(--cardBorderColor);
+}
+
+
+
+.highlightCard{
+    position: absolute;
+    z-index: 10; 
+    text-align: center;
+    transition: all 0.3s;
+    transition-timing-function: cubic-bezier(0,.95,.25,1);
+}
+
+.card .rareCardBackground, .highlightCard .rareCardBackground{
+    top:0;
+    left:0;
+    position: absolute;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(#854e47,#050403,#0e0d0b);
+    background-position: -30px -20px;
+    background-size: 180px 260px;
+    background-repeat: no-repeat;
+    
+}
+
+.card{
+    vertical-align: top;
+    z-index: 1;
+
+}
+
+.name{
+    position: absolute;
+    font-size: 2em;
+    height: 34px;
+    width: 100%;
+    border-bottom: 2px solid var(--cardBorderColor);
+    z-index: 1;
+}
+
+.damage{
+    font-size: 2.5em;
+    position: absolute;
+    bottom: 5px;
+    left: 10px;
+    z-index: 1;
+
+}
+
+.damageIcon{
+   
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    bottom: 40px;
+    left: 5px;
+    background-image: url('./assets/Dagger1.svg');
+    opacity: 0.6;
+    background-repeat: no-repeat;
+    background-position: 0;
+    background-size: 30px;
+    z-index: 1;
+}
+
+
+
+.health{
+    font-size: 2.5em;
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+    z-index: 1;
+}
+
+.healthIcon{
+    
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    bottom: 40px;
+    right: 5px;
+    background-image: url('./assets/Heart.svg');
+    opacity: 0.6;
+    background-repeat: no-repeat;
+    background-position: 0;
+    background-size: 30px;
+    z-index: 1;
+}
+
+.factionSymbol{
+    position: absolute;
+    left: 50%;
+    top:105px;
+    transform: translateX(-50%);
+    line-height: 25px;
+    font-size: 1.2em;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: var(--cardBackgroundColor);
+    border: 3px solid var(--cardBorderColor);
+    z-index: 1;
+}
+
+.cost{
+    font-size: 2em;
+    font-weight: bold;
+    position: absolute;
+    top: 36px;
+    left: -4px;
+    z-index: 1;
+}
+
+.cost .blood{
+    
+    background-color: var(--bloodColor);
+    background-size: 30px;
+
+    
+    mask-image: url('../assets/blood.svg');
+    mask-size: 30px;
+    -webkit-mask-image: url('../assets/blood.svg');
+    -webkit-mask-size: 30px;
+
+    width: 30px;
+    height: 30px;
+    margin: 0 -15px 0 0;
+    display: inline-block;
+    z-index: 1;
+}
+
+.image{
+    top:34px;
+  
+    /*background-image: url('./assets/CardImages/Drunk.svg');*/
+    background-repeat: no-repeat;
+    background-position: 15px 0;
+    background-size: 90px;
+    /*mask-image: url('./assets/Card\ Images/BlackKnight.svg');
+    mask-size: 70px;
+    mask-repeat: no-repeat;
+    -webkit-mask-image: url('./assets/Card\ Images/BlackKnight.svg');
+    -webkit-mask-size: 70px;
+    -webkit-mask-repeat: no-repeat;*/
+
+    position: absolute;
+    width: 100%;
+    height: 90px;
+    border-bottom: 3px solid var(--cardBorderColor);
+    z-index: 1;
+}
+
+.description{
+    /*background-image: url('./assets/EffectImages/Rebirth.svg');*/
+    font-size: 3em !important;
+    opacity: 1;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-size: 50px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 10px;
+    font-size: 0.5em;
+    width: 50px;
+    height: 50px;
+    z-index: 1;
+}

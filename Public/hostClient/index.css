@@ -1,9 +1,24 @@
 @import url('../fonts/loadfont.css');
+@import url('../colorPalette.css');
+@import url('../cardDesign.css');
+
+*{
+    color:var(--text)
+}
 
 body{
     font-family: MainFont;
     font-weight: 400; 
+    background-color: var(--backgroundColor);
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    overflow: hidden;
 }
+
+body::-webkit-scrollbar {
+    display: none;
+  }
 
 h1{
     margin:0;
@@ -16,7 +31,7 @@ h1{
     font-family: MainFont;
     position: absolute;
     z-index: 12;
-    background-color: rgb(102, 102, 102);
+    background-color: var(--backgroundColor);
     width: 100%;
     height: 100%;
     margin: 0;
@@ -76,38 +91,20 @@ section.onscreen {
     overflow: hidden;
 }
 
-body{
-    background-color: rgb(102, 102, 102);
-    margin: 0;
-    padding: 0;
-    text-align: center;
-    overflow: hidden;
-}
 
-body::-webkit-scrollbar {
-    display: none;
-  }
 
 .backgroundDiv{
     position: absolute;
     top:0;
     width: 100%;
     height: 100%;
-    background-color: rgb(102, 102, 102,0);
     -webkit-box-shadow: inset 0px 0px 500px 100px #000000; 
     box-shadow: inset 0px 0px 500px 100px #000000;
     z-index: 5;
     pointer-events: none;
 }
 
-.card,.highlightCard{
-    background-color: rgb(92, 84, 56);
-    width:120px;
-    height:180px;
-    border-radius: 20px;
-    border: 10px solid black;
-    
-}
+
 .card{
     vertical-align: top;
     transition: opacity 1s cubic-bezier(0,1,0.5,1);
@@ -120,104 +117,18 @@ body::-webkit-scrollbar {
     z-index: 10;
 }
 
-.name{
-    font-size: 2em;
-    height: 20px;
-    width: 100%;
-}
-
-.damage{
-    bottom: 20px;
-    font-size: 2.5em;
-    font-weight: bold;
-    position: absolute;
-    bottom: 5px;
-    left: 10px;
-    color: rgb(110, 30, 30);
-}
-
-.health{
-    font-size: 2.5em;
-    font-weight: bold;
-    position: absolute;
-    bottom: 5px;
-    right: 10px;
-    color: rgb(88, 149, 69);
-}
-
-.cost{
-    font-size: 2em;
-    font-weight: bold;
-    position: absolute;
-    bottom: 100px;
-    left: 5px;
-    
-}
-
-.cost .blood{
-    width: 10px;
-    background-color: rgb(105, 24, 24);
-    border-radius: 3px;
-    border: 3px solid black;
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    margin: 0 -6px 0 0;
-}
-
-.description{
-    position: absolute;
-    top: 70px;
-    font-size: 2em;
-    width: 100%;
-}
 
 
 
 #BigBoiTextDisplay{
     z-index: 11;
     position: absolute;
-    font-size: 10em;
+    font-size: 8em;
     top:50%;
     left:50%;
     transform: translate(-50%,-50%);
     width: 100%;
     height: auto;    
-}
-
-/*For selecting cards*/
-#cardSelectionPage{
-    position: absolute;
-    top:-100%;
-    left:0;
-    z-index: 8;
-    width:100%;
-    height:100%;
-    background-color: rgb(92, 92, 92);
-    -webkit-box-shadow: inset 0px 0px 500px 100px #000000, 0px 0px 500px 100px #000000; 
-    box-shadow: inset 0px 0px 500px 100px #000000, 0px 0px 500px 100px #000000;
-    text-align: center;
-
-    transition: top 0.5s;
-   
-}
-#cardSelectionPage h1{
-    font-size: 6em;
-    margin: 70px 0 0 0;
-}
-#cardSelectionPage #cardPickZone{
-    position: absolute;
-    margin-top: 0;
-    width:100%;
-}
-
-#cardSelectionPage .card{
-    display: inline-block;
-    margin: 20px;
-    opacity: 1;
-    transition: opacity 3.0s linear, margin 0.75;
-    -webkit-transition: opacity 1.0s linear;
-    transition-timing-function: cubic-bezier(0,.95,.25,1); 
 }
 
 /*For displaying Cards*/
@@ -229,7 +140,6 @@ body::-webkit-scrollbar {
     height:75%;
     width:100%;
     transform: translate(-50%,-50%);
-    background-color: rgba(220, 220, 220, 0);
     z-index: 1;
 }
 
@@ -249,42 +159,57 @@ body::-webkit-scrollbar {
     transform: translateX(-50%);
 }
 
+#player1Board .cardSlots{
+    background-image: url('../assets/ArrowDown.png');
+    background-size: 160px;
+    background-position:-25px 20px;
+    background-repeat: no-repeat;
+    background-blend-mode: soft-light;
+}
+
+#player2Board .cardSlots{
+    background-image: url('../assets/ArrowUp.png');
+    background-size: 160px;
+    background-position:-25px 20px;
+    background-repeat: no-repeat;
+    
+}
+
 #playerBoard .cardSlots{
     display: inline-block;
     width: 120px;
-    height: 180px;
+    height: 200px;
     margin:0 20px 0 20px;
 
-    border-radius: 20px;
-    border: 10px solid rgb(78, 78, 78);
-    background-color: rgb(129, 128, 126);
+    border-radius: 5px;
+    border: 5px solid var(--actionSlotColor);
 
     transition: border 1s, transform 0.3s;
     transition-timing-function: cubic-bezier(0,.95,.25,1);
+    
     
 }
 
 #playerBoard .cardSlots .card{
     position:absolute;
     top:0px;
-    margin: 0 0 0 -10px;
+    margin: 0 0 0 -5px;
 }
 
 
 #playerBoard #scaleDiv{
     position: absolute;
-    width: 150px;
-    height: 40px;
+    width: 900px;
+    height: 6px;
     left:50%;
     top:50%;
     display: inline-block;
     z-index: 1;
     transform: translate(-50%,-50%);
-    background-color: rgb(121, 113, 101);
-    border-radius: 10px;
-    border: 10px solid rgb(41, 41, 41);
+    background-color: var(--text);
+    border-radius: 70%;
     text-align: center;
-    color:whitesmoke;
+    
     line-height: 75px;
     font-size: 4em;
     
@@ -296,19 +221,35 @@ body::-webkit-scrollbar {
     left:50%;
     transform: translate(-50%);
     height: 80px;
-    background-color: rgb(141, 37, 37);
-    border: 10px solid rgb(41, 41, 41);
+    background-image: url('../assets/Heart.svg');
+    background-repeat: no-repeat;
+    background-position: 5px -5px;
 }
 
 #playerBoard #scaleDiv #player1Scale{
-    top: 20px;
-    border-radius: 0 0 10px 10px;
+    top: 50px;
 }
 
 #playerBoard #scaleDiv #player2Scale{
-    border-radius: 10px 10px 0 0;
-    top:-80px;
- 
+    top:-110px;
+}
+
+#playerBoard #player1Name{
+    position: absolute;
+    top: -50px;
+    left:50%;
+    font-size: 2em;
+    transform: translate(-50%);
+    z-index: 15;
+}
+
+#playerBoard #player2Name{
+    position: absolute;
+    bottom:-50px;
+    font-size: 2em;
+    left:50%;
+    transform: translate(-50%);
+    z-index: 15;
 }
 
 /*Effect*/
@@ -329,8 +270,16 @@ body::-webkit-scrollbar {
     width: 150px;
     height: 150px;
     position: absolute;
-    background-image: url('../assets/clawPNG.png');
-    background-size: 150px 150px;
+    background-color: var(--bloodColor);
+    background-size: 150px;
+    
+    mask-image: url('../assets/Claw_Marks.svg');
+    mask-size: 140px;
+    mask-repeat: no-repeat;
+    -webkit-mask-image: url('../assets/Claw_Marks.svg');
+    -webkit-mask-size: 140px;
+    -webkit-mask-repeat: no-repeat;
+    
     z-index: 30;
     transform: rotate(0deg);
     transition: opacity 0.3s linear, left 0.7s cubic-bezier(0,1,0.5,1), top 0.7s cubic-bezier(1,0,0.5,1);
