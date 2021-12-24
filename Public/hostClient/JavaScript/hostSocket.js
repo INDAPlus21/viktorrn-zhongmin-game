@@ -89,12 +89,36 @@ function shuffle (array) {
   return array;
 }
 
+// background music
+let bgmTrapper = new Audio('./../../assets/Music/trapper.ogg');
+let bgmCabin = new Audio('./../../assets/Music/cabin.ogg');
+bgmTrapper.loop = true;
+bgmCabin.loop = true;
+
+function playBgm (songName) {
+  switch (songName) {
+    case 'trapper': bgmTrapper.play(); console.log('playing trapper theme'); break;
+    case 'cabin': bgmCabin.play(); console.log('playing cabin theme'); break;
+  }
+}
+function pauseBgm (songName) {
+  switch (songName) {
+    case 'trapper': bgmTrapper.pause(); break;
+    case 'cabin': bgmCabin.pause(); break;
+  }
+}
+
+window.onload = function () {
+  $('pleaseClickOnThisForAudio').addEventListener('mousedown', function () {
+    $('pleaseClickOnThisForAudio').remove();
+    playBgm('trapper');
+  })
+}
+
 // socket connection
 socket.on('connect', () => {// run this when connected
   console.log("I'm online! with id " + socket.id);
   socketId = socket.id;
-
-
 
   // this is only run once, when the host client connects
   socket.emit('createRoom', socket.id, (generated) => {
@@ -165,6 +189,9 @@ socket.on('connect', () => {// run this when connected
         GAMESTATE = 'ingame';
         $('bodyPregame').classList.remove('onscreen');
         $('bodyIngame').classList.add('onscreen');
+        // bgm change
+        pauseBgm('trapper');
+        playBgm('cabin');
       }
     }catch (error) {
       console.log(error);
