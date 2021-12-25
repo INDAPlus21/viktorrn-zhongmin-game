@@ -77,16 +77,25 @@ export function getCardDiv(card){
                 msg += "MA "
                 break;
             case 'Valiant Hearts':
-                msg += "VH";
+                msg += "VH ";
                 break;
             case 'Reach':
-                msg += "RH";
+                msg += "RH ";
                 break;
             case 'Rebirth':
-                msg += "RB";
+                msg += "RB ";
                 break;
             case 'Flying':
-                msg += "FL";
+                msg += "FL ";
+                break;
+            case 'Hound Master':
+                msg += "HM ";
+                break;
+            case 'Headed Hunter':
+                msg += "HH ";
+                break;
+            case 'Growth':
+                msg += "GW ";
                 break;
             default:
                 msg+="";

@@ -77,7 +77,7 @@ window.onload = function(){
     });
     
     socket.on('startTurn', (turn) => {
-        //console.log("playerData",playerData,"start");
+        console.log("playerData",playerData,"startTurn");
         UI_Handler.returnHandCard()
         currentlyYourTurn = true;
         currentTurn = turn;

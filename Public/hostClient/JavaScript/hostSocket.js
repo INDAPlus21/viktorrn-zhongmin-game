@@ -33,6 +33,24 @@ let boardInfo = {
 let UI_Handler = new UIHandler.UIHandler($('cardSelectionPage'),$('cardPickZone'));
 let DataManager = new DataManagerImport.DataManager();
 
+// background music
+let bgmTrapper = new Audio('./../../assets/Music/trapper.ogg');
+let bgmCabin = new Audio('./../../assets/Music/cabin.ogg');
+bgmTrapper.loop = true;
+bgmCabin.loop = true;
+
+async function playBgm (songName) {
+  switch (songName) {
+    case 'trapper': bgmTrapper.play();break;
+    case 'cabin': bgmCabin.play();break;
+  }
+}
+async function pauseBgm (songName) {
+  switch (songName) {
+    case 'trapper': bgmTrapper.pause(); break;
+    case 'cabin': bgmCabin.pause(); break;
+  }
+}
 
 window.onload = async function(){
   DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager,()=>{
@@ -61,6 +79,10 @@ window.onload = async function(){
       
       AnimationHandler.displayAttack(getCardFromBoard(2,0),getCardFromBoard(1,0),12,2);
   }*/
+  $('pleaseClickOnThisForAudio').addEventListener('mousedown', function () {
+    $('pleaseClickOnThisForAudio').remove();
+    playBgm('cabin');
+  })
   });
   
 }
@@ -89,31 +111,7 @@ function shuffle (array) {
   return array;
 }
 
-// background music
-let bgmTrapper = new Audio('./../../assets/Music/trapper.ogg');
-let bgmCabin = new Audio('./../../assets/Music/cabin.ogg');
-bgmTrapper.loop = true;
-bgmCabin.loop = true;
 
-function playBgm (songName) {
-  switch (songName) {
-    case 'trapper': bgmTrapper.play(); console.log('playing trapper theme'); break;
-    case 'cabin': bgmCabin.play(); console.log('playing cabin theme'); break;
-  }
-}
-function pauseBgm (songName) {
-  switch (songName) {
-    case 'trapper': bgmTrapper.pause(); break;
-    case 'cabin': bgmCabin.pause(); break;
-  }
-}
-
-window.onload = function () {
-  $('pleaseClickOnThisForAudio').addEventListener('mousedown', function () {
-    $('pleaseClickOnThisForAudio').remove();
-    playBgm('trapper');
-  })
-}
 
 // socket connection
 socket.on('connect', () => {// run this when connected
@@ -190,8 +188,8 @@ socket.on('connect', () => {// run this when connected
         $('bodyPregame').classList.remove('onscreen');
         $('bodyIngame').classList.add('onscreen');
         // bgm change
-        pauseBgm('trapper');
-        playBgm('cabin');
+        pauseBgm('cabin');
+        playBgm('trapper');
       }
     }catch (error) {
       console.log(error);
@@ -208,7 +206,9 @@ socket.on('connect', () => {// run this when connected
       let card = playerInfo['player'+i].remainingDeck.shift();
       playerInfo['player'+i].hand.push(card); 
     }
-   
+    for(let e of playerInfo['player'+i].statusEffects){
+      if(e === "Hound Master" && playerInfo['player'+i].hand.length < 7){playerInfo['player'+i].hand.push(DataManager.getSpecificCard('Blood Beast'));}
+    }
 
     socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i], true  /* this boolean makes the player client redraw their hand as well as blood */); // refresh the client with new data
     
@@ -227,24 +227,23 @@ socket.on('connect', () => {// run this when connected
 
     // check if player has effects
     for(let e of playerInfo['player'+i].statusEffects){
-      console.log("check if player has valiant hearts")
       switch(e){
         case 'Valiant Hearts':
-          if(card.faction == "Humanity"){
-            if(card.shieldBroken == undefined){
-              card.shieldBroken = false;
-            }
-          }
+          if(card.faction != "Humanity") return;
+          if(card.shieldBroken != undefined)return;
+          card.shieldBroken = false;
           break;
       }
     }
-    
 
     //trigger status cards
     for(let a of card.amulets){
       switch(a){
         case 'Valiant Hearts':
             playerInfo['player'+i].statusEffects.push('Valiant Hearts');
+          break;
+        case 'Hound Master':
+            playerInfo['player'+i].statusEffects.push('Hound Master');
           break;
       }
     }    
@@ -263,21 +262,20 @@ socket.on('connect', () => {// run this when connected
     for(let a of card.amulets){
       switch(a){
         case"Shield":
-          if(card.shieldBroken == undefined){
-            card.shieldBroken = false;
-          }
+          if(card.shieldBroken != undefined)return
+          card.shieldBroken = false;
+          
           break;
         case 'Mirror':
-          if(opposingBoard[column] != null){
+          card.health = 2;
+          card.damage = 2;
+          card.amulets = [];
+          if(opposingBoard[column] == null)return;
             card.health = opposingBoard[column].health;
             card.damage = opposingBoard[column].damage;
             card.amulets = opposingBoard[column].amulets;
-            if(wasMirrorAmulet === false) runOnPlayedAmulets(card,playerBoard,opposingBoard,column,true);
-          }else{
-            card.health = 2;
-            card.damage = 2;
-            card.amulets = [];
-          }
+          if(wasMirrorAmulet === true) return 
+          runOnPlayedAmulets(card,playerBoard,opposingBoard,column,true);
           break;
         case 'Marching':
           card.moveDirection = 1;
@@ -288,10 +286,10 @@ socket.on('connect', () => {// run this when connected
         case "Valiant Hearts":
           card.shieldBroken = true;
           for(let c in playerBoard){
-            if(playerBoard[c] != null && c != column && playerBoard[c].faction == "Humanity" && playerBoard[c].name)
-              if(playerBoard[c].shieldBroken == undefined){
-                playerBoard[c].shieldBroken = false;
-              }
+            if(playerBoard[c] == null || c == column || playerBoard[c].faction != "Humanity") continue; 
+            if(playerBoard[c].name == "Armoury") continue;
+            if(playerBoard[c].shieldBroken == undefined)
+              playerBoard[c].shieldBroken = false;
           }
           break;
       }
@@ -318,7 +316,7 @@ socket.on('connect', () => {// run this when connected
       }
 
       if(removeCard){
-        await cardRemoved(playerInfo['player'+i],boardInfo['player'+i],column);
+        await removePlayerStatusEffect(playerInfo['player'+i],boardInfo['player'+i],column);
         boardInfo['player'+i][column] = null;
       }
       
@@ -393,11 +391,20 @@ socket.on('connect', () => {// run this when connected
             }
 
             opposingCard.health -= damage;
+
+            for(let a of opposingCard.amulets){
+              switch(a){
+                case'Headed Hunter':
+                  opposingCard.damage += damage;
+                break;
+              }
+              
+            }
             await AnimationHandler.displayAttack(getCardFromBoard(atkingPlayer,col),getCardFromBoard(atkedPlayer,col),opposingCard,damage,atkingPlayer,true);
             await new Promise(r => setTimeout(r, 500));
 
             if (opposingCard.health <= 0){
-              await cardRemoved(playerInfo['player'+atkedPlayer],boardInfo['player'+atkedPlayer],col);
+              await removePlayerStatusEffect(playerInfo['player'+atkedPlayer],boardInfo['player'+atkedPlayer],col);
               boardInfo['player'+atkedPlayer][col] = null;
             }  // set column to null if it dies from the attack
         
@@ -416,7 +423,6 @@ socket.on('connect', () => {// run this when connected
             switch(a){
               case 'Marching':
                 thisCard.lastTurnMoved = boardInfo.turn;
-                console.log(boardInfo['player'+atkingPlayer][col + thisCard.moveDirection])
                   if(boardInfo['player'+atkingPlayer][col + thisCard.moveDirection] !== null ){
                     thisCard.moveDirection = -thisCard.moveDirection;
                   }
@@ -426,9 +432,17 @@ socket.on('connect', () => {// run this when connected
                   }
   
                 break;
+              case 'Growth':
+                switch(thisCard.name){
+                  case 'Lost Soul':
+                    boardInfo['player'+atkingPlayer][col] = DataManager.getSpecificCard('WereWolf');
+                    break;
+                }
+              break;
             }
           }
         }
+
         thisCard.age += 1 
         socket.emit('syncClient', playerInfo['player'+atkingPlayer], boardInfo['player'+atkingPlayer], true /* this boolean makes the player client redraw their hand as well as blood */  ); 
       }
@@ -446,6 +460,7 @@ socket.on('connect', () => {// run this when connected
       if (atkingPlayer===2) boardInfo.turn += 1 // if the player is player2 then a round has passed
       // the opposing player's turn starts
       socket.emit('syncClient', playerInfo['player'+atkedPlayer], boardInfo['player'+atkedPlayer],true);
+      socket.emit('syncClient', playerInfo['player'+atkingPlayer], boardInfo['player'+atkingPlayer],true);
       socket.emit('startTurn', playerInfo['player'+atkedPlayer].id, boardInfo.turn);
     }
   });
@@ -453,13 +468,12 @@ socket.on('connect', () => {// run this when connected
 
 // SEPARATOR - You are now entering Not Socket
 
-async function cardRemoved(playerObj,playerBoard,column){
+async function removePlayerStatusEffect(playerObj,playerBoard,column){
   let card = playerBoard[column];
   for(let a of card.amulets){
+    let other = false;
     switch(a){
       case 'Valiant Hearts':
-        console.log("found valiant heart")
-        let other = false;
         for(let c in playerBoard){
           if(playerBoard[c] == null || c == column)continue;
           for(let a of playerBoard[c].amulets){
@@ -467,10 +481,20 @@ async function cardRemoved(playerObj,playerBoard,column){
           }
         }
         if(other) return;
-        console.log("Removing it")
         for(let e in playerObj.statusEffects){
-          console.log("removed valiant heart")
           if(playerObj.statusEffects[e] = 'Valiant Hearts') playerObj.statusEffects.splice(e,1);
+        }
+        break;
+      case 'Hound Master':
+        for(let c in playerBoard){
+          if(playerBoard[c] == null || c == column)continue;
+          for(let a of playerBoard[c].amulets){
+            if(a == 'Hound Master') other = true;
+          }
+        }
+        if(other) return;
+        for(let e in playerObj.statusEffects){
+          if(playerObj.statusEffects[e] = 'Hound Master') playerObj.statusEffects.splice(e,1);
         }
         break;
     }

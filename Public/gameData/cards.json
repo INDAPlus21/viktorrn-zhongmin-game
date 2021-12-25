@@ -71,7 +71,7 @@
     {
         "faction":"Beasts",
         "regularCards":[
-            {  "name":"Undead"
+            {  "name":"Cadaver"
                 ,"damage":0
                 ,"health":3
                 ,"cost":1
@@ -92,11 +92,18 @@
                 ,"amulets":["Flying"]
                 ,"imgSrc":""
             }
-            ,{  "name":"Phoenix"
+            ,{  "name":"Lost Soul"
                 ,"damage":0
-                ,"health":5
-                ,"cost":2
-                ,"amulets":["Rebirth"]
+                ,"health":1
+                ,"cost":1
+                ,"amulets":["Growth"]
+                ,"imgSrc":""
+            }
+            ,{  "name":"WereWolf"
+                ,"damage":2
+                ,"health":2
+                ,"cost":0
+                ,"amulets":[""]
                 ,"imgSrc":""
             }
             ,{  "name":"Queen Spider"
@@ -112,13 +119,13 @@
                 ,"damage":1
                 ,"health":5
                 ,"cost":2
-                ,"amulets":["Swarm"]
+                ,"amulets":["Headed Hunter"]
                 ,"imgSrc":""
             }
-            ,{  "name":"The Tamer"
+            ,{  "name":"Hound Master"
                 ,"damage":1
                 ,"health":5
-                ,"cost":2
+                ,"cost":3
                 ,"amulets":["Hound Master"]
                 ,"imgSrc":""
             }
@@ -173,15 +180,17 @@
     }
     ]
 ,"startingRegularCards":[
-    "Toad"
-    ,"Sparrow"
-    ,"Bow Man"
-    ,"Frank"
-    ,"Undead"
-    
-
+    "Lost Soul"
+    ,"Blood Beast"
+    ,"Cadaver"
 ]
 ,"startingRareCards":[
+    
+    "Hydra"
+    ,"Hound Master"
+]
+,"OutOfOrderAtmList":[
+    "THis list is used so I dont have to keep track of cards in my head when in testing new cards",
     "Minotaur"
     ,"Armoury"
     ,"Brain Jack"

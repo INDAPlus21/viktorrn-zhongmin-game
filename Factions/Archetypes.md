@@ -53,29 +53,34 @@
 
 ## Beasts, fast aggro deck built around sacrifices
 
-    {C}Undead  0/3:1       [ Rebirth ]
+    {C}Cadaver  0/3:1      [ Rebirth ]
 
     {C}Blood Beast 1/1:1   [ Rush ]
 
-    {C}Sparrow 1/2:1       [ Flying ]
+    {C}Raven 1/2:1         [ Flying ]
 
-    {C}Phoenix 0/5:2       [ Rebirth ]
+    {C}Lost Soul 1/2:2     [ Growth ]  
+
+    {C}WereWolf 2/3:0              
 
     {C}Hydra   1/5:3       [ Swarm ]
 
-    Queen Spider  3/4:3 [ Predator ]
+    {R}Queen Spider  3/4:3 [ Predator ]
+
 
 ## Beast catalyst cards
 
-    The Tamer 1/5:2     [ Hound Master]
+    {R} Hound Master 1/5:2     [ Hound Master]
 
-    Blood Moon  0/4:3   [ Blood moon ]
+    {R} Blood Moon  0/4:3   [ Blood moon ]
+
+    
 
 ## Amulets
 
 ### Rebirth 
 
-    Wont die on sacrifice
+    Insted of dying the creature loses one health on sacrifice
 
 ### Blood Moon
 
@@ -95,7 +100,7 @@
 
 ### Predator
 
-    Attacks whatever card is the weakest
+    Card Moves in front of the weakest (lowest HP) opposing card if possible 
 
 
 
@@ -109,7 +114,9 @@
 
     Apostel 1/2:1       [ Rebirth ]
 
-    Evil Minion 2/1:1
+    Evil Minion 1/1:1   [ Growth ]
+
+    Tiny Devil  2/1:1   [ Flying ]
 
     Blade Dancer 1/2:2  [ Manic ]
 
