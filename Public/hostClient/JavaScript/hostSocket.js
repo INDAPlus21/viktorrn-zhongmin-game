@@ -254,7 +254,6 @@ socket.on('connect', () => {// run this when connected
     //delete boardInfo['player'+i][column].cost; // cost is irrelevant to boardInfo since it's already placed out
 
     socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i],true  /* this boolean makes the player client redraw their hand as well as blood */); // refresh the client with new data
-    console.log("player",playerInfo['player'+i])
     UI_Handler.displayBoard(boardInfo,columnAmount,playerInfo);
   });
 
@@ -263,8 +262,7 @@ socket.on('connect', () => {// run this when connected
       switch(a){
         case"Shield":
           if(card.shieldBroken != undefined)return
-          card.shieldBroken = false;
-          
+          card.shieldBroken = false;    
           break;
         case 'Mirror':
           card.health = 2;
