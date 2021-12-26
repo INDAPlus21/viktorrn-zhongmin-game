@@ -10,11 +10,9 @@
 
     {C}Foot Soldier 1/1:1  [ Marching ]
 
-    {C}Bow Man 2/2:2       [ Reach ]
+    {C}Bow Man 2/2:2       
 
     {C}Drunk   X/3:2       [ Drunk ]
-
-    {R}Brain Jack X/X:1    [ Mirror ]  
 
     {C}Black Knight 2/4:3  [ Shield ]
 
@@ -59,9 +57,9 @@
 
     {C}Raven 1/2:1         [ Flying ]
 
-    {C}Lost Soul 1/2:2     [ Growth ]  
+    {C}Lost Soul 0/1:2     [ Growth ]  
 
-    {C}WereWolf 2/3:0              
+    {C}WereWolf 2/2:0              
 
     {C}Hydra   1/5:3       [ Swarm ]
 
@@ -115,7 +113,7 @@
     Apostel 1/2:1       [ Rebirth ]
 
     Evil Minion 1/1:1   [ Growth ]
-
+            V
     Tiny Devil  2/1:1   [ Flying ]
 
     Blade Dancer 1/2:2  [ Manic ]
@@ -152,11 +150,13 @@
 
 ## Mix cards
 
-    {C}Toad      0/3:1     [ High Block ]
+    {C}Toad      1/2:1     [ High Block ]
 
     {R}Minotaur 3/5:3      [ Rush ]
 
     {R}Black Hole  ?/?:4   [ Black Hole ]
+
+    {R}Brain Jack X/X:1    [ Mirror ]  
 
 ## Amulets
 

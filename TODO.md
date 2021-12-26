@@ -3,13 +3,23 @@
 
 ## Prio
 
-[ ] Some sort of feedback for sacc´ing cards
+[ ] Randomize who starts
 
-[ ] Show when its your turn more clearly
+[ ] More than one match, best of 5
+
+[ ] Deslect Cards
+
+
+
+## Cool things to have
+
+[ ] 
 
 [ ] Assets for the game
 
-## Cool things to have
+[ ] Some sort of feedback for sacc´ing cards
+
+[ ] Show when its your turn more clearly
 
 [ ] Improved sleep display
 

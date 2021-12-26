@@ -22,19 +22,19 @@
                 ,"damage":2
                 ,"health":2
                 ,"cost":2
-                ,"amulets":[]
+                ,"amulets":["Reach"]
                 ,"imgSrc":""
             }
             ,{  "name":"Drunk"
                 ,"damage":"?"
-                ,"health":3
+                ,"health":2
                 ,"cost":2
                 ,"amulets":["Drunk"]
                 ,"imgSrc":""
             }
             ,{  "name":"Black Knight"
                 ,"damage":2
-                ,"health":5
+                ,"health":4
                 ,"cost":3
                 ,"amulets":["Shield"]
                 ,"imgSrc":""
@@ -59,7 +59,7 @@
             
             {  "name":"Armoury"
                 ,"damage":0
-                ,"health":4
+                ,"health":5
                 ,"cost":2
                 ,"amulets":["Valiant Hearts"]
                 ,"imgSrc":""
@@ -73,9 +73,16 @@
         "regularCards":[
             {  "name":"Cadaver"
                 ,"damage":0
-                ,"health":3
+                ,"health":2
                 ,"cost":1
                 ,"amulets":["Rebirth"]
+                ,"imgSrc":""
+            }
+            ,{  "name":"Bat"
+                ,"damage":1
+                ,"health":1
+                ,"cost":1
+                ,"amulets":["Flying","Rush"]
                 ,"imgSrc":""
             }
             ,{  "name":"Blood Beast"
@@ -86,24 +93,10 @@
                 ,"imgSrc":""
             }
             ,{  "name":"Sparrow"
-                ,"damage":1
-                ,"health":2
-                ,"cost":1
-                ,"amulets":["Flying"]
-                ,"imgSrc":""
-            }
-            ,{  "name":"Lost Soul"
-                ,"damage":0
+                ,"damage":2
                 ,"health":1
                 ,"cost":1
-                ,"amulets":["Growth"]
-                ,"imgSrc":""
-            }
-            ,{  "name":"WereWolf"
-                ,"damage":2
-                ,"health":2
-                ,"cost":0
-                ,"amulets":[]
+                ,"amulets":["Flying"]
                 ,"imgSrc":""
             }
            
@@ -117,17 +110,10 @@
                 ,"imgSrc":""
             }
             ,{  "name":"Hound Master"
-                ,"damage":1
-                ,"health":5
-                ,"cost":3
-                ,"amulets":["Hound Master"]
-                ,"imgSrc":""
-            }
-            ,{  "name":"Blood Moon"
                 ,"damage":0
                 ,"health":4
-                ,"cost":3
-                ,"amulets":["Blood Moon"]
+                ,"cost":2
+                ,"amulets":["Hound Master"]
                 ,"imgSrc":""
             }
         ]
@@ -140,19 +126,19 @@
     {   "faction":"Neutral",
         "regularCards":[
             {  "name":"Toad"
-                ,"damage":0
-                ,"health":3
+                ,"damage":1
+                ,"health":2
                 ,"cost":1
                 ,"amulets":["High Block"]
                 ,"imgSrc":""
-            }  
-            ,{  "name":"Minotaur"
-                ,"damage":3
-                ,"health":5
-                ,"cost":3
-                ,"amulets":["Rush"]
+            },
+            {  "name":"Oak"
+                ,"damage":0
+                ,"health":3
+                ,"cost":0
+                ,"amulets":["High Block"]
                 ,"imgSrc":""
-            }
+            } 
         ]
         ,"rareCards":[
             {  "name":"Black Hole"
@@ -169,6 +155,13 @@
                 ,"amulets":["Mirror"]
                 ,"imgSrc":""
             }
+            ,{  "name":"Minotaur"
+                ,"damage":2
+                ,"health":3
+                ,"cost":3
+                ,"amulets":["Rush"]
+                ,"imgSrc":""
+            }
             
         ]
     }
@@ -180,21 +173,37 @@
     ,"Drunk"
     ,"Black Knight"
     ,"Cannon"
-    ,"Lost Soul"
     ,"Blood Beast"
     ,"Cadaver"
     ,"Sparrow"
     ,"Toad"
-    ,"Minotaur"
+    ,"Oak"
+    ,"Bat"
+    
 ]
 ,"startingRareCards":[
     "Armoury"
     ,"Brain Jack"
     ,"Hydra"
     ,"Hound Master"
+    ,"Minotaur"
 ]
 ,"OutOfOrderAtmList":[
     "THis list is used so I dont have to keep track of cards in my head when in testing new cards"
+    ,{  "name":"Lost Soul"
+        ,"damage":0
+        ,"health":2
+        ,"cost":1
+        ,"amulets":["Growth"]
+        ,"imgSrc":""
+    }
+    ,{  "name":"WereWolf"
+        ,"damage":2
+        ,"health":3
+        ,"cost":0
+        ,"amulets":[]
+        ,"imgSrc":""
+    }
     
 ]
 ,"amuletDescriptions":[

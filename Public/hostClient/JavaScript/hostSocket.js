@@ -8,7 +8,7 @@ let roomId; // room id
 let playerInfo = new Object();
 
 let columnAmount = 4;
-let playerMaxHealth = 15;
+let playerMaxHealth = 12;
 
 let GAMESTATE = 'lobby';
 
@@ -355,6 +355,7 @@ socket.on('connect', () => {// run this when connected
             for(let a of opposingCard.amulets){
               switch(a){        
                 case 'Flying':
+                  attackHitCard = false;
                 case 'High Block':
                   opponentCanBlockAir = true;
                   break;
@@ -368,7 +369,7 @@ socket.on('connect', () => {// run this when connected
           for(let a of thisCard.amulets){
             switch(a){
               case "Drunk":
-                damage = 1+Math.floor(Math.random()*3);
+                damage = Math.floor(Math.random()*4);
                 break;
               case 'Flying':
                 attackHitCard = false;
