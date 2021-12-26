@@ -32,9 +32,7 @@ Look into hound master
 Check if flying is too OP
 
 Ideas, 
-- Maybe tweek card cost curve
-- Maybe Implement Inscryptions scale mechanic, with a larger scale
-- Maybe add Bone Mechanic, or you gain one blood whenever you take 5 or more direct damage
-- More 0 Cost minions
-- Maybe from turn
-- Make Cavader a 0/5:2
+- Maybe tweek card cost curve                                                               // pre 12 HP
+- Maybe Implement Inscryptions scale mechanic, with a larger scale                          // Pre 12 HP
+- Maybe add Bone Mechanic, or you gain one blood whenever you take 5 or more direct damage  // Pre 12 HP
+- More 0 Cost minions                                       

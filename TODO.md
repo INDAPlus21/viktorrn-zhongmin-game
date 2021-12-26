@@ -9,7 +9,9 @@
 
 [ ] Deslect Cards
 
+[ ] Cards left in deck counter
 
+[ ] Make it clearer that you can only have 4 blood
 
 ## Cool things to have
 
