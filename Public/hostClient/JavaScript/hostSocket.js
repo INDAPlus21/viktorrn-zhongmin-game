@@ -262,7 +262,7 @@ socket.on('connect', () => {// run this when connected
       switch(a){
         case"Shield":
           if(card.shieldBroken != undefined)return
-          card.shieldBroken = false;    
+          card.shieldBroken = false;      
           break;
         case 'Mirror':
           card.health = 2;
@@ -355,9 +355,6 @@ socket.on('connect', () => {// run this when connected
             for(let a of opposingCard.amulets){
               switch(a){        
                 case 'Flying':
-                  attackHitCard = false;
-                  opponentCanBlockAir = true;
-                  break;
                 case 'High Block':
                   opponentCanBlockAir = true;
                   break;
