@@ -22,7 +22,7 @@
                 ,"damage":2
                 ,"health":2
                 ,"cost":2
-                ,"amulets":["Reach"]
+                ,"amulets":[]
                 ,"imgSrc":""
             }
             ,{  "name":"Drunk"
@@ -43,14 +43,14 @@
                 ,"damage":6
                 ,"health":2
                 ,"cost":3
-                ,"amulets":[""]
+                ,"amulets":[]
                 ,"imgSrc":""
             }
             ,{  "name":"Human"
                 ,"damage":0
                 ,"health":1
                 ,"cost":0
-                ,"amulets":[""]
+                ,"amulets":[]
                 ,"imgSrc":""
             }
         ]
@@ -103,16 +103,10 @@
                 ,"damage":2
                 ,"health":2
                 ,"cost":0
-                ,"amulets":[""]
+                ,"amulets":[]
                 ,"imgSrc":""
             }
-            ,{  "name":"Queen Spider"
-                ,"damage":3
-                ,"health":4
-                ,"cost":4
-                ,"amulets":["Predator"]
-                ,"imgSrc":""
-            }
+           
         ]
         ,"rareCards":[
             {  "name":"Hydra"
@@ -152,6 +146,13 @@
                 ,"amulets":["High Block"]
                 ,"imgSrc":""
             }  
+            ,{  "name":"Minotaur"
+                ,"damage":3
+                ,"health":5
+                ,"cost":3
+                ,"amulets":["Rush"]
+                ,"imgSrc":""
+            }
         ]
         ,"rareCards":[
             {  "name":"Black Hole"
@@ -159,13 +160,6 @@
                 ,"health":"?"
                 ,"cost":4
                 ,"amulets":["Black Hole"]
-                ,"imgSrc":""
-            }
-            ,{  "name":"Minotaur"
-                ,"damage":3
-                ,"health":5
-                ,"cost":3
-                ,"amulets":["Rush"]
                 ,"imgSrc":""
             }
             ,{  "name":"Brain Jack"
@@ -180,20 +174,28 @@
     }
     ]
 ,"startingRegularCards":[
-    "Lost Soul"
+    "Frank"
+    ,"Soldier"
+    ,"Bow Man"
+    ,"Drunk"
+    ,"Black Knight"
+    ,"Cannon"
+    ,"Lost Soul"
     ,"Blood Beast"
     ,"Cadaver"
+    ,"Sparrow"
+    ,"Toad"
+    ,"Minotaur"
 ]
 ,"startingRareCards":[
-    
-    "Hydra"
+    "Armoury"
+    ,"Brain Jack"
+    ,"Hydra"
     ,"Hound Master"
 ]
 ,"OutOfOrderAtmList":[
-    "THis list is used so I dont have to keep track of cards in my head when in testing new cards",
-    "Minotaur"
-    ,"Armoury"
-    ,"Brain Jack"
+    "THis list is used so I dont have to keep track of cards in my head when in testing new cards"
+    
 ]
 ,"amuletDescriptions":[
     {   "name":"Shield"
