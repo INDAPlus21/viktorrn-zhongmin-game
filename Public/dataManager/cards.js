@@ -21,6 +21,12 @@ export function getCardDiv(card){
         case 'Humanity':
             factionSymbol.innerText = "H";
             break;
+        case 'Beasts':
+            factionSymbol.innerText = "B";
+            break;
+        case 'Graveyard':
+            factionSymbol.innerText = "G";
+            break;
 
         default:
             factionSymbol.innerText = "N";

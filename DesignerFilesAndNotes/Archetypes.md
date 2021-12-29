@@ -12,7 +12,7 @@
 
     {C}Bow Man 2/2:2       
 
-    {C}Drunk   X/3:2       [ Drunk ]
+    {C}Drunk   X/2:2       [ Drunk ]
 
     {C}Black Knight 2/4:3  [ Shield ]
 
@@ -51,26 +51,23 @@
 
 ## Beasts, fast aggro deck built around sacrifices
 
-    {C}Cadaver  0/3:1      [ Rebirth ]
+    {C}Cadaver  0/2:1      [ Rebirth ]
 
     {C}Blood Beast 1/1:1   [ Rush ]
 
-    {C}Raven 1/2:1         [ Flying ]
+    {C}Sparrow 2/1:1       [ Flying ]
 
-    {C}Lost Soul 0/1:2     [ Growth ]  
+    {C}Bat     1/1:1       [ Flying,Rush]
 
-    {C}WereWolf 2/2:0              
-
-    {C}Hydra   1/5:3       [ Swarm ]
-
-    {R}Queen Spider  3/4:3 [ Predator ]
-
+    {C}Boar    1/3:2
+    
+    {C}Hydra   1/4:2       [ Swarm ]
 
 ## Beast catalyst cards
 
-    {R} Hound Master 1/5:2     [ Hound Master]
+    {R} Hound Master 1/5:2  [ Hound Master]
 
-    {R} Blood Moon  0/4:3   [ Blood moon ]
+    {R} Blood Moon  0/2:2   [ Blood moon ]
 
     
 
@@ -96,51 +93,38 @@
 
     Attacks the oponent directly
 
-### Predator
 
-    Card Moves in front of the weakest (lowest HP) opposing card if possible 
+## Darklings, cards grow stonger when more of the faction is present
 
+    Skeleton 0/1:0
 
+    Pike Man 0/2:1      [ Reach ]
 
-## Darklings, buffing stronger units and playing fother
-
-    Skeleton X/1:0      [ Undead Army ]
-    
-    Evil Tree 0/2:0     [ High Block ]
-
-    Dark monk 1/?:1     [ Shadow ]
-
-    Apostel 1/2:1       [ Rebirth ]
-
-    Evil Minion 1/1:1   [ Growth ]
+    Evil Minion 0/1:1   [ Growth ]
             V
-    Tiny Devil  2/1:1   [ Flying ]
+    Tiny Devil  1/2:0   [ Flying ]
 
-    Blade Dancer 1/2:2  [ Manic ]
+    Apostel 0/3:2       [ Rebirth ]
 
 ## Darklord Catalyst cards
 
-    Bone King 1/4:3     [ Undead Leader ]
+    Tomb Stone 0/6:3    [ Reanimation]
 
-    The Reaper 7/7:13-X [ Death ]
+    The Reaper 7/7:13-X [ Death Watcher ]
 
 ## Amulets
 
-### Undead Army
+### Bone Army
 
-    Skeleton +1/0 for each skeleton on the board
+    Units baring this amulet gains +1/0 for each other Bone Army Card on the board
 
-### Undead Leader
+### Reanimation
 
     Spawn Skeleton on random free slot at the end of turn
 
 ### High Block
 
     Blocks flying cards
-
-### Shadow
-
-    Cant take damage by enemy card
 
 ### Death
 
@@ -152,11 +136,19 @@
 
     {C}Toad      1/2:1     [ High Block ]
 
+    {C}Hyena     1/1:1     [ Scavenger ]
+
+    {C}Vulture   1/1:1     [ Scavenger, Flying ]
+
+    {C}Giant Maggot 0/3:1  [ Scavenger, High Block ]
+
+    {R}Brain Jack X/X:1    [ Mirror ] 
+
+    {R}Blade Dancer 1/2:2  [ Manic ]
+
     {R}Minotaur 3/5:3      [ Rush ]
 
-    {R}Black Hole  ?/?:4   [ Black Hole ]
-
-    {R}Brain Jack X/X:1    [ Mirror ]  
+ 
 
 ## Amulets
 
@@ -164,8 +156,10 @@
 
     Blocks flying cards
 
-### Black Hole
+### Scavenger
 
-    Kills whatever attacks it, after it kills 4 creatures it explodes killing everything on the board
+    Is played when one of your cards die, taking its place
 
+### Manic
 
+    Attacks after every turn regardless if it is your turn or your opponents

@@ -169,7 +169,6 @@ socket.on('connect', () => {// run this when connected
       // copy original deck to remaining deck for the game
         playerInfo.player1.remainingDeck = shuffle(cloneObject(playerInfo.player1.originalDeck));
         playerInfo.player2.remainingDeck = shuffle(cloneObject(playerInfo.player2.originalDeck));
-        playerInfo.player2.blood = 1;
         // start this mf
         // both players draw 4 cards to put in their hand
         for (let i in [1,2,3]) {
@@ -180,10 +179,14 @@ socket.on('connect', () => {// run this when connected
         playerInfo.player2.hand.push(DataManager.getSpecificCard('Human'));
         //starts with giving player 1 the cards and then prompting
         UI_Handler.displayBoard(boardInfo,columnAmount,playerInfo);
-        await socket.emit('startGame', roomId, playerInfo.player1.id, playerInfo.player2.id);
+        let starting = Math.ceil(Math.random()*2);
+        let other = starting == 1 ? 2 : 1;
+        playerInfo['player'+other].blood += 1;
+
+        await socket.emit('startGame', roomId, playerInfo['player'+starting].id, playerInfo['player'+other].id);
         await socket.emit('syncClient', playerInfo.player1, boardInfo.player1,true);
         await socket.emit('syncClient', playerInfo.player2, boardInfo.player2,true);
-        await socket.emit('startTurn', playerInfo.player1.id, 0);
+        await socket.emit('startTurn', playerInfo['player'+starting].id, 0);
         GAMESTATE = 'ingame';
         $('bodyPregame').classList.remove('onscreen');
         $('bodyIngame').classList.add('onscreen');
@@ -199,13 +202,13 @@ socket.on('connect', () => {// run this when connected
 
   socket.on('playerDrawCard', (playerId, drawnCard) => {
     let i = isPlayer(playerId);
-    console.log("player Drew card",drawnCard)
     if(drawnCard == 'Human'){ 
       playerInfo['player'+i].hand.push(DataManager.getSpecificCard('Human'));}
     else{
       let card = playerInfo['player'+i].remainingDeck.shift();
       playerInfo['player'+i].hand.push(card); 
     }
+
     for(let e of playerInfo['player'+i].statusEffects){
       if(e === "Hound Master" && playerInfo['player'+i].hand.length < 7){playerInfo['player'+i].hand.push(DataManager.getSpecificCard('Blood Beast'));}
     }
@@ -401,8 +404,8 @@ socket.on('connect', () => {// run this when connected
 
             if (opposingCard.health <= 0){
               await removePlayerStatusEffect(playerInfo['player'+atkedPlayer],boardInfo['player'+atkedPlayer],col);
-              boardInfo['player'+atkedPlayer][col] = null;
-            }  // set column to null if it dies from the attack
+              onCardDieEvent(playerInfo['player'+atkedPlayer],boardInfo['player'+atkedPlayer],col)
+            }
         
           } else if(damage > 0) {
             
@@ -430,8 +433,7 @@ socket.on('connect', () => {// run this when connected
                 break;
               case 'Growth':
                 switch(thisCard.name){
-                  case 'Lost Soul':
-                    boardInfo['player'+atkingPlayer][col] = DataManager.getSpecificCard('WereWolf');
+                  default:
                     break;
                 }
               break;
@@ -453,7 +455,7 @@ socket.on('connect', () => {// run this when connected
     } else if (boardInfo.p1damage <= 0) {
       socket.emit('endGame', playerInfo.player2.id, playerInfo.player1.id);
     } else { // no win condition was reached
-      if (atkingPlayer===2) boardInfo.turn += 1 // if the player is player2 then a round has passed
+      boardInfo.turn += 1
       // the opposing player's turn starts
       socket.emit('syncClient', playerInfo['player'+atkedPlayer], boardInfo['player'+atkedPlayer],true);
       socket.emit('syncClient', playerInfo['player'+atkingPlayer], boardInfo['player'+atkingPlayer],true);
@@ -463,6 +465,18 @@ socket.on('connect', () => {// run this when connected
 });
 
 // SEPARATOR - You are now entering Not Socket
+
+async function onCardDieEvent(playerObj,playerBoard,column){
+  playerBoard[c] = null;
+  for(let c in playerObj.hand){
+    for(a of playerObj.hand[c].amulets){
+      if(a == "Scavenger"){
+        console.log("found scavenger")
+        playerBoard[c] = playerObj.hand[c];
+      }
+    }
+  }
+}
 
 async function removePlayerStatusEffect(playerObj,playerBoard,column){
   let card = playerBoard[column];

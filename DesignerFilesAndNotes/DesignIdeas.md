@@ -35,4 +35,3 @@ Units you play on the board, has a cost, health and damage and some has an Amule
 Amulets are special effects cards can have that makes them stronger and/or more unique
 
 ### Spells <- (could be cool)
-

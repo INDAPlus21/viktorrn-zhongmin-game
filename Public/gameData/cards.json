@@ -59,7 +59,7 @@
             
             {  "name":"Armoury"
                 ,"damage":0
-                ,"health":5
+                ,"health":4
                 ,"cost":2
                 ,"amulets":["Valiant Hearts"]
                 ,"imgSrc":""
@@ -99,17 +99,21 @@
                 ,"amulets":["Flying"]
                 ,"imgSrc":""
             }
-           
-        ]
-        ,"rareCards":[
-            {  "name":"Hydra"
+            ,{
+
+            }
+            ,{  "name":"Hydra"
                 ,"damage":1
-                ,"health":5
+                ,"health":4
                 ,"cost":2
                 ,"amulets":["Headed Hunter"]
                 ,"imgSrc":""
             }
-            ,{  "name":"Hound Master"
+           
+        ]
+        ,"rareCards":[
+            
+            {  "name":"Hound Master"
                 ,"damage":0
                 ,"health":4
                 ,"cost":2
@@ -119,9 +123,32 @@
         ]
     },
     {
-        "faction":"Darklings",
-        "regularCards":[]
-        ,"rareCards":[]
+        "faction":"Graveyard",
+        "regularCards":[
+            {  "name":"Skeleton"
+                ,"damage":0
+                ,"health":1
+                ,"cost":0
+                ,"amulets":[""]
+                ,"imgSrc":""
+            }
+            ,{  "name":"Pike Man"
+                ,"damage":0
+                ,"health":2
+                ,"cost":1
+                ,"amulets":[""]
+                ,"imgSrc":""
+            }
+        ]
+        ,"rareCards":[
+            {  "name":"Tomb Stone"
+                ,"damage":0
+                ,"health":5
+                ,"cost":3
+                ,"amulets":["Reanimation"]
+                ,"imgSrc":""
+            }
+        ]
     },
     {   "faction":"Neutral",
         "regularCards":[
@@ -134,21 +161,42 @@
             },
             {  "name":"Oak"
                 ,"damage":0
-                ,"health":3
+                ,"health":4
                 ,"cost":0
                 ,"amulets":["High Block"]
                 ,"imgSrc":""
             } 
-        ]
-        ,"rareCards":[
-            {  "name":"Black Hole"
-                ,"damage":"?"
-                ,"health":"?"
-                ,"cost":4
-                ,"amulets":["Black Hole"]
+            ,{  "name":"Hyena"
+                ,"damage":1
+                ,"health":1
+                ,"cost":1
+                ,"amulets":["Scavenger"]
+                ,"imgSrc":""
+            } 
+            ,{  "name":"Vulture"
+                ,"damage":1
+                ,"health":1
+                ,"cost":1
+                ,"amulets":["Scavenger","Flying"]
+                ,"imgSrc":""
+            } 
+            ,{  "name":"Giant Maggot"
+                ,"damage":0
+                ,"health":3
+                ,"cost":1
+                ,"amulets":["Scavanger","High Block"]
                 ,"imgSrc":""
             }
-            ,{  "name":"Brain Jack"
+            ,{  "name":"Blade Dancer"
+                ,"damage":1
+                ,"health":2
+                ,"cost":2
+                ,"amulets":["Manic"]
+                ,"imgSrc":""
+            }  
+        ]
+        ,"rareCards":[
+            {  "name":"Brain Jack"
                 ,"damage":"X"
                 ,"health":"X"
                 ,"cost":1
@@ -173,45 +221,72 @@
     ,"Drunk"
     ,"Black Knight"
     ,"Cannon"
+    
     ,"Blood Beast"
     ,"Cadaver"
     ,"Sparrow"
+    ,"Bat"
+
     ,"Toad"
     ,"Oak"
-    ,"Bat"
+    ,"Vulture"
+    ,"Hyena"
+    ,"Giant Maggot"
+    ,"Blade Dancer"
     
 ]
 ,"startingRareCards":[
     "Armoury"
-    ,"Brain Jack"
+    
     ,"Hydra"
     ,"Hound Master"
+
     ,"Minotaur"
+    ,"Brain Jack"
 ]
 ,"OutOfOrderAtmList":[
     "THis list is used so I dont have to keep track of cards in my head when in testing new cards"
-    ,{  "name":"Lost Soul"
-        ,"damage":0
-        ,"health":2
-        ,"cost":1
-        ,"amulets":["Growth"]
-        ,"imgSrc":""
-    }
-    ,{  "name":"WereWolf"
-        ,"damage":2
-        ,"health":3
-        ,"cost":0
-        ,"amulets":[]
-        ,"imgSrc":""
-    }
     
 ]
 ,"amuletDescriptions":[
     {   "name":"Shield"
         ,"description":"Completly blocks the first incoming attack"
     }
-    ,{   "name":"Shield"
-        ,"description":"Completly blocks the first incoming attack"
+    ,{   "name":"Drunk"
+        ,"description":"Damage is randomized between 0-3"
+    }
+    ,{   "name":"Marching"
+        ,"description":"Attacks and then Moves, if the Move direction is blocked it changes direction"
+    }
+    ,{   "name":"Valiant Hearts"
+        ,"description":"Gives all Human uints shield"
+    }
+    ,{   "name":"Reach"
+        ,"description":"Can hit flying targets"
+    }
+    ,{   "name":"Flying"
+        ,"description":"Attacks over grounded uints"
+    }
+    ,{   "name":"High Block"
+        ,"description":"Blocks on every level"
+    }
+    ,{   "name":"Mirror"
+        ,"description":"Completly mirrors oposing card"
+    }
+    ,{   "name":"Hound Master"
+        ,"description":"At the begining of your turn, reccive a Blood Beast"
+    }
+    ,{   "name":"Headed Hunter"
+        ,"description":"Damage increases by 1 for each missing health"
+    }
+    ,{   "name":"Rebirth"
+        ,"description":"Instead of dying on saccrifice, the card loses 1 health"
+    }
+    ,{   "name":"Scavenger"
+        ,"description":"When a card on your board dies, it get replaced by the leftmost scavenger in your hand"
+    }
+    ,{   "name":"Manic"
+        ,"description":"Attacks after EVERY turn"
     }
 ]
 }
