@@ -182,7 +182,7 @@ socket.on('connect', () => {// run this when connected
         let starting = Math.ceil(Math.random()*2);
         let other = starting == 1 ? 2 : 1;
         playerInfo['player'+other].blood += 1;
-
+        
         await socket.emit('startGame', roomId, playerInfo['player'+starting].id, playerInfo['player'+other].id);
         await socket.emit('syncClient', playerInfo.player1, boardInfo.player1,true);
         await socket.emit('syncClient', playerInfo.player2, boardInfo.player2,true);
