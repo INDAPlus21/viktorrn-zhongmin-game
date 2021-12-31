@@ -99,16 +99,7 @@
                 ,"amulets":["Flying"]
                 ,"imgSrc":""
             }
-            ,{
-
-            }
-            ,{  "name":"Hydra"
-                ,"damage":1
-                ,"health":4
-                ,"cost":2
-                ,"amulets":["Headed Hunter"]
-                ,"imgSrc":""
-            }
+           
            
         ]
         ,"rareCards":[
@@ -118,6 +109,13 @@
                 ,"health":4
                 ,"cost":2
                 ,"amulets":["Hound Master"]
+                ,"imgSrc":""
+            }
+            ,{  "name":"Hydra"
+                ,"damage":1
+                ,"health":4
+                ,"cost":2
+                ,"amulets":["Headed Hunter"]
                 ,"imgSrc":""
             }
         ]
@@ -184,7 +182,7 @@
                 ,"damage":0
                 ,"health":3
                 ,"cost":1
-                ,"amulets":["Scavanger","High Block"]
+                ,"amulets":["Scavenger","High Block"]
                 ,"imgSrc":""
             }
             ,{  "name":"Blade Dancer"

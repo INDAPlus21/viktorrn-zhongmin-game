@@ -182,7 +182,7 @@ socket.on('connect', () => {// run this when connected
         let starting = Math.ceil(Math.random()*2);
         let other = starting == 1 ? 2 : 1;
         playerInfo['player'+other].blood += 1;
-        
+
         await socket.emit('startGame', roomId, playerInfo['player'+starting].id, playerInfo['player'+other].id);
         await socket.emit('syncClient', playerInfo.player1, boardInfo.player1,true);
         await socket.emit('syncClient', playerInfo.player2, boardInfo.player2,true);
@@ -466,11 +466,11 @@ socket.on('connect', () => {// run this when connected
 
 // SEPARATOR - You are now entering Not Socket
 
-async function onCardDieEvent(playerObj,playerBoard,column){
+async function onCardDieEvent(playerObj,playerBoard,c){
   playerBoard[c] = null;
   for(let c in playerObj.hand){
-    for(a of playerObj.hand[c].amulets){
-      if(a == "Scavenger"){
+    for(let a of playerObj.hand[c].amulets){
+      if(a === "Scavenger"){
         console.log("found scavenger")
         playerBoard[c] = playerObj.hand[c];
       }

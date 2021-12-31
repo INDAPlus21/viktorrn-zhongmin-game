@@ -3,7 +3,6 @@
 
 ## Prio
 
-[ ] Randomize who starts
 
 [ ] More than one match, best of 5
 
@@ -12,6 +11,10 @@
 [ ] Cards left in deck counter
 
 [ ] Make it clearer that you can only have 4 blood
+
+[ ] ReArrange hand functionality
+
+[ ] Fix bug where mulitple scavenger cards gets played, and on the wrong slot
 
 ## Cool things to have
 
@@ -25,10 +28,12 @@
 
 [ ] Improved sleep display
 
-[ ] Add background Music
-
 
 ## Done
+
+[X] Add background Music
+
+[X] Randomize who starts
 
 [X] Move damage display
 
