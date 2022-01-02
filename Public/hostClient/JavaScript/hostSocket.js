@@ -466,14 +466,13 @@ socket.on('connect', () => {// run this when connected
 
 // SEPARATOR - You are now entering Not Socket
 
-async function onCardDieEvent(playerObj,playerBoard,c){
+async function onCardDieEvent(playerObj,playerBoard,col){
   playerBoard[c] = null;
   for(let c in playerObj.hand){
     for(let a of playerObj.hand[c].amulets){
-      if(a === "Scavenger"){
-        console.log("found scavenger")
-        playerBoard[c] = playerObj.hand[c];
-      }
+      if(a !== "Scavenger") continue;
+      playerBoard[col] = playerObj.hand[c];
+      playerObj.splice(c,1);
     }
   }
 }
