@@ -1,124 +1,290 @@
 {
-    "cards": [
-        {   "name": "Squirrel",
-            "damage": 0,
-            "health": 1,
-            "cost": 0,
-            "age": 0,
-            "sigil": ""
-        },
-        {   "name": "Stunted Wolf",
-            "damage": 2,
-            "health": 2,
-            "cost": 1,
-            "age": 0,
-            "sigil": ""
-        },
-        {   "name": "Wolf",
-            "damage": 3,
-            "health": 2,
-            "cost": 2,
-            "age": 0,
-            "sigil": ""
-        },
-        { "name": "Wolf Cub",
-            "damage": 1,
-            "health": 1,
-            "cost": 1,
-            "age": 0,
-            "sigil": "Fledgling"
-        },
-        {   "name": "Grizzly",
-            "damage": 4,
-            "health": 6,
-            "cost": 3,
-            "age": 0,
-            "sigil": ""
-        },
-        {   "name": "Rabbit",
-            "damage": 0,
-            "health": 1,
-            "cost": 0,
-            "age": 0,
-            "sigil": ""
-        },
-        {   "name": "Geck",
-            "damage": 1,
-            "health": 1,
-            "cost": 1,
-            "age": 0,
-            "sigil": ""
-        },
-        {   "name": "Urayuli",
-            "damage": 7,
-            "health": 7,
-            "cost": 4,
-            "age": 0,
-            "sigil": ""
-        },
-        {  "name": "Random",
-            "damage": 0,
-            "health": 0,
-            "cost": 0,
-            "age": 0,
-            "sigil": ""
-        },
-        {   "name": "Cat",
-            "damage": 0,
-            "health": 1,
-            "cost": 0,
-            "age": 0,
-            "sigil": "Many Lives"
-        },
-        {   "name": "Warren",
-            "damage": 0,
-            "health": 2,
-            "cost": 1,
-            "age": 0,
-            "sigil": "Rabbit Hole"
-        },
-        {   "name": "Porcupine",
-            "damage": 1,
-            "health": 2,
-            "cost": 1,
-            "age": 0,
-            "sigil": "Sharp Quills"
-        },
-        {   "name": "Sparrow",
-            "damage": 1,
-            "health": 2,
-            "cost": 1,
-            "age": 0,
-            "sigil": "Flying"
-        },
-        {   "name": "Raven",
-            "damage": 3,
-            "health": 2,
-            "cost": 2,
-            "age": 0,
-            "sigil": "Flying"
-        },
-        {   "name": "Raven Egg",
-            "damage": 0,
-            "health": 2,
-            "cost": 1,
-            "age": 0,
-            "sigil": "Fledgling"
-        }
-    ],
-
-    "startingCards": [
-        "Stunted Wolf",
-        "Wolf",
-        "Grizzly",
-        "Geck",
-        "Urayuli",
-        "Cat",
-        "Warren",
-        "Porcupine",
-        "Sparrow",
-        "Raven",
-        "Raven Egg",
-        "Wolf Cub"
+"cards": 
+    [
+    {   "faction":"Humanity" 
+        ,"regularCards":
+        [
+            {   "name":"Frank"
+                ,"damage":1
+                ,"health":2
+                ,"cost":1
+                ,"amulets":[""]
+                ,"imgSrc":""
+            }
+            ,{  "name":"Soldier"
+                ,"damage":1
+                ,"health":1
+                ,"cost":1
+                ,"amulets":["Marching"]
+                ,"imgSrc":""
+            }
+            ,{  "name":"Bow Man"
+                ,"damage":2
+                ,"health":2
+                ,"cost":2
+                ,"amulets":["Reach"]
+                ,"imgSrc":""
+            }
+            ,{  "name":"Drunk"
+                ,"damage":"?"
+                ,"health":2
+                ,"cost":2
+                ,"amulets":["Drunk"]
+                ,"imgSrc":""
+            }
+            ,{  "name":"Black Knight"
+                ,"damage":2
+                ,"health":4
+                ,"cost":3
+                ,"amulets":["Shield"]
+                ,"imgSrc":""
+            }
+            ,{  "name":"Cannon"
+                ,"damage":6
+                ,"health":2
+                ,"cost":3
+                ,"amulets":[]
+                ,"imgSrc":""
+            }
+            ,{  "name":"Human"
+                ,"damage":0
+                ,"health":1
+                ,"cost":0
+                ,"amulets":[]
+                ,"imgSrc":""
+            }
+        ]
+        ,"rareCards":
+        [
+            
+            {  "name":"Armoury"
+                ,"damage":0
+                ,"health":4
+                ,"cost":2
+                ,"amulets":["Valiant Hearts"]
+                ,"imgSrc":""
+            }
+            
+        ]
+    },
+  
+    {
+        "faction":"Beasts",
+        "regularCards":[
+            {  "name":"Cadaver"
+                ,"damage":0
+                ,"health":2
+                ,"cost":1
+                ,"amulets":["Rebirth"]
+                ,"imgSrc":""
+            }
+            ,{  "name":"Bat"
+                ,"damage":1
+                ,"health":1
+                ,"cost":1
+                ,"amulets":["Flying","Rush"]
+                ,"imgSrc":""
+            }
+            ,{  "name":"Blood Beast"
+                ,"damage":1
+                ,"health":1
+                ,"cost":1
+                ,"amulets":["Rush"]
+                ,"imgSrc":""
+            }
+            ,{  "name":"Sparrow"
+                ,"damage":2
+                ,"health":1
+                ,"cost":1
+                ,"amulets":["Flying"]
+                ,"imgSrc":""
+            }
+           
+           
+        ]
+        ,"rareCards":[
+            
+            {  "name":"Hound Master"
+                ,"damage":0
+                ,"health":4
+                ,"cost":2
+                ,"amulets":["Hound Master"]
+                ,"imgSrc":""
+            }
+            ,{  "name":"Hydra"
+                ,"damage":1
+                ,"health":4
+                ,"cost":2
+                ,"amulets":["Headed Hunter"]
+                ,"imgSrc":""
+            }
+        ]
+    },
+    {
+        "faction":"Graveyard",
+        "regularCards":[
+            {  "name":"Skeleton"
+                ,"damage":0
+                ,"health":1
+                ,"cost":0
+                ,"amulets":[""]
+                ,"imgSrc":""
+            }
+            ,{  "name":"Pike Man"
+                ,"damage":0
+                ,"health":2
+                ,"cost":1
+                ,"amulets":[""]
+                ,"imgSrc":""
+            }
+        ]
+        ,"rareCards":[
+            {  "name":"Tomb Stone"
+                ,"damage":0
+                ,"health":5
+                ,"cost":3
+                ,"amulets":["Reanimation"]
+                ,"imgSrc":""
+            }
+        ]
+    },
+    {   "faction":"Neutral",
+        "regularCards":[
+            {  "name":"Toad"
+                ,"damage":1
+                ,"health":2
+                ,"cost":1
+                ,"amulets":["High Block"]
+                ,"imgSrc":""
+            },
+            {  "name":"Oak"
+                ,"damage":0
+                ,"health":4
+                ,"cost":0
+                ,"amulets":["High Block"]
+                ,"imgSrc":""
+            } 
+            ,{  "name":"Hyena"
+                ,"damage":1
+                ,"health":1
+                ,"cost":1
+                ,"amulets":["Scavenger"]
+                ,"imgSrc":""
+            } 
+            ,{  "name":"Vulture"
+                ,"damage":1
+                ,"health":1
+                ,"cost":1
+                ,"amulets":["Scavenger","Flying"]
+                ,"imgSrc":""
+            } 
+            ,{  "name":"Giant Maggot"
+                ,"damage":0
+                ,"health":3
+                ,"cost":1
+                ,"amulets":["Scavenger","High Block"]
+                ,"imgSrc":""
+            }
+            ,{  "name":"Blade Dancer"
+                ,"damage":1
+                ,"health":2
+                ,"cost":2
+                ,"amulets":["Manic"]
+                ,"imgSrc":""
+            }  
+        ]
+        ,"rareCards":[
+            {  "name":"Brain Jack"
+                ,"damage":"X"
+                ,"health":"X"
+                ,"cost":1
+                ,"amulets":["Mirror"]
+                ,"imgSrc":""
+            }
+            ,{  "name":"Minotaur"
+                ,"damage":2
+                ,"health":3
+                ,"cost":3
+                ,"amulets":["Rush"]
+                ,"imgSrc":""
+            }
+            
+        ]
+    }
     ]
+,"startingRegularCards":[
+    "Frank"
+    ,"Soldier"
+    ,"Bow Man"
+    ,"Drunk"
+    ,"Black Knight"
+    ,"Cannon"
+    
+    ,"Blood Beast"
+    ,"Cadaver"
+    ,"Sparrow"
+    ,"Bat"
+
+    ,"Toad"
+    ,"Oak"
+    ,"Vulture"
+    ,"Hyena"
+    ,"Giant Maggot"
+    ,"Blade Dancer"
+    
+]
+,"startingRareCards":[
+    "Armoury"
+    
+    ,"Hydra"
+    ,"Hound Master"
+
+    ,"Minotaur"
+    ,"Brain Jack"
+]
+,"OutOfOrderAtmList":[
+    "THis list is used so I dont have to keep track of cards in my head when in testing new cards"
+    
+]
+,"amuletDescriptions":[
+    {   "name":"Shield"
+        ,"description":"Completly blocks the first incoming attack"
+    }
+    ,{   "name":"Drunk"
+        ,"description":"Damage is randomized between 0-3"
+    }
+    ,{   "name":"Marching"
+        ,"description":"Attacks and then Moves, if the Move direction is blocked it changes direction"
+    }
+    ,{   "name":"Valiant Hearts"
+        ,"description":"Gives all Human uints shield"
+    }
+    ,{   "name":"Reach"
+        ,"description":"Can hit flying targets"
+    }
+    ,{   "name":"Flying"
+        ,"description":"Attacks over grounded uints"
+    }
+    ,{   "name":"High Block"
+        ,"description":"Blocks on every level"
+    }
+    ,{   "name":"Mirror"
+        ,"description":"Completly mirrors oposing card"
+    }
+    ,{   "name":"Hound Master"
+        ,"description":"At the begining of your turn, reccive a Blood Beast"
+    }
+    ,{   "name":"Headed Hunter"
+        ,"description":"Damage increases by 1 for each missing health"
+    }
+    ,{   "name":"Rebirth"
+        ,"description":"Instead of dying on saccrifice, the card loses 1 health"
+    }
+    ,{   "name":"Scavenger"
+        ,"description":"When a card on your board dies, it get replaced by the leftmost scavenger in your hand"
+    }
+    ,{   "name":"Manic"
+        ,"description":"Attacks after EVERY turn"
+    }
+]
 }
