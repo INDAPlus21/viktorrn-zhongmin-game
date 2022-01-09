@@ -115,7 +115,6 @@ socket.on('connect', () => {// run this when connected
         playerInfo.player1.remainingDeck = shuffle(playerInfo.player1.originalDeck);
         playerInfo.player2.remainingDeck = shuffle(playerInfo.player2.originalDeck);
         playerInfo.player2.blood = 1;
-        // start this mf
         // both players draw 4 cards to put in their hand
         for (let i in [1,2,3]) {
           drawOneCard(playerInfo.player1);
