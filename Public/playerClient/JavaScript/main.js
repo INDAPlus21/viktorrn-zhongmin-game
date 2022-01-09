@@ -25,7 +25,6 @@ window.onload = function(){
     DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager,(Manager = DataManager) => {
 
         cardsSlected = [];
-        displayCardShop(1);
 
         $('handPoint').classList.add('displaying');
         $('endTurnBtn').onpointerdown = endTurn;
@@ -48,7 +47,7 @@ window.onload = function(){
                 $('login').classList.remove('onscreen');
                 $('cardShop').classList.add('onscreen');
                 $('playerName').innerText = playerName;
-
+                displayCardShop(1);
                 //cardsSlected = [{cardName:"Frank"},{cardName:"Frank"},{cardName:"Armoury"},{cardName:"Undead"}];
                 //displayCardShop(3);
             }
@@ -92,6 +91,10 @@ window.onload = function(){
         $('sacrificeCardBtn').classList.add('displaying');
         
     });
+
+    socket.on("endOfRound",(deck)=>{
+        console.log("ready to display cardShop",deck);
+    })
     
     socket.on('youWin', () => {
         $('playArea').classList.remove('onscreen');
@@ -111,6 +114,8 @@ window.onload = function(){
 
 
 function displayCardShop(stage){
+    $('cardShop').classList.add('onscreen');
+    $('playArea').classList.remove('onscreen');
     clearElement($('itemPage'))
     let rareCards = shuffle( DataManager.getAllStartingRareCards() );
     let regularCards = shuffle (DataManager.getAllStartingRegularCards() );
@@ -233,7 +238,9 @@ export function doneWithStartingCards(cards){
     for(let i in cards){
         deck.push(DataManager.getSpecificCard(cards[i].cardName))
     }
-    socket.emit('ready', roomId, socketId, deck);
+
+    socket.emit('playerSelectedCards', roomId, socketId, deck);
+    socket.emit('ready', roomId, socketId);
     // @viktor at here, maybe change to another section that is just a blank waiting screen
 }
 

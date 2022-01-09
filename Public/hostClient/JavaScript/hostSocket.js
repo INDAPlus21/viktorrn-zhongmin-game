@@ -8,9 +8,16 @@ let roomId; // room id
 let playerInfo = new Object();
 
 let columnAmount = 4;
-let playerMaxHealth = 12;
+let playerMaxHealth = 1;//12
 
-let GAMESTATE = 'lobby';
+let lobbyData = {
+  currentRound: 0,
+  p1Ready: false,
+  p2Ready: false,
+  p1Wins: 0,
+  p2Wins: 0,
+  GAMESTATE: 'lobby'
+}
 
 let boardInfo = {
   player1: [
@@ -26,8 +33,10 @@ let boardInfo = {
     null
   ],
   turn: 0,
-  p1damage: playerMaxHealth,
-  p2damage: playerMaxHealth
+  p1damage: 0,
+  p2damage: 0
+
+
 }
 
 let UI_Handler = new UIHandler.UIHandler($('cardSelectionPage'),$('cardPickZone'));
@@ -131,7 +140,7 @@ socket.on('connect', () => {// run this when connected
     answer[0] = false;
 
     answer[1] = (Object.keys(playerInfo).length > 1) ? "The room is full."
-              : (GAMESTATE !== 'lobby') ? "The game has already started."
+              : (lobbyData.GAMESTATE !== 'lobby') ? "The game has already started."
               : null;
     
     if (answer[1] === null) { // if none of the above failure conditions match, let the player in
@@ -152,23 +161,38 @@ socket.on('connect', () => {// run this when connected
     }
   })
 
-  socket.on('playerReady', async (playerId, deck) => {
+  socket.on('playerReady', async (playerId) => {
     try{
       if (isPlayer(playerId)===1) {
-        playerInfo.player1.originalDeck = deck;
         $('player1State').innerHTML = `<span>${playerInfo.player1.name}</span><br><b>READY!</b>`
+        lobbyData.p1Ready = true;
       }
       if (isPlayer(playerId)===2) {
-        playerInfo.player2.originalDeck = deck;
         $('player2State').innerHTML = `<span>${playerInfo.player2.name}</span><br><b>READY!</b>`
+        lobbyData.p2Ready = true;
       }
 
     // check if game can start // cheep as error handling, yes box
     
-      if (playerInfo.player1.originalDeck.length > 0 && playerInfo.player2.originalDeck.length > 0) {
-      // copy original deck to remaining deck for the game
+      if (lobbyData.p1Ready && lobbyData.p2Ready) {
+        lobbyData.currentRound += 1;
+        boardInfo.turn = 0;
+
+        let starting = Math.ceil(Math.random()*2);
+        let other = starting == 1 ? 2 : 1;
+        
+        //setting data
+        playerInfo['player'+starting].blood = 0;
+        playerInfo['player'+other].blood = 1;
+        playerInfo['player'+starting].statusEffects = [];
+        playerInfo['player'+other].statusEffects = [];
+        
+        boardInfo.p1damage = playerMaxHealth;
+        boardInfo.p2damage = playerMaxHealth;
+        
         playerInfo.player1.remainingDeck = shuffle(cloneObject(playerInfo.player1.originalDeck));
         playerInfo.player2.remainingDeck = shuffle(cloneObject(playerInfo.player2.originalDeck));
+
         // both players draw 4 cards to put in their hand
         for (let i in [1,2,3]) {
           drawOneCard(playerInfo.player1);
@@ -178,15 +202,14 @@ socket.on('connect', () => {// run this when connected
         playerInfo.player2.hand.push(DataManager.getSpecificCard('Human'));
         //starts with giving player 1 the cards and then prompting
         UI_Handler.displayBoard(boardInfo,columnAmount,playerInfo);
-        let starting = Math.ceil(Math.random()*2);
-        let other = starting == 1 ? 2 : 1;
-        playerInfo['player'+other].blood += 1;
 
         await socket.emit('startGame', roomId, playerInfo['player'+starting].id, playerInfo['player'+other].id);
         await socket.emit('syncClient', playerInfo.player1, boardInfo.player1,true);
         await socket.emit('syncClient', playerInfo.player2, boardInfo.player2,true);
         await socket.emit('startTurn', playerInfo['player'+starting].id, 0);
-        GAMESTATE = 'ingame';
+        
+        lobbyData.GAMESTATE = 'ingame';
+        
         $('bodyPregame').classList.remove('onscreen');
         $('bodyIngame').classList.add('onscreen');
         // bgm change
@@ -198,6 +221,17 @@ socket.on('connect', () => {// run this when connected
       console.log(playerInfo);
     }
   });
+
+  socket.on("playerSelectedCards", async (playerId, deck) => {
+    console.log("player Selected cards",deck,playerId)
+    if (isPlayer(playerId)===1) {
+      for(let c of deck) playerInfo.player1.originalDeck.push(c);
+    }
+    if (isPlayer(playerId)===2) {
+      for(let c of deck) playerInfo.player2.originalDeck.push(c);
+    }
+
+  })
 
   socket.on('playerDrawCard', (playerId, drawnCard) => {
     let i = isPlayer(playerId);
@@ -450,20 +484,43 @@ socket.on('connect', () => {// run this when connected
     await new Promise(r => setTimeout(r, 1000)); // wait 1 sec
 
     if (boardInfo.p2damage <= 0) {
+      boardInfo.p1Wins += 1;
+      if(boardInfo.p1Wins >= 2)
       socket.emit('endGame', playerInfo.player1.id, playerInfo.player2.id);
-    } else if (boardInfo.p1damage <= 0) {
-      socket.emit('endGame', playerInfo.player2.id, playerInfo.player1.id);
-    } else { // no win condition was reached
+      else{
+        endRound(socket);
+      } 
+      return;
+    } 
+    
+    if (boardInfo.p1damage <= 0) {
+      boardInfo.p2Wins += 1;
+      if(boardInfo.p2Wins >= 2)
+        socket.emit('endGame', playerInfo.player2.id, playerInfo.player1.id);
+      else{
+        endRound(socket);
+      }
+      return;
+    } // no win condition was reached
       boardInfo.turn += 1
       // the opposing player's turn starts
       socket.emit('syncClient', playerInfo['player'+atkedPlayer], boardInfo['player'+atkedPlayer],true);
       socket.emit('syncClient', playerInfo['player'+atkingPlayer], boardInfo['player'+atkingPlayer],true);
       socket.emit('startTurn', playerInfo['player'+atkedPlayer].id, boardInfo.turn);
-    }
+    
   });
+
+  
 });
 
 // SEPARATOR - You are now entering Not Socket
+
+async function endRound(socket){
+    socket.emit('endOfRound', playerInfo.player1.id, playerInfo.player1.originalDeck, playerInfo.player2.id, playerInfo.player2.originalDeck );
+    playBgm('cabin');
+    pauseBgm('trapper');
+    clearElement($('playerBoard'));
+}
 
 async function onCardDieEvent(playerObj,playerBoard,col){
   playerBoard[col] = null;

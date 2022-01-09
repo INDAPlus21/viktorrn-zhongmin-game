@@ -81,14 +81,19 @@ io.on('connection', (socket) => { // server is online
     socket.to(hostOf(roomId)).emit('playerLeft', playerId);
   })
 
-  // event from player: player has assembled their starting deck and is ready to start.
+  socket.on('playerSelectedCards' , (roomId,playerId,deck) => {
+    socket.to(hostOf(roomId)).emit('playerSelectedCards', playerId, deck);
+  })
+
+  // event from player: player has assembled their deck and is ready to start the round.
   // this action cannot be undone.
-  socket.on('ready', (roomId, playerId, deck) => {
-    socket.to(hostOf(roomId)).emit('playerReady', playerId, deck);
+  socket.on('ready', (roomId, playerId) => {
+    socket.to(hostOf(roomId)).emit('playerReady', playerId);
   });
 
+
+
   // event from host: both players have locked in their decks: change player's UI to game field, and the player with firstPlayerId starts their round first.
-  // startgame event should prompt player 1 to be able to play
   socket.on('startGame', (roomId, firstPlayerId, secondPlayerId) => { 
     socket.to(firstPlayerId).emit('startGame');
     socket.to(secondPlayerId).emit('startGame');
@@ -130,6 +135,12 @@ io.on('connection', (socket) => { // server is online
   socket.on('playerSacrificeCard', (roomId, playerId, column) => {
     socket.to(hostOf(roomId)).emit('playerSacrificeCard', playerId, column);
   });
+
+  //when a round is over
+  socket.on('endOfRound' , (player1Id, p1Deck ,player2Id, p2Deck) => {
+    socket.to(player1Id).emit('endOfRound',p1Deck);
+    socket.to(player2Id).emit('endOfRound',p2Deck);
+  })
 
   // event from host: the game has ended, the specified player display that they won, the other player that they lost.
   socket.on('endGame', (winnerPlayerId, loserPlayerId) => {

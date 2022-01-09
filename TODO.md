@@ -15,8 +15,6 @@
 
 ## Cool things to have
 
-[ ] 
-
 [ ] Assets for the game
 
 [ ] Some sort of feedback for sacc´ing cards
@@ -24,7 +22,6 @@
 [ ] Show when its your turn more clearly
 
 [ ] Improved sleep display
-
 
 ## Done
 
