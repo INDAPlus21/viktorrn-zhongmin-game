@@ -3,8 +3,7 @@
 
 ## Prio
 
-
-[ ] More than one match, best of 5
+[ ] More than one match, best of 3
 
 [ ] Deslect Cards
 
@@ -13,8 +12,6 @@
 [ ] Make it clearer that you can only have 4 blood
 
 [ ] ReArrange hand functionality
-
-[ ] Fix bug where mulitple scavenger cards gets played, and on the wrong slot
 
 ## Cool things to have
 

@@ -178,13 +178,6 @@
                 ,"amulets":["Scavenger","Flying"]
                 ,"imgSrc":""
             } 
-            ,{  "name":"Giant Maggot"
-                ,"damage":0
-                ,"health":3
-                ,"cost":1
-                ,"amulets":["Scavenger","High Block"]
-                ,"imgSrc":""
-            }
             ,{  "name":"Blade Dancer"
                 ,"damage":1
                 ,"health":2
@@ -226,10 +219,6 @@
     ,"Bat"
 
     ,"Toad"
-    ,"Oak"
-    ,"Vulture"
-    ,"Hyena"
-    ,"Giant Maggot"
     ,"Blade Dancer"
     
 ]

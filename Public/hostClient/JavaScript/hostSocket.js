@@ -1,6 +1,6 @@
 import * as UIHandler from './uiHandler.js';
 import * as DataManagerImport from '../../dataManager/dataManager.js';
-import * as AnimationHandler from './animations.js';
+import * as AnimationHandler from '../../dataManager/animations.js';
 
 let socket = io(); // event listener/emitter
 let socketId; // the client's unique id for the socket connection
@@ -465,13 +465,15 @@ socket.on('connect', () => {// run this when connected
 
 // SEPARATOR - You are now entering Not Socket
 
-async function onCardDieEvent(playerObj,playerBoard,c){
-  playerBoard[c] = null;
-  for(let c in playerObj.hand){
-    for(let a of playerObj.hand[c].amulets){
+async function onCardDieEvent(playerObj,playerBoard,col){
+  playerBoard[col] = null;
+  for(let s in playerObj.hand){
+    for(let a of playerObj.hand[s].amulets){
       if(a === "Scavenger"){
         console.log("found scavenger")
-        playerBoard[c] = playerObj.hand[c];
+        playerBoard[col] = playerObj.hand[s];
+        playerObj.hand.splice(s,1)
+        return true;
       }
     }
   }
