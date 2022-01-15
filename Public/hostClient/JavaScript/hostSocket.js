@@ -19,6 +19,9 @@ let lobbyData = {
   GAMESTATE: 'lobby'
 }
 
+
+
+
 let boardInfo = {
   player1: [
     null,
@@ -35,8 +38,6 @@ let boardInfo = {
   turn: 0,
   p1damage: 0,
   p2damage: 0
-
-
 }
 
 let UI_Handler = new UIHandler.UIHandler($('cardSelectionPage'),$('cardPickZone'));
@@ -182,6 +183,8 @@ socket.on('connect', () => {// run this when connected
         let other = starting == 1 ? 2 : 1;
         
         //setting data
+        playerInfo['player'+starting].hand = [];
+        playerInfo['player'+other].hand = [];
         playerInfo['player'+starting].blood = 0;
         playerInfo['player'+other].blood = 1;
         playerInfo['player'+starting].statusEffects = [];
@@ -189,6 +192,8 @@ socket.on('connect', () => {// run this when connected
         
         boardInfo.p1damage = playerMaxHealth;
         boardInfo.p2damage = playerMaxHealth;
+        boardInfo.player1 = [null,null,null,null];
+        boardInfo.player2 = [null,null,null,null];
         
         playerInfo.player1.remainingDeck = shuffle(cloneObject(playerInfo.player1.originalDeck));
         playerInfo.player2.remainingDeck = shuffle(cloneObject(playerInfo.player2.originalDeck));
@@ -483,9 +488,10 @@ socket.on('connect', () => {// run this when connected
 
     await new Promise(r => setTimeout(r, 1000)); // wait 1 sec
 
+    
     if (boardInfo.p2damage <= 0) {
-      boardInfo.p1Wins += 1;
-      if(boardInfo.p1Wins >= 2)
+      lobbyData.p1Wins += 1;
+      if(lobbyData.p1Wins >= 2)
       socket.emit('endGame', playerInfo.player1.id, playerInfo.player2.id);
       else{
         endRound(socket);
@@ -494,8 +500,8 @@ socket.on('connect', () => {// run this when connected
     } 
     
     if (boardInfo.p1damage <= 0) {
-      boardInfo.p2Wins += 1;
-      if(boardInfo.p2Wins >= 2)
+      lobbyData.p2Wins += 1;
+      if(lobbyData.p2Wins >= 2)
         socket.emit('endGame', playerInfo.player2.id, playerInfo.player1.id);
       else{
         endRound(socket);

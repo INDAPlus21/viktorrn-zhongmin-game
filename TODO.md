@@ -3,8 +3,6 @@
 
 ## Prio
 
-[ ] More than one match, best of 3
-
 [ ] Deslect Cards
 
 [ ] Cards left in deck counter
@@ -24,6 +22,8 @@
 [ ] Improved sleep display
 
 ## Done
+
+[X] More than one match, best of 3
 
 [X] Add background Music
 
