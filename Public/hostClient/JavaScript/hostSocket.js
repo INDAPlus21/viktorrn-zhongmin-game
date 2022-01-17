@@ -1,6 +1,7 @@
 import * as UIHandler from './uiHandler.js';
 import * as DataManagerImport from '../../dataManager/dataManager.js';
 import * as AnimationHandler from '../../dataManager/animations.js';
+import * as VixiAI from './vixiAI.js';
 
 let socket = io(); // event listener/emitter
 let socketId; // the client's unique id for the socket connection
@@ -16,10 +17,9 @@ let lobbyData = {
   p2Ready: false,
   p1Wins: 0,
   p2Wins: 0,
-  GAMESTATE: 'lobby'
+  GAMESTATE: 'lobby',
+  currentMode: 0  //0 is pvp, 1 is pve
 }
-
-
 
 
 let boardInfo = {
@@ -86,15 +86,34 @@ window.onload = async function(){
     UI_Handler.displayBoard(dummyBoard)
 
     $('spawnEffect').onpointerdown = () =>{
-      
       AnimationHandler.displayAttack(getCardFromBoard(2,0),getCardFromBoard(1,0),12,2);
   }*/
+
   $('pleaseClickOnThisForAudio').addEventListener('mousedown', function () {
     $('pleaseClickOnThisForAudio').remove();
     playBgm('cabin');
   })
-  });
-  
+  }); 
+}
+
+function toggleLobbyMode(dir){
+  lobbyData.currentMode = Math.abs( (lobbyData.currentMode + dir) % 2 );
+  switch(lobbyData.currentMode){
+    case 0:
+        $('currentMode').innerText = "PvP";
+       
+        if(playerInfo.player1.id == '000'){
+          console.log(playerInfo)
+          onPlayerLeave(playerInfo.player1.id);
+        }
+      break;
+    case 1: 
+        $('currentMode').innerText = "PvE";
+        let playerObj = {name:"Botward", id:'000', originalDeck:[], remainingDeck:[], hand:[], statusEffects:[], blood:0}
+        playerInfo.player1 = playerObj;
+        onPlayerReady(socket,'000');
+      break;
+  }
 }
 
 // socket connection
@@ -107,6 +126,14 @@ socket.on('connect', () => {// run this when connected
     roomId = generated;
     console.log(roomId);
     $('roomCode').innerHTML = `Join the game at:<h1>${roomId.toUpperCase()}</h1>`;
+    
+    $('leftArrow').onpointerdown = () => {
+      toggleLobbyMode(-1);
+    }
+  
+    $('rightArrow').onpointerdown = () => {
+      toggleLobbyMode(1);
+    }
   });
 
   // playerClient's joinRoom -> server's isRoomOpen?
@@ -140,6 +167,10 @@ socket.on('connect', () => {// run this when connected
     }
   })
 
+  socket.on('playerLeftRoom', (playerId) => {
+    onPlayerLeave(playerId);
+  });
+
   socket.on('playerReady', async (playerId) => {
     onPlayerReady(socket,playerId);
   });
@@ -149,7 +180,188 @@ socket.on('connect', () => {// run this when connected
   })
 
   socket.on('playerDrawCard', (playerId, drawnCard) => {
+    onPlayerDrawCard(socket,playerId,drawnCard);
+  });
+
+  socket.on('playerPlayCard', async (playerId, cardIndex, column) => {
+    onPlayerPlayCard(socket,playerId,cardIndex,column);
+  });
+
+  socket.on('playerSacrificeCard', async (playerId,column) =>{
+    onSacrificeCard(socket,playerId,column);
+  });
+
+  // big calculations in here!!!!
+  socket.on('playerEndTurn', async (playerId) => {
+    onPlayerEndTurn(socket,playerId);
+  });
+
+});
+
+// X----------------X
+// | Util functions |
+// X----------------X
+
+function isPlayer (playerId) {
+  //if(playerInfo.player1 == undefined && playerInfo.player2 == undefined) return false;
+  if (playerInfo.player1.id == playerId) return 1;
+  else if (playerInfo.player2.id == playerId) return 2;
+  else return false;
+}
+
+function shuffle (array) {
+  let currentIndex = array.length,  randomIndex;
+
+  // While there remain elements to shuffle...
+  while (currentIndex != 0) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+
+  return array;
+}
+
+// X- - - - - - - - -X
+// | input functions |
+// X- - - - - - - - -X
+
+export async function onPlayerReady(socket,playerId){
+  try{
+    
+    if (isPlayer(playerId)===1) {
+      $('player1State').innerHTML = `<span>${playerInfo.player1.name}</span><br><b>READY!</b>`
+      lobbyData.p1Ready = true;
+    }
+
+    if (isPlayer(playerId)===2) {
+      $('player2State').innerHTML = `<span>${playerInfo.player2.name}</span><br><b>READY!</b>`
+      lobbyData.p2Ready = true;
+    }
+
+  // check if game can start // cheep as error handling, yes box
+  
+    if (lobbyData.p1Ready && lobbyData.p2Ready) {
+      lobbyData.currentRound += 1;
+      boardInfo.turn = 0;
+
+      let starting = Math.ceil(Math.random()*2);
+      let other = starting == 1 ? 2 : 1;
+      
+      //setting data
+      playerInfo['player'+starting].hand = [];
+      playerInfo['player'+other].hand = [];
+      playerInfo['player'+starting].blood = 0;
+      playerInfo['player'+other].blood = 1;
+      playerInfo['player'+starting].statusEffects = [];
+      playerInfo['player'+other].statusEffects = [];
+      
+      boardInfo.p1damage = playerMaxHealth;
+      boardInfo.p2damage = playerMaxHealth;
+      boardInfo.player1 = [ null , null , null , null ];
+      boardInfo.player2 = [ null , null , null , null ];
+      
+      playerInfo.player1.remainingDeck = shuffle(cloneObject(playerInfo.player1.originalDeck));
+      playerInfo.player2.remainingDeck = shuffle(cloneObject(playerInfo.player2.originalDeck));
+
+      // both players draw 4 cards to put in their hand
+      for (let i in [1,2,3]) {
+        drawOneCard(playerInfo.player1);
+        drawOneCard(playerInfo.player2);
+      }
+
+      playerInfo.player1.hand.push(DataManager.getSpecificCard('Human'));
+      playerInfo.player2.hand.push(DataManager.getSpecificCard('Human'));
+      //starts with giving player 1 the cards and then prompting
+      UI_Handler.displayBoard(boardInfo,columnAmount,playerInfo);
+
+      await socket.emit('startGame', roomId, playerInfo['player'+starting].id, playerInfo['player'+other].id);
+      
+      await socket.emit('syncClient', playerInfo.player1, boardInfo.player1,true);
+      await socket.emit('syncClient', playerInfo.player2, boardInfo.player2,true);
+      
+      if(playerInfo['player'+starting].id == '000') {
+        VixiAI.takeTurn(playerInfo,boardInfo)
+      }
+      else {
+        await socket.emit('startTurn', playerInfo['player'+starting].id, 0);
+      }
+      
+      lobbyData.GAMESTATE = 'ingame';
+      
+      $('bodyPregame').classList.remove('onscreen');
+      $('bodyIngame').classList.add('onscreen');
+      // bgm change
+      pauseBgm('cabin');
+      playBgm('trapper');
+    }
+  }catch (error) {
+    console.log(error);
+    console.log(playerInfo);
+  }
+}
+
+export async function onPlayerLeave(socket,playerId){
+  let player = 1;
+  console.log("player",player)
+  if(!player) return;
+  delete playerInfo['player'+player];
+  if(lobbyData.GAMESTATE === "lobby"){
+    $('player'+player+'State').innerHTML = "Waiting...";
+  }
+}
+
+export async function onPlayerSelectedCards(playerId, deck){
+  console.log("player Selected cards",deck,playerId)
+  if (isPlayer(playerId)===1) {
+    for(let c of deck) playerInfo.player1.originalDeck.push(c);
+  }
+  if (isPlayer(playerId)===2) {
+    for(let c of deck) playerInfo.player2.originalDeck.push(c);
+  }
+}
+
+export async function onSacrificeCard(socket, playerId, column){
+  try{
+    //console.log("player sacrificed card on col",column)
     let i = isPlayer(playerId);
+    //sigil check
+    let card = boardInfo['player'+i][column];
+    let removeCard =  true;
+    card.lastSacrificedOnTurn = boardInfo.turn;
+    for(let a of card.amulets){
+      switch(a){
+        case "Rebirth":
+          card.health -=1;
+          if(card.health > 0)
+            removeCard = false;
+          break;
+      }
+    }
+
+    if(removeCard){
+      await removePlayerStatusEffect(playerInfo['player'+i],boardInfo['player'+i],column);
+      boardInfo['player'+i][column] = null;
+    }
+    
+    if(playerInfo['player'+i].blood < 4) playerInfo['player'+i].blood += 1;
+    
+    socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i],true  /* this boolean makes the player client redraw their hand as well as blood */);
+    
+    UI_Handler.displayBoard(boardInfo,columnAmount,playerInfo);
+
+  }catch(error){
+    console.log("error",error)
+  }
+} 
+
+export async function onPlayerDrawCard(socket, playerId, drawnCard){
+  let i = isPlayer(playerId);
     if(drawnCard == 'Human'){ 
       playerInfo['player'+i].hand.push(DataManager.getSpecificCard('Human'));}
     else{
@@ -161,13 +373,11 @@ socket.on('connect', () => {// run this when connected
       if(e === "Hound Master" && playerInfo['player'+i].hand.length < 7){playerInfo['player'+i].hand.push(DataManager.getSpecificCard('Blood Beast'));}
     }
 
-    socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i], true  /* this boolean makes the player client redraw their hand as well as blood */); // refresh the client with new data
-    
-  });
+    if(playerId != "000") socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i], true  /* this boolean makes the player client redraw their hand as well as blood */); // refresh the client with new data
+}
 
-  socket.on('playerPlayCard', async (playerId, cardIndex, column) => {
-    
-    let i = isPlayer(playerId); // get which player it is
+export async function onPlayerPlayCard(socket, playerId, cardIndex, column){
+  let i = isPlayer(playerId); // get which player it is
     let card = playerInfo['player'+i].hand[cardIndex]; // get the card that is being played
     let n = i===1 ? 2 : 1;
     playerInfo['player'+i].blood -=  playerInfo['player'+i].hand[cardIndex].cost; //charge the cards cost
@@ -204,47 +414,13 @@ socket.on('connect', () => {// run this when connected
     boardInfo['player'+i][column] = card; // add that card to the board
     //delete boardInfo['player'+i][column].cost; // cost is irrelevant to boardInfo since it's already placed out
 
-    socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i],true  /* this boolean makes the player client redraw their hand as well as blood */); // refresh the client with new data
+    if(playerId != "000") socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i],true  /* this boolean makes the player client redraw their hand as well as blood */); // refresh the client with new data
+    
     UI_Handler.displayBoard(boardInfo,columnAmount,playerInfo);
-  });
+}
 
-  socket.on('playerSacrificeCard', async (playerId,column) =>{
-    try{
-      //console.log("player sacrificed card on col",column)
-      let i = isPlayer(playerId);
-      //sigil check
-      let card = boardInfo['player'+i][column];
-      let removeCard =  true;
-      card.lastSacrificedOnTurn = boardInfo.turn;
-      for(let a of card.amulets){
-        switch(a){
-          case "Rebirth":
-            card.health -=1;
-            if(card.health > 0)
-              removeCard = false;
-            break;
-        }
-      }
-
-      if(removeCard){
-        await removePlayerStatusEffect(playerInfo['player'+i],boardInfo['player'+i],column);
-        boardInfo['player'+i][column] = null;
-      }
-      
-      if(playerInfo['player'+i].blood < 4) playerInfo['player'+i].blood += 1;
-      
-      socket.emit('syncClient', playerInfo['player'+i], boardInfo['player'+i],true  /* this boolean makes the player client redraw their hand as well as blood */);
-      
-      UI_Handler.displayBoard(boardInfo,columnAmount,playerInfo);
-
-    }catch(error){
-      console.log("error",error)
-    }
-  });
-
-  // big calculations in here!!!!
-  socket.on('playerEndTurn', async (playerId) => {
-    let atkingPlayer = isPlayer(playerId); // get which player it is
+export async function onPlayerEndTurn(socket, playerId){
+  let atkingPlayer = isPlayer(playerId); // get which player it is
     let atkedPlayer = atkingPlayer===1 ? 2 : 1; // get the number of the opposite player
 
     for (let col=0; col<columnAmount; col++) { // loop through all 4 columns
@@ -386,141 +562,9 @@ socket.on('connect', () => {// run this when connected
       socket.emit('syncClient', playerInfo['player'+atkingPlayer], boardInfo['player'+atkingPlayer],true);
       socket.emit('startTurn', playerInfo['player'+atkedPlayer].id, boardInfo.turn);
     
-  });
-
-});
-
-// X----------------X
-// | Util functions |
-// X----------------X
-
-function isPlayer (playerId) {
-  if (playerInfo.player1.id === playerId) return 1;
-  else if (playerInfo.player2.id === playerId) return 2;
-  else return false;
-}
-
-function shuffle (array) {
-  let currentIndex = array.length,  randomIndex;
-
-  // While there remain elements to shuffle...
-  while (currentIndex != 0) {
-
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-
-    // And swap it with the current element.
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex], array[currentIndex]];
-  }
-
-  return array;
-}
-
-// X- - - - - - - - -X
-// | input functions |
-// X- - - - - - - - -X
-
-export async function onPlayerReady(socket,playerId){
-  try{
-    
-    if (isPlayer(playerId)===1) {
-      $('player1State').innerHTML = `<span>${playerInfo.player1.name}</span><br><b>READY!</b>`
-      lobbyData.p1Ready = true;
-    }
-
-    if (isPlayer(playerId)===2) {
-      $('player2State').innerHTML = `<span>${playerInfo.player2.name}</span><br><b>READY!</b>`
-      lobbyData.p2Ready = true;
-    }
-
-  // check if game can start // cheep as error handling, yes box
-  
-    if (lobbyData.p1Ready && lobbyData.p2Ready) {
-      lobbyData.currentRound += 1;
-      boardInfo.turn = 0;
-
-      let starting = Math.ceil(Math.random()*2);
-      let other = starting == 1 ? 2 : 1;
-      
-      //setting data
-      playerInfo['player'+starting].hand = [];
-      playerInfo['player'+other].hand = [];
-      playerInfo['player'+starting].blood = 0;
-      playerInfo['player'+other].blood = 1;
-      playerInfo['player'+starting].statusEffects = [];
-      playerInfo['player'+other].statusEffects = [];
-      
-      boardInfo.p1damage = playerMaxHealth;
-      boardInfo.p2damage = playerMaxHealth;
-      boardInfo.player1 = [ null , null , null , null ];
-      boardInfo.player2 = [ null , null , null,null];
-      
-      playerInfo.player1.remainingDeck = shuffle(cloneObject(playerInfo.player1.originalDeck));
-      playerInfo.player2.remainingDeck = shuffle(cloneObject(playerInfo.player2.originalDeck));
-
-      // both players draw 4 cards to put in their hand
-      for (let i in [1,2,3]) {
-        drawOneCard(playerInfo.player1);
-        drawOneCard(playerInfo.player2);
-      }
-
-      playerInfo.player1.hand.push(DataManager.getSpecificCard('Human'));
-      playerInfo.player2.hand.push(DataManager.getSpecificCard('Human'));
-      //starts with giving player 1 the cards and then prompting
-      UI_Handler.displayBoard(boardInfo,columnAmount,playerInfo);
-
-      await socket.emit('startGame', roomId, playerInfo['player'+starting].id, playerInfo['player'+other].id);
-      await socket.emit('syncClient', playerInfo.player1, boardInfo.player1,true);
-      await socket.emit('syncClient', playerInfo.player2, boardInfo.player2,true);
-      await socket.emit('startTurn', playerInfo['player'+starting].id, 0);
-      
-      lobbyData.GAMESTATE = 'ingame';
-      
-      $('bodyPregame').classList.remove('onscreen');
-      $('bodyIngame').classList.add('onscreen');
-      // bgm change
-      pauseBgm('cabin');
-      playBgm('trapper');
-    }
-  }catch (error) {
-    console.log(error);
-    console.log(playerInfo);
-  }
-}
-
-export async function onPlayerSelectedCards(playerId, deck){
-  console.log("player Selected cards",deck,playerId)
-  if (isPlayer(playerId)===1) {
-    for(let c of deck) playerInfo.player1.originalDeck.push(c);
-  }
-  if (isPlayer(playerId)===2) {
-    for(let c of deck) playerInfo.player2.originalDeck.push(c);
-  }
-}
-
-export async function onSacrificeCard(socket, playerId, column){
-
-} 
-
-export async function onPlayerDrawCard(socket, playerId, drawnCard){
-
-}
-
-export async function onPlayerPlayCard(socket, playerId, cardIndex, column){
-  
-}
-
-export async function onPlayerEndTurn(socket, playerId){
-
 }
 
 // game functions
-
-function resetMatchData(){
-
-}
 
 async function endRound(socket){
     socket.emit('endOfRound', playerInfo.player1.id, playerInfo.player1.originalDeck, playerInfo.player2.id, playerInfo.player2.originalDeck );
@@ -627,6 +671,7 @@ function getCardFromBoard(playerIndex,col){
 
 //neccessary Util functions
 export function $(el) { return document.getElementById(el) };
+
 export function getOffset( el ) {
     var _x = 0;
     var _y = 0;
