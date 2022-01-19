@@ -219,7 +219,7 @@
     ,"Bat"
 
     ,"Toad"
-    ,"Blade Dancer"
+    
     
 ]
 ,"startingRareCards":[
@@ -233,6 +233,7 @@
 ]
 ,"OutOfOrderAtmList":[
     "THis list is used so I dont have to keep track of cards in my head when in testing new cards"
+    ,"Blade Dancer"
     
 ]
 ,"amuletDescriptions":[

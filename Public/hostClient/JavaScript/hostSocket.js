@@ -9,7 +9,8 @@ let roomId; // room id
 let playerInfo = new Object();
 
 let columnAmount = 4;
-let playerMaxHealth = 1;//12
+let playerMaxHealth = 12;
+let amountOfHumanCards = 15;
 
 let lobbyData = {
   currentRound: 0,
@@ -109,7 +110,14 @@ function toggleLobbyMode(dir){
       break;
     case 1: 
         $('currentMode').innerText = "PvE";
-        let playerObj = {name:"Botward", id:'000', originalDeck:[], remainingDeck:[], hand:[], statusEffects:[], blood:0}
+
+        let cards = [ "Blood Beast" , "Frank" , "Cadaver" ];
+        let deck = [];
+        for(let c of cards){
+          deck.push(DataManager.getSpecificCard(c));
+        }
+        let playerObj = {name:"Botward", id:'000', originalDeck:deck, remainingDeck:[], hand:[], statusEffects:[], blood:0}
+        
         playerInfo.player1 = playerObj;
         onPlayerReady(socket,'000');
       break;
@@ -260,6 +268,8 @@ export async function onPlayerReady(socket,playerId){
       playerInfo['player'+other].blood = 1;
       playerInfo['player'+starting].statusEffects = [];
       playerInfo['player'+other].statusEffects = [];
+      playerInfo['player'+starting].humanCards = amountOfHumanCards;
+      playerInfo['player'+other].humanCards = amountOfHumanCards;
       
       boardInfo.p1damage = playerMaxHealth;
       boardInfo.p2damage = playerMaxHealth;
@@ -286,7 +296,8 @@ export async function onPlayerReady(socket,playerId){
       await socket.emit('syncClient', playerInfo.player2, boardInfo.player2,true);
       
       if(playerInfo['player'+starting].id == '000') {
-        VixiAI.takeTurn(playerInfo,boardInfo)
+        VixiAI.takeTurn( cloneObject(playerInfo) , cloneObject(boardInfo) )
+        onPlayerEndTurn(socket,'000')
       }
       else {
         await socket.emit('startTurn', playerInfo['player'+starting].id, 0);
@@ -561,6 +572,10 @@ export async function onPlayerEndTurn(socket, playerId){
       socket.emit('syncClient', playerInfo['player'+atkedPlayer], boardInfo['player'+atkedPlayer],true);
       socket.emit('syncClient', playerInfo['player'+atkingPlayer], boardInfo['player'+atkingPlayer],true);
       socket.emit('startTurn', playerInfo['player'+atkedPlayer].id, boardInfo.turn);
+      if(playerInfo['player'+atkedPlayer].id == '000') {
+        let actions = await VixiAI.takeTurn( cloneObject(playerInfo) , cloneObject(boardInfo) );
+        onPlayerEndTurn(socket,playerInfo['player'+atkedPlayer].id)
+      }
     
 }
 
