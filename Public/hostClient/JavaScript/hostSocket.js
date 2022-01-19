@@ -111,7 +111,7 @@ function toggleLobbyMode(dir){
     case 1: 
         $('currentMode').innerText = "PvE";
 
-        let cards = [ "Blood Beast" , "Frank" , "Cadaver" ];
+        let cards = [ "Blood Beast" , "Frank" , "Bow Man" , "Cannon" ];
         let deck = [];
         for(let c of cards){
           deck.push(DataManager.getSpecificCard(c));
@@ -639,18 +639,18 @@ async function runOnPlayedAmulets(card,playerBoard,opposingBoard,column,wasMirro
   for(let a of card.amulets){
     switch(a){
       case"Shield":
-        if(card.shieldBroken != undefined)return
+        if(card.shieldBroken != undefined) continue; 
         card.shieldBroken = false;      
         break;
       case 'Mirror':
         card.health = 2;
         card.damage = 2;
         card.amulets = [];
-        if(opposingBoard[column] == null)return;
+        if(opposingBoard[column] == null) continue; 
           card.health = opposingBoard[column].health;
           card.damage = opposingBoard[column].damage;
           card.amulets = opposingBoard[column].amulets;
-        if(wasMirrorAmulet === true) return 
+        if(wasMirrorAmulet === true) continue; 
         runOnPlayedAmulets(card,playerBoard,opposingBoard,column,true);
         break;
       case 'Marching':

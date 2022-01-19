@@ -83,7 +83,7 @@ window.onload = function(){
         UI_Handler.returnHandCard()
         currentlyYourTurn = true;
         currentTurn = turn;
-        if(turn !== 0){
+        if(turn > 1){
             UI_Handler.displayActionSlots('chooseCard',playerData.deck,[],playerData.hand);
             playerPickingCard = true;
         }else{
