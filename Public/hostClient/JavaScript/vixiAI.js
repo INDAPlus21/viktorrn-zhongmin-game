@@ -1,16 +1,69 @@
 
 export async function takeTurn(playerInfo,boardInfo,turn){
+    /*
+        Behaviour milestones:
+        
+        Score cards in hand [X]
+
+        Fix if should pull human or beast
+        
+        Value faceAttacking
+        
+        Human Block
+
+        Check if next card in line solves issue
+        
+        Evaluate if should sacc own cards
+
+        ---> Make A function that compares cards at will, for quicker debug <---
+
+    */
+
     let actions = [];
-    //  actions
-    //  pull human card
-    //
-    //
-    //
+
     let hand = playerInfo.player1.hand;
     let blood = playerInfo.player1.blood;
     let deck = playerInfo.player1.remainingDeck;
     let yourBoard = boardInfo.player1;
     let enemyBoard = boardInfo.player2;
+
+    
+    //score cards against players 
+
+    let treathMap = calcThreatBoard(enemyBoard,yourBoard);
+    
+    let interactions = [];
+    for(let c in hand){
+        if(hand[c].name == "Human") continue;
+        for(let oc of treathMap){
+            if(oc.score == 0) continue;
+            let score = compareCards(hand[c] , enemyBoard[ oc.col ])
+            interactions.push({card : hand[c], cardIndex : c ,score: score , col: oc.col , oc : enemyBoard[ oc.col ] })
+        }
+    }
+    let foundIndexes = []
+    for(let i = interactions.length-1; i >= 0; i--){
+        let foundAny = false;
+        for(let c of foundIndexes){
+            if(interactions[i].cardIndex == c){
+                interactions.splice(i,1);
+                foundAny = true;
+                break;
+            }
+        }
+        if(!foundAny) {
+            foundIndexes.push(interactions[i].cardIndex)
+        }
+    }
+    sortItems(interactions);
+
+    //clear card dupes
+    
+
+    console.log("threat map post sort",treathMap);
+    console.log("action map", interactions)
+
+
 
     for(let c in hand){
         if(hand[c].name == "Human"){
@@ -18,26 +71,13 @@ export async function takeTurn(playerInfo,boardInfo,turn){
             hand.splice(c,1);
         }
     }
-
+    console.log("blood",blood)
     
     
     /*if(resourcesAmount < findCheapestCard(hand)){
         humanCards += 1;
     }*/
 
-    let treathMap = calcThreatBoard(enemyBoard,yourBoard);
-    
-    let interactions = [];
-    for(let c in hand){
-        for(let oc of treathMap){
-            if(oc.score == 0) continue;
-            let score = compareCards(hand[c] , enemyBoard[ oc.col ])
-            interactions.push({card : hand[c], cardIndex : c ,score: score , col: oc.col , oc : enemyBoard[ oc.col ] })
-        }
-    }
-    sortItems(interactions);
-    console.log("threat map post sort",treathMap);
-    console.log("action map", interactions)
     
     if(interactions.length == 0) return;
     if(blood >= interactions[interactions.length-1].card.cost){
@@ -74,62 +114,14 @@ function calcThreatBoard(enemyBoard,yourBoard){
     return sortItems(threatMap);
 }
 
-function compareCards(yourCard,opposingCard){
-    
-    let score = 0;
-    let damageTimes = 1;
-    let midPoint = opposingCard.cost;
-    let point = yourCard.cost;
-    let canHitFlying = false;
-    let enemyCardFlying = false;
-
-    /*
-        MidPoint: 1
-        EQ:         - (x - 0,5)( x + 1,5)
-                        X: 0,5 = 0  
-                        X: - 1,5 = 0
-    */
-    for(let a of opposingCard.amulets){
-        switch(a){
-            case 'Flying':
-                
-                break;
-        }
-    }
-
-    for(let a of yourCard.amulets){
-        switch(a){
-            case 'rush':
-                damageTimes = 0;
-            break;
-            case 'Reach':
-            case 'Flying':
-                canHitFlying = true;
-                break;
-        }
-    }
-
-    let costScore = 1 - 0.2*(point - midPoint) * (point - midPoint) - 0.1*point
-    console.log("card",yourCard,"opposingCard",opposingCard,"score",costScore)
-    
-    let remainingHP = yourCard.health - opposingCard.damage * damageTimes;
-    let turnsToDie;
-    if(remainingHP > 0)
-    turnsToDie = opposingCard.damage != 0 ? remainingHP / opposingCard.damage 
-                                            : 0 ;
-    else turnsToDie = opposingCard.damage;
-
-    let turnsToKill = yourCard.damage != 0 ? 1 / (opposingCard.health / yourCard.damage) 
-                                            : 0 ; 
-
-
-    
-    
+export function compareCards(yourCard,opposingCard){
+     
     /*
         The cost factor:
 
-        opposing card:      scale: (cost - oc.cost + 1) (cost + oc.cost - 1) 
-
+        opposing card:      scale: K (cost - oc.cost + 1) (cost + oc.cost - 1) - C*cost 
+                                    K used to lower value difference
+                                    C used to favor cheaper cards
 
         Def: efficiantly, cheapest card that wins 
 
@@ -155,15 +147,67 @@ function compareCards(yourCard,opposingCard){
 
     */
 
-    let flyingBonus = 0;
-    if(!canHitFlying && enemyCardFlying) flyingBonus = -0.5
+    let damageTimes = 1;
+    let yourDamage = yourCard.damage;
+    let yourHealth = yourCard.health;
+    let opposingDamage = opposingCard.damage;
+    let opposingHealth = opposingCard.health;
+    let midPoint = opposingCard.cost;
+    let point = yourCard.cost;
+
+    let canHitFlying = false;
+    let enemyCardFlying = false;
+    let yourCardFlying = false;
+
+    for(let a of opposingCard.amulets){
+        switch(a){
+            case 'Flying':
+                enemyCardFlying = true;
+                break;
+        }
+    }
+
+    for(let a of yourCard.amulets){
+        switch(a){
+            case 'rush':
+                damageTimes = 0;
+            break;
+            case 'Flying':
+                yourCardFlying = true;
+            case 'Reach':
+                canHitFlying = true;
+                break;
+        }
+    }
+
+  
+    if( yourCardFlying != enemyCardFlying){ yourDamage = 0; opposingDamage = 0; } 
+    if( enemyCardFlying && canHitFlying){ yourDamage = yourCard.damage }
+
+    let costScore = 1 - 0.2*(point - midPoint) * (point - midPoint) - 0.25*point;
     
+    let remainingHP =  yourHealth - opposingDamage * damageTimes;
+    let turnsToDie;
+    if(remainingHP > 0) turnsToDie = opposingDamage != 0 ? remainingHP / opposingDamage : 0 ;
+    else turnsToDie = opposingDamage;
+
+    let turnsToKill = yourDamage != 0 ? 1 / (opposingHealth / yourDamage)  : 0 ;
+                                            
+    let opportunity = 0;
+    if(enemyCardFlying && !yourCardFlying){
+        if(canHitFlying) opportunity += 0.25 * turnsToKill;
+        else opposingHealth += 0.5*yourCard.damage;
+    } 
     
 
-    let result = (turnsToKill - turnsToDie) + costScore + flyingBonus;
-    score = result;
-    
-    return result; 
+    let score =   0.25 * Math.fround(turnsToKill - turnsToDie) + costScore + opportunity;
+    console.log("card",yourCard,"opposingCard",opposingCard)
+    console.log("costScore",costScore)
+    console.log("opportunity",opportunity)
+    console.log("ttk - ttd",turnsToKill," - ",turnsToDie," = ",0.25*(turnsToKill - turnsToDie))
+    console.log("Final score",score)
+
+    return score; 
 }
 
 function drawOneCard(playerObj) {
