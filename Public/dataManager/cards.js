@@ -103,6 +103,9 @@ export function getCardDiv(card){
             case 'Growth':
                 msg += "GW ";
                 break;
+            case 'Manic':
+                msg += "MN "
+                break;
             default:
                 msg+="";
                 break;

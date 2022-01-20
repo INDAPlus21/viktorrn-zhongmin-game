@@ -113,11 +113,22 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
  z-index: 10;
 }
 
+
+
 #cardShop #cardShopDeck .card{
     position: relative !important;
     display: inline-block !important;
-    margin: 0 20px 0 20px;
+    margin: 0 0 0 -60px;
 
+    transition: bottom 0.2s, margin 0.75s, box-shadow 0.4s;
+    transition-timing-function: cubic-bezier(0,.95,.25,1);
+
+}
+
+#cardShop #cardShopDeck .card:hover{
+    top:-20px;
+    margin: 0 45px 0 -15px;
+    z-index: 6;
 }
 
 #cardShop .card{

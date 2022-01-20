@@ -21,12 +21,14 @@ let currentTurn;
 let cardsSlected;
 let cardsLeftToSelect;
 
+let rareCards;
+let regularCards;
+
 window.onload = function(){
     DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager,(Manager = DataManager) => {
 
         cardsSlected = [];
-        displayCardShop(1);
-
+        setCardPools();
         $('handPoint').classList.add('displaying');
         $('endTurnBtn').onpointerdown = endTurn;
         $('sacrificeCardBtn').onpointerdown = ()=> {UI_Handler.suggestSacrifices(getPlayerData().board);}
@@ -48,7 +50,7 @@ window.onload = function(){
                 $('login').classList.remove('onscreen');
                 $('cardShop').classList.add('onscreen');
                 $('playerName').innerText = playerName;
-
+                displayCardShop(1);
                 //cardsSlected = [{cardName:"Frank"},{cardName:"Frank"},{cardName:"Armoury"},{cardName:"Undead"}];
                 //displayCardShop(3);
             }
@@ -81,7 +83,7 @@ window.onload = function(){
         UI_Handler.returnHandCard()
         currentlyYourTurn = true;
         currentTurn = turn;
-        if(turn !== 0){
+        if(turn > 1){
             UI_Handler.displayActionSlots('chooseCard',playerData.deck,[],playerData.hand);
             playerPickingCard = true;
         }else{
@@ -92,6 +94,11 @@ window.onload = function(){
         $('sacrificeCardBtn').classList.add('displaying');
         
     });
+
+    socket.on("endOfRound",(deck)=>{
+        displayCardShop(4);
+        console.log("ready to display cardShop",deck);
+    })
     
     socket.on('youWin', () => {
         $('playArea').classList.remove('onscreen');
@@ -108,17 +115,19 @@ window.onload = function(){
 }
 
 //code for card picking
-
+function setCardPools(){
+    rareCards = shuffle( DataManager.getAllStartingRareCards() );
+    regularCards = shuffle (DataManager.getAllStartingRegularCards() );
+}
 
 function displayCardShop(stage){
+    $('cardShop').classList.add('onscreen');
+    $('playArea').classList.remove('onscreen');
     clearElement($('itemPage'))
-    let rareCards = shuffle( DataManager.getAllStartingRareCards() );
-    let regularCards = shuffle (DataManager.getAllStartingRegularCards() );
-    
     switch(stage){
         case 1:
-            let shf1 = document.createElement('div');
-            shf1.classList.add('shelf');
+            let shf0 = document.createElement('div');
+            shf0.classList.add('shelf');
             cardsLeftToSelect = 1;
       
 
@@ -133,30 +142,30 @@ function displayCardShop(stage){
                     displayCardShop(stage);
                 }
 
-                shf1.appendChild(c);
+                shf0.appendChild(c);
                 if(i==0){
                     let text = document.createElement('div')
                     text.innerText = "or";
                     text.classList.add('shelfTextDiv');
-                    shf1.appendChild(text)
+                    shf0.appendChild(text)
                 }
             }
-            $('itemPage').appendChild(shf1);
+            $('itemPage').appendChild(shf0);
 
             break;
         case 2:
-            let shf2 = document.createElement('div');
-            cardsLeftToSelect = 6;
-            shf2.classList.add('shelf'); 
+            let shf1 = document.createElement('div');
+            cardsLeftToSelect = 2; //5
+            shf1.classList.add('shelf'); 
             
-            let shf3 = document.createElement('div');
-            shf3.classList.add('shelf');
+            let shf2 = document.createElement('div');
+            shf2.classList.add('shelf');
             
             let text = document.createElement('div');
             text.classList.add('shelfHeader');
             text.id = "text";
             text.innerText = "You Need to select "+cardsLeftToSelect + " more cards"
-            shf3.appendChild(text);
+            shf2.appendChild(text);
 
             for(let i in [1,2,3,4,5,6]){
                 if(regularCards.length > 0){
@@ -193,12 +202,12 @@ function displayCardShop(stage){
                             displayCardShop(stage);
                         }
                     }
-                    shf2.appendChild(c);
+                    shf1.appendChild(c);
                 }
 
             }
-            $('itemPage').appendChild(shf3);
             $('itemPage').appendChild(shf2);
+            $('itemPage').appendChild(shf1);
             break;
 
         case 3:
@@ -206,8 +215,94 @@ function displayCardShop(stage){
             break;
 
         case 4:
-            
+            setCardPools();
+            let shf4 = document.createElement('div');
+            shf4.classList.add('shelf');
+            cardsLeftToSelect = 1;
+      
+
+            for(let i in [1,2]){
+                let c = Card.getCardDiv(rareCards.shift());
+                
+                c.onpointerdown = () =>{
+                    let cd = {cardName:c.getAttribute('cardName'),cardDiv:c.cloneNode(true)}
+                    cardsSlected.push(cd);
+                    drawDeck(cardsSlected);
+                    stage+=1;
+                    displayCardShop(stage);
+                }
+
+                shf4.appendChild(c);
+                if(i==0){
+                    let text = document.createElement('div')
+                    text.innerText = "or";
+                    text.classList.add('shelfTextDiv');
+                    shf4.appendChild(text)
+                }
+            }
+            $('itemPage').appendChild(shf4);
+
             break;
+
+            case 5:
+                let shf5 = document.createElement('div');
+                cardsLeftToSelect = 3;
+                shf5.classList.add('shelf'); 
+                
+                let shf6 = document.createElement('div');
+                shf6.classList.add('shelf');
+                
+                let text2 = document.createElement('div');
+                text2.classList.add('shelfHeader');
+                text2.id = "text";
+                text2.innerText = "You Need to select "+cardsLeftToSelect + " more cards"
+                shf6.appendChild(text2);
+    
+                for(let i in [1,2,3,4,5,6]){
+                    if(regularCards.length > 0){
+                        let c = Card.getCardDiv(regularCards.shift());
+                        c.setAttribute('timesSelected',0);
+                        c.onpointerdown=()=>{
+                            cardsLeftToSelect -= 1;
+                            $('text').innerText = "You Need to select "+cardsLeftToSelect + " more cards";
+                            console.log("cardsLeft",cardsLeftToSelect);
+                            c.style.transform = "scale(1.1)";
+                            
+                            let timer = setInterval(()=>{
+                                c.style.transform = '';
+                                clearInterval(timer);
+                            },300)
+    
+                            let cd = {cardName:c.getAttribute('cardName'),cardDiv:c.cloneNode(true)}
+                            cardsSlected.push(cd);
+                            
+                            drawDeck(cardsSlected);
+    
+                            if(c.getAttribute('timesSelected') < 1){
+                                c.setAttribute('timesSelected',1);
+    
+                            }else{
+                                c.onpointerdown = null;
+                                c.style.opacity = '0';
+                            }
+    
+                           
+    
+                            if(cardsLeftToSelect <= 0){
+                                stage+=1;
+                                displayCardShop(stage);
+                            }
+                        }
+                        shf5.appendChild(c);
+                    }
+    
+                }
+                $('itemPage').appendChild(shf6);
+                $('itemPage').appendChild(shf5);
+                break;
+            case 6:
+                doneWithStartingCards(cardsSlected);
+                break;
     }
 }
 
@@ -233,7 +328,9 @@ export function doneWithStartingCards(cards){
     for(let i in cards){
         deck.push(DataManager.getSpecificCard(cards[i].cardName))
     }
-    socket.emit('ready', roomId, socketId, deck);
+
+    socket.emit('playerSelectedCards', roomId, socketId, deck);
+    socket.emit('ready', roomId, socketId);
     // @viktor at here, maybe change to another section that is just a blank waiting screen
 }
 

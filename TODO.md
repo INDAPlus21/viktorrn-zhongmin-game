@@ -3,9 +3,6 @@
 
 ## Prio
 
-
-[ ] More than one match, best of 5
-
 [ ] Deslect Cards
 
 [ ] Cards left in deck counter
@@ -14,11 +11,7 @@
 
 [ ] ReArrange hand functionality
 
-[ ] Fix bug where mulitple scavenger cards gets played, and on the wrong slot
-
 ## Cool things to have
-
-[ ] 
 
 [ ] Assets for the game
 
@@ -28,8 +21,9 @@
 
 [ ] Improved sleep display
 
-
 ## Done
+
+[X] More than one match, best of 3
 
 [X] Add background Music
 

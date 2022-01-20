@@ -140,3 +140,14 @@ export async function displayAttack(attackingCard,attackedCard,attackedCardData,
     }catch{}
     
 }
+export async function cardServerSidePlayed(){
+
+}
+
+export async function cardServerSideSacrificed(){
+
+}
+
+export async function cardClientSideSacrificed(){
+
+}
