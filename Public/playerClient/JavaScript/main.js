@@ -146,7 +146,7 @@ function displayCardShop(stage){
             break;
         case 2:
             let shf2 = document.createElement('div');
-            cardsLeftToSelect = 5;
+            cardsLeftToSelect = 6;
             shf2.classList.add('shelf'); 
             
             let shf3 = document.createElement('div');
@@ -206,7 +206,7 @@ function displayCardShop(stage){
             break;
 
         case 4:
-
+            
             break;
     }
 }
