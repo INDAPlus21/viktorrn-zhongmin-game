@@ -56,6 +56,29 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
     
 }
 
+/*Help Manual button*/
+#theManual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 75px;
+    height: 75px;
+    background: #eee;
+    border-radius: 8px;
+    z-index: 999;
+}
+#theManual div {
+    width: 70px;
+    height: 70px;
+    background: url("./../assets/help-circle-outline.svg");
+    background-size: contain;
+}
+
+
+
 /*Card styling*/
 
 
