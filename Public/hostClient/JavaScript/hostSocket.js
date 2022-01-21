@@ -2,6 +2,7 @@ import * as UIHandler from './uiHandler.js';
 import * as DataManagerImport from '../../dataManager/dataManager.js';
 import * as AnimationHandler from '../../dataManager/animations.js';
 import * as VixiAI from './vixiAI.js';
+import { textAmulets } from '../../dataManager/cards.js';
 
 let socket = io(); // event listener/emitter
 let socketId; // the client's unique id for the socket connection
@@ -89,6 +90,18 @@ window.onload = async function(){
     $('spawnEffect').onpointerdown = () =>{
       AnimationHandler.displayAttack(getCardFromBoard(2,0),getCardFromBoard(1,0),12,2);
   }*/
+  $('displayCardComparisionPage').onpointerdown = () =>{
+    if($('bodyPregame').classList[0] == 'onscreen'){
+      $('bodyPregame').classList.remove('onscreen');
+      $('cardComparison').classList.add('onscreen');
+    }else{
+      $('bodyPregame').classList.add('onscreen');
+      $('cardComparison').classList.remove('onscreen');
+    }
+  }
+  let hand = ["Frank","Blood Beast"];
+  let cardsToCompareAgainst = ["Frank","Human","Blood Beast"];
+  runCardComparisons(cardsToCompareAgainst,hand);
 
   $('pleaseClickOnThisForAudio').addEventListener('mousedown', function () {
     $('pleaseClickOnThisForAudio').remove();
@@ -121,6 +134,28 @@ function toggleLobbyMode(dir){
         playerInfo.player1 = playerObj;
         onPlayerReady(socket,'000');
       break;
+  }
+}
+
+function runCardComparisons(hand,deck){
+  for(let i in hand) hand[i] = DataManager.getSpecificCard(hand[i]);
+  for(let i in deck) deck[i] = DataManager.getSpecificCard(deck[i]);
+  for(let c of hand){
+    let tr = document.createElement('tr');
+    let td1 = document.createElement('td');
+    td1.innerHTML = c.name + "<br>" + c.damage + "/" +c.health +":"+c.cost + "<br>" + textAmulets(c) + "<br>" + " ";
+    tr.appendChild(td1);
+    let opposingCards = [];
+    for(let oc of deck){
+      opposingCards.push({card : oc, score : VixiAI.compareCards(oc,c)})
+    }
+    VixiAI.sortItems(opposingCards);
+    for(let c of opposingCards){
+      let td2 = document.createElement('td');
+      td2.innerHTML = c.card.name + "<br>" + c.card.damage + "/" +c.card.health +":"+c.card.cost + "<br>" + textAmulets(c.card) + "<br>" + c.score;
+      tr.appendChild(td2);
+    }
+    $('scoreboard').appendChild(tr)
   }
 }
 
@@ -319,7 +354,7 @@ export async function onPlayerReady(socket,playerId){
 
 export async function onPlayerLeave(socket,playerId){
   let player = 1;
-  console.log("player",player)
+  console.log("player",playerId)
   if(!player) return;
   delete playerInfo['player'+player];
   if(lobbyData.GAMESTATE === "lobby"){

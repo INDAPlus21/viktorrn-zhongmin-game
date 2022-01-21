@@ -41,6 +41,8 @@ export async function takeTurn(playerInfo,boardInfo,turn){
             interactions.push({card : hand[c], cardIndex : c ,score: score , col: oc.col , oc : enemyBoard[ oc.col ] })
         }
     }
+    sortItems(interactions);
+    //remove duplicate actions
     let foundIndexes = []
     for(let i = interactions.length-1; i >= 0; i--){
         let foundAny = false;
@@ -55,7 +57,7 @@ export async function takeTurn(playerInfo,boardInfo,turn){
             foundIndexes.push(interactions[i].cardIndex)
         }
     }
-    sortItems(interactions);
+    
 
     //clear card dupes
     
@@ -199,8 +201,8 @@ export function compareCards(yourCard,opposingCard){
         else opposingHealth += 0.5*yourCard.damage;
     } 
     
-
     let score =   0.25 * Math.fround(turnsToKill - turnsToDie) + costScore + opportunity;
+
     console.log("card",yourCard,"opposingCard",opposingCard)
     console.log("costScore",costScore)
     console.log("opportunity",opportunity)
@@ -217,7 +219,7 @@ function drawOneCard(playerObj) {
   }
 
 
-function sortItems(list) {
+export function sortItems(list) {
 	let swapped = true;
 	do {
 		swapped = false;
