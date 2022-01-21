@@ -116,23 +116,36 @@ function calcThreatBoard(enemyBoard,yourBoard){
     return sortItems(threatMap);
 }
 
-export function compareCards(yourCard,opposingCard){
+export function compareCardsOld(yourCard,opposingCard){
     let yourDamage = yourCard.damage;
     let yourHealth = yourCard.health;
     let opposingDamage = opposingCard.damage;
     let opposingHealth = opposingCard.health;
     
-    let damageTimes = 0;
+    //goal: Figure out if I win of lose this duel
+
+    let damageTimes = 1;
+    for(let a of yourCard.amulets){
+        switch(a){
+            case 'Rush':
+                damageTimes = 0;
+            break;
+        }
+    }
 
     let remainingHP =  yourHealth - opposingDamage * damageTimes;
     let turnsToDie;
     
     if(remainingHP > 0) turnsToDie = opposingDamage != 0 ? remainingHP / opposingDamage : 0 ;
-    else turnsToDie = 2*opposingDamage;
+    else turnsToDie = 3*opposingDamage;
 
-    let turnsToKill = yourDamage != 0 ? 1 / (opposingHealth / yourDamage)  : 0 ;
+    let turnsToKill = yourDamage != 0 ? 1.5/ (opposingHealth / yourDamage)  : 0 ;
 
     let score = turnsToKill - turnsToDie;
+
+    console.log("remaining HP",remainingHP)
+    console.log("score",score)
+    console.log("ttk",turnsToKill,"ttd",turnsToDie)
 
     return score;
 }

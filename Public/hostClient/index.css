@@ -316,13 +316,16 @@ section.onscreen {
     -webkit-transition: opacity 0.3s linear, left 0.7s cubic-bezier(0,1,0.5,1), top 0.7s cubic-bezier(1,0,0.5,1);
 }
 
-/*Scoring cards*/
+
 /*Scoreboard*/
+
 #cardComparison #scoreboard{
     position: absolute;
     left:100px;
     top:20px;
     font-size: 2em;
+    overflow-y: scroll !important;
+    height: 100%;
 }
 
 #cardComparison #scoreboard td{

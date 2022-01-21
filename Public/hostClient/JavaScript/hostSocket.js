@@ -108,8 +108,8 @@ window.onload = async function(){
       $('cardComparison').classList.remove('onscreen');
     }
   }
-  let hand = ["Frank","Blood Beast"];
-  let cardsToCompareAgainst = ["Frank","Human","Blood Beast"];
+  let hand = ["Frank","Human","Blood Beast","Bat","Sparrow","Bow Man","Cannon"];
+  let cardsToCompareAgainst = ["Frank","Human","Blood Beast","Bat","Sparrow","Bow Man","Cannon"];
   runCardComparisons(cardsToCompareAgainst,hand);
 
   $('pleaseClickOnThisForAudio').addEventListener('mousedown', function () {
