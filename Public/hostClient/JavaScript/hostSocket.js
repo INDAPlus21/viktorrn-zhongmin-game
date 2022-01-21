@@ -48,6 +48,8 @@ let DataManager = new DataManagerImport.DataManager();
 // background music
 let bgmTrapper = new Audio('./../../assets/Music/trapper.ogg');
 let bgmCabin = new Audio('./../../assets/Music/cabin.ogg');
+bgmTrapper.volume = 0.5;
+bgmCabin.volume = 0.5;
 bgmTrapper.loop = true;
 bgmCabin.loop = true;
 // sfx
@@ -55,6 +57,10 @@ let sfxAttack = new Audio('./../../assets/Music/sfx_attack.ogg');
 let sfxPlace = new Audio('./../../assets/Music/sfx_placecard.ogg');
 let sfxDraw = new Audio('./../../assets/Music/sfx_drawcard.ogg');
 let sfxSac = new Audio('./../../assets/Music/sfx_sacrifice.ogg');
+let sfxEndTurn = new Audio('./../../assets/Music/sfx_endturn.ogg');
+let sfxDmg = new Audio('./../../assets/Music/sfx_facedamage.ogg');
+sfxEndTurn.volume = 0.6;
+sfxDmg.volume = 0.8;
 
 async function playBgm (songName) {
   switch (songName) {
@@ -72,8 +78,10 @@ async function playSfx (sfx) {
   switch (sfx) {
     case 'attack': sfxAttack.play();break;
     case 'playcard': sfxPlace.play();break;
-    case 'drawcard': sfxDraw.play();break; // unused atm
+    case 'drawcard': sfxDraw.play();break;
     case 'sacrifice': sfxSac.play();break;
+    case 'endturn': sfxEndTurn.play();break;
+    case 'facedmg': sfxDmg.play();break;
   }
 }
 
@@ -388,6 +396,7 @@ export async function onSacrificeCard(socket, playerId, column){
 } 
 
 export async function onPlayerDrawCard(socket, playerId, drawnCard){
+  playSfx('drawcard');
   let i = isPlayer(playerId);
     if(drawnCard == 'Human'){ 
       playerInfo['player'+i].hand.push(DataManager.getSpecificCard('Human'));}
@@ -447,6 +456,7 @@ export async function onPlayerPlayCard(socket, playerId, cardIndex, column){
 }
 
 export async function onPlayerEndTurn(socket, playerId){
+  playSfx('endturn');
   let atkingPlayer = isPlayer(playerId); // get which player it is
     let atkedPlayer = atkingPlayer===1 ? 2 : 1; // get the number of the opposite player
 
@@ -513,8 +523,8 @@ export async function onPlayerEndTurn(socket, playerId){
               }
               
             }
-            playSfx('attack');
             await AnimationHandler.displayAttack(getCardFromBoard(atkingPlayer,col),getCardFromBoard(atkedPlayer,col),opposingCard,damage,atkingPlayer,true);
+            playSfx('attack');
             await new Promise(r => setTimeout(r, 500));
 
             if (opposingCard.health <= 0){
@@ -523,8 +533,9 @@ export async function onPlayerEndTurn(socket, playerId){
             }
         
           } else if(damage > 0) {
-            
             await AnimationHandler.displayAttack(getCardFromBoard(atkingPlayer,col),$('p'+atkedPlayer+"SlotIndex"+col),null,damage,atkingPlayer,false);
+            playSfx('attack');
+            playSfx('facedmg');
             boardInfo[`p${atkedPlayer}damage`] -= damage; // if there is no card opposing it OR if this card ignores opposing cards, attack the player
             //console.log(`card: ${thisCard.name} from player ${i} dealt ${thisCard.damage}, total ${boardInfo[`p${i}damage`]}`);
             
