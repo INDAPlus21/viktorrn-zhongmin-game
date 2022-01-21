@@ -2,6 +2,7 @@ import * as UIHandler from './uiHandler.js';
 import * as DataManagerImport from '../../dataManager/dataManager.js';
 import * as AnimationHandler from '../../dataManager/animations.js';
 import * as VixiAI from './vixiAI.js';
+import * as HexAI from './hexAI.js';
 
 let socket = io(); // event listener/emitter
 let socketId; // the client's unique id for the socket connection
@@ -51,7 +52,9 @@ bgmTrapper.loop = true;
 bgmCabin.loop = true;
 // sfx
 let sfxAttack = new Audio('./../../assets/Music/sfx_attack.ogg');
-let sfxPlaceCard = new Audio('./../../assets/Music/sfx_placecard.ogg');
+let sfxPlace = new Audio('./../../assets/Music/sfx_placecard.ogg');
+let sfxDraw = new Audio('./../../assets/Music/sfx_drawcard.ogg');
+let sfxSac = new Audio('./../../assets/Music/sfx_sacrifice.ogg');
 
 async function playBgm (songName) {
   switch (songName) {
@@ -68,7 +71,9 @@ async function pauseBgm (songName) {
 async function playSfx (sfx) {
   switch (sfx) {
     case 'attack': sfxAttack.play();break;
-    case 'playcard': sfxPlaceCard.play();break;
+    case 'playcard': sfxPlace.play();break;
+    case 'drawcard': sfxDraw.play();break; // unused atm
+    case 'sacrifice': sfxSac.play();break;
   }
 }
 
@@ -366,6 +371,7 @@ export async function onSacrificeCard(socket, playerId, column){
     }
 
     if(removeCard){
+      playSfx('sacrifice');
       await removePlayerStatusEffect(playerInfo['player'+i],boardInfo['player'+i],column);
       boardInfo['player'+i][column] = null;
     }
