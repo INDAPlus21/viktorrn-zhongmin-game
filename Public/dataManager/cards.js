@@ -60,6 +60,22 @@ export function getCardDiv(card){
     div.appendChild(cost);
 
     let description = document.createElement('div');
+     
+    description.innerText = textAmulets(card);
+    description.classList.add('description')
+    div.appendChild(description);
+
+    if(card.rarity === "rare") {
+        let bg = document.createElement('div');
+        bg.classList.add('rareCardBackground');
+        div.appendChild(bg);
+      }
+  
+
+    return div;
+}
+
+export function textAmulets(card){
     let msg = "";
     for(let a of card.amulets){
         switch(a){
@@ -69,7 +85,6 @@ export function getCardDiv(card){
             case 'High Block':
                 msg += "HB ";
                 break;
-            
             case 'Shield':
                 msg += "SH ";
                 break;
@@ -112,17 +127,6 @@ export function getCardDiv(card){
         }
         
         
-    } 
-    description.innerText = msg;
-    description.classList.add('description')
-    div.appendChild(description);
-
-    if(card.rarity === "rare") {
-        let bg = document.createElement('div');
-        bg.classList.add('rareCardBackground');
-        div.appendChild(bg);
-      }
-  
-
-    return div;
+    }
+    return msg;
 }

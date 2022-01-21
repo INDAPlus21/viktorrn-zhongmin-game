@@ -41,6 +41,8 @@ export async function takeTurn(playerInfo,boardInfo,turn){
             interactions.push({card : hand[c], cardIndex : c ,score: score , col: oc.col , oc : enemyBoard[ oc.col ] })
         }
     }
+    sortItems(interactions);
+    //remove duplicate actions
     let foundIndexes = []
     for(let i = interactions.length-1; i >= 0; i--){
         let foundAny = false;
@@ -55,7 +57,7 @@ export async function takeTurn(playerInfo,boardInfo,turn){
             foundIndexes.push(interactions[i].cardIndex)
         }
     }
-    sortItems(interactions);
+    
 
     //clear card dupes
     
@@ -115,6 +117,40 @@ function calcThreatBoard(enemyBoard,yourBoard){
 }
 
 export function compareCards(yourCard,opposingCard){
+    let yourDamage = yourCard.damage;
+    let yourHealth = yourCard.health;
+    let opposingDamage = opposingCard.damage;
+    let opposingHealth = opposingCard.health;
+    
+    //goal: Figure out if I win of lose this duel
+
+    let damageTimes = 1;
+    for(let a of yourCard.amulets){
+        switch(a){
+            case 'Rush':
+                damageTimes = 0;
+            break;
+        }
+    }
+
+    let remainingHP =  yourHealth - opposingDamage * damageTimes;
+    let turnsToDie;
+    
+    if(remainingHP > 0) turnsToDie = opposingDamage != 0 ? remainingHP / opposingDamage : 0 ;
+    else turnsToDie = 3*opposingDamage;
+
+    let turnsToKill = yourDamage != 0 ? 1.5/ (opposingHealth / yourDamage)  : 0 ;
+
+    let score = turnsToKill - turnsToDie;
+
+    console.log("remaining HP",remainingHP)
+    console.log("score",score)
+    console.log("ttk",turnsToKill,"ttd",turnsToDie)
+
+    return score;
+}
+
+export function compareCardsOld(yourCard,opposingCard){
      
     /*
         The cost factor:
@@ -158,6 +194,7 @@ export function compareCards(yourCard,opposingCard){
     let canHitFlying = false;
     let enemyCardFlying = false;
     let yourCardFlying = false;
+    let yourCardHasRush = false;
 
     for(let a of opposingCard.amulets){
         switch(a){
@@ -169,8 +206,9 @@ export function compareCards(yourCard,opposingCard){
 
     for(let a of yourCard.amulets){
         switch(a){
-            case 'rush':
+            case 'Rush':
                 damageTimes = 0;
+                yourCardHasRush = true;
             break;
             case 'Flying':
                 yourCardFlying = true;
@@ -196,11 +234,16 @@ export function compareCards(yourCard,opposingCard){
     let opportunity = 0;
     if(enemyCardFlying && !yourCardFlying){
         if(canHitFlying) opportunity += 0.25 * turnsToKill;
-        else opposingHealth += 0.5*yourCard.damage;
+        else opportunity += 0.2*yourCard.damage;
     } 
-    
+    if(yourCardHasRush && yourDamage === opposingHealth) {
+        console.log("instakill rush")
+        opportunity += 0.25; 
+    }
 
-    let score =   0.25 * Math.fround(turnsToKill - turnsToDie) + costScore + opportunity;
+    
+    let score = 0.25 * Math.fround(turnsToKill - turnsToDie) + costScore + opportunity;
+
     console.log("card",yourCard,"opposingCard",opposingCard)
     console.log("costScore",costScore)
     console.log("opportunity",opportunity)
@@ -217,7 +260,7 @@ function drawOneCard(playerObj) {
   }
 
 
-function sortItems(list) {
+export function sortItems(list) {
 	let swapped = true;
 	do {
 		swapped = false;

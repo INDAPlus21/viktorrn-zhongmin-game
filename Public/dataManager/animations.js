@@ -53,17 +53,17 @@ export async function displayAttack(attackingCard,attackedCard,attackedCardData,
         claw.style.left = pos.left - 50 + "px";
         document.body.appendChild(claw);
         let b1 = setInterval(()=>{
-        claw.style.top = pos.top + 20 + "px";
-        claw.style.left = pos.left + 10 + "px";
-        clearInterval(b1)
-        let b2 = setInterval(()=>{
-        claw.style.opacity = "0";
-        clearInterval(b2);
-        let b3 = setInterval(()=>{
-            clearInterval(b3);
-            claw.remove();
-        },500)
-        },300)
+            claw.style.top = pos.top + 20 + "px";
+            claw.style.left = pos.left + 10 + "px";
+            clearInterval(b1)
+            let b2 = setInterval(()=>{
+                claw.style.opacity = "0";
+                clearInterval(b2);
+                let b3 = setInterval(()=>{
+                    clearInterval(b3);
+                    claw.remove();
+                },500)
+            },300)
         },10)
 
         //damage number
