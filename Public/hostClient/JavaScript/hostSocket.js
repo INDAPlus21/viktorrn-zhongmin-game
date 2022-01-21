@@ -278,6 +278,19 @@ socket.on('connect', () => {// run this when connected
     onPlayerEndTurn(socket,playerId);
   });
 
+  // incoming chat msg from a player
+  socket.on('chat', async (playerId,msg) => {
+    switch (isPlayer(playerId)) {
+      case 1:
+        // do ya thing, funky scrybe
+        console.log('Player 1 sent: '+msg);
+        break;
+      case 2:
+        console.log('Player 2 sent: '+msg);
+        break;
+    }
+  });
+
 });
 
 // X----------------X

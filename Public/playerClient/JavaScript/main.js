@@ -24,7 +24,16 @@ let cardsLeftToSelect;
 let rareCards;
 let regularCards;
 
+function fix(txt) { // strips off bad characters, mostly for chat
+    return txt.replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 window.onload = function(){
+
     DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager,(Manager = DataManager) => {
 
         cardsSlected = [];
@@ -67,6 +76,22 @@ window.onload = function(){
             }
         });
     }
+
+    // the chat send thing
+    $('chatSend').onpointerdown = () => {
+        if ($('chatInput').value !== '') {
+            socket.emit('chat', socketId, roomId, $('chatInput').value);
+            $('chatInput').value = '';
+        }
+    }
+
+    // the dom thing where it checks if the input key is enter - thanks stackoverflow
+    $('chatInput').onkeydown = (e) => {
+        if (e.key === 'Enter' || e.keyCode === 13 && $('chatInput').value !== '') {
+            socket.emit('chat', socketId, roomId, $('chatInput').value);
+            $('chatInput').value = '';
+        }
+    };
     
     socket.on('startGame', () => {
         UI_Handler.displayActionSlots('waitingForTurn');

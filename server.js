@@ -148,12 +148,13 @@ io.on('connection', (socket) => { // server is online
     socket.to(loserPlayerId).emit('youLose');
   })
 
-  // event from player: player is sending a very angry letter to be displayed on host screen
-  socket.on('chat', (playerId, roomid, msg) => {
-    socket.to(roomId).emit('chat',playerId,msg);
+  // event from player: player is sending a very angry letter to be displayed on the host screen
+  socket.on('chat', (playerId, roomId, msg) => {
+    socket.to(hostOf(roomId)).emit('chat',playerId,msg);
+    console.log('Player '+playerId+' wrote: '+msg)
   })
 });
 
-http.listen(5000, function(){ // set port
-  console.log('listening on *:5000');
+http.listen(5001, function(){ // set port
+  console.log('listening on *:5001');
 });
