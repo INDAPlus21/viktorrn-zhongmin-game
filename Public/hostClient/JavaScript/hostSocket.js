@@ -11,8 +11,9 @@ let roomId; // room id
 let playerInfo = new Object();
 
 let columnAmount = 4;
-let playerMaxHealth = 1; //12
+let playerMaxHealth = 12; 
 let amountOfHumanCards = 15;
+
 
 let lobbyData = {
   currentRound: 0,
@@ -21,9 +22,9 @@ let lobbyData = {
   p1Wins: 0,
   p2Wins: 0,
   GAMESTATE: 'lobby',
-  currentMode: 0  //0 is pvp, 1 is pve
+  currentMode: 0,  //0 is pvp, 1 is pve
+  currentAI: 0
 }
-
 
 let boardInfo = {
   player1: [
@@ -133,9 +134,11 @@ window.onload = async function(){
 }
 
 function toggleLobbyMode(dir){
-  lobbyData.currentMode = Math.abs( (lobbyData.currentMode + dir) % 2 );
+  lobbyData.currentMode = Math.abs( (lobbyData.currentMode + dir) % 3 );
+  let cards, deck, playerObj;
   switch(lobbyData.currentMode){
     case 0:
+      
         $('currentMode').innerText = "PvP";
        
         if(playerInfo.player1.id == '000'){
@@ -144,17 +147,30 @@ function toggleLobbyMode(dir){
         }
       break;
     case 1: 
-        $('currentMode').innerText = "PvE";
+      $('currentMode').innerText = "VS Botward";
 
-        let cards = [ "Blood Beast" , "Frank" , "Bow Man" , "Cannon" ];
-        let deck = [];
-        for(let c of cards){
-          deck.push(DataManager.getSpecificCard(c));
-        }
-        let playerObj = {name:"Botward", id:'000', originalDeck:deck, remainingDeck:[], hand:[], statusEffects:[], blood:0}
+      cards = [ "Blood Beast" , "Frank" , "Bow Man" , "Cannon" ];
+      deck = [];
+      for(let c of cards){
+        deck.push(DataManager.getSpecificCard(c));
+      }
+      playerObj = {name:"Botward", id:'000', originalDeck:deck, remainingDeck:[], hand:[], statusEffects:[], blood:0}
+      
+      playerInfo.player1 = playerObj;
+      onPlayerReady(socket,'000');
+      break;
+    case 2:
+      $('currentMode').innerText = "VS Captain Davey";
+
+      cards = [ "Cadaver" , "Cadaver" , "Hound Master" , "Cannon" ];
+      deck = [];
+      for(let c of cards){
+        deck.push(DataManager.getSpecificCard(c));
+      }
+      playerObj = {name:"Capn. Davey", id:'000', originalDeck:deck, remainingDeck:[], hand:[], statusEffects:[], blood:0}
         
-        playerInfo.player1 = playerObj;
-        onPlayerReady(socket,'000');
+      playerInfo.player1 = playerObj;
+      onPlayerReady(socket,'000');
       break;
   }
 }
@@ -293,6 +309,25 @@ function shuffle (array) {
   return array;
 }
 
+// AI ACTION TIME BABY
+async function runActions(actions){
+  console.log("runActions ",actions)
+  for(let a of actions){
+    switch(a.action){
+      case 'playCard':
+        console.log("played card",a)
+        //if(boardInfo.player1[a.column] == null )
+        await onPlayerPlayCard(socket,'000',Number(a.cardIndex),a.column)
+        break;
+      case 'sacrificeCard':
+        console.log("sacrificed card",a)
+        await onSacrificeCard(socket,'000', a.column)
+      break;
+    }
+  }
+  onPlayerEndTurn(socket,'000');
+}
+
 // X- - - - - - - - -X
 // | input functions |
 // X- - - - - - - - -X
@@ -354,8 +389,20 @@ export async function onPlayerReady(socket,playerId){
       await socket.emit('syncClient', playerInfo.player2, boardInfo.player2,true);
       
       if(playerInfo['player'+starting].id == '000') {
-        VixiAI.takeTurn( cloneObject(playerInfo) , cloneObject(boardInfo) )
-        onPlayerEndTurn(socket,'000')
+        console.log("ai action",lobbyData.currentMode)
+        let actions;
+        switch(lobbyData.currentMode){
+          case 1 :
+            console.log("pre actions",playerInfo)
+            actions = await VixiAI.takeTurn( playerInfo , boardInfo )
+            console.log("post actions",playerInfo)
+            runActions(actions)
+            break;
+          case 2: 
+            //runActions(HexAI)
+            break;
+        }
+        
       }
       else {
         await socket.emit('startTurn', playerInfo['player'+starting].id, 0);
@@ -449,6 +496,7 @@ export async function onPlayerDrawCard(socket, playerId, drawnCard){
 }
 
 export async function onPlayerPlayCard(socket, playerId, cardIndex, column){
+  console.log(playerId,cardIndex,column);
   let i = isPlayer(playerId); // get which player it is
     let card = playerInfo['player'+i].hand[cardIndex]; // get the card that is being played
     let n = i===1 ? 2 : 1;
@@ -637,8 +685,18 @@ export async function onPlayerEndTurn(socket, playerId){
       socket.emit('syncClient', playerInfo['player'+atkingPlayer], boardInfo['player'+atkingPlayer],true);
       socket.emit('startTurn', playerInfo['player'+atkedPlayer].id, boardInfo.turn);
       if(playerInfo['player'+atkedPlayer].id == '000') {
-        let actions = await VixiAI.takeTurn( cloneObject(playerInfo) , cloneObject(boardInfo) );
-        onPlayerEndTurn(socket,playerInfo['player'+atkedPlayer].id)
+        console.log("ai action",lobbyData.currentMode)
+        let actions;
+        switch(lobbyData.currentMode){
+          case 1 :
+            console.log("pre actions",playerInfo)
+            actions = await VixiAI.takeTurn( playerInfo , boardInfo )
+            console.log("post actions",playerInfo)
+            runActions(actions)
+          case 2: 
+            //runActions(HexAI)
+            break;
+        }
       }
     
 }

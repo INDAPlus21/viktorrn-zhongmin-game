@@ -18,18 +18,18 @@ export async function takeTurn(playerInfo,boardInfo,turn){
         ---> Make A function that compares cards at will, for quicker debug <---
 
     */
-
+    console.log("AI on pre game",playerInfo.player1)
     let actions = [];
-
+    drawOneCard(playerInfo.player1);
     let hand = playerInfo.player1.hand;
-    let blood = playerInfo.player1.blood;
+    let blood = playerInfo.player1.blood += 1;
     let deck = playerInfo.player1.remainingDeck;
     let yourBoard = boardInfo.player1;
     let enemyBoard = boardInfo.player2;
 
     
     //score cards against players 
-
+    
     let treathMap = calcThreatBoard(enemyBoard,yourBoard);
     
     let interactions = [];
@@ -41,6 +41,7 @@ export async function takeTurn(playerInfo,boardInfo,turn){
             interactions.push({card : hand[c], cardIndex : c ,score: score , col: oc.col , oc : enemyBoard[ oc.col ] })
         }
     }
+
     sortItems(interactions);
     //remove duplicate actions
     let foundIndexes = []
@@ -63,9 +64,7 @@ export async function takeTurn(playerInfo,boardInfo,turn){
     
 
     console.log("threat map post sort",treathMap);
-    console.log("action map", interactions)
-
-
+    console.log("action map", interactions);
 
     for(let c in hand){
         if(hand[c].name == "Human"){
@@ -81,14 +80,14 @@ export async function takeTurn(playerInfo,boardInfo,turn){
     }*/
 
     
-    if(interactions.length == 0) return;
+    if(interactions.length == 0) return [];
     if(blood >= interactions[interactions.length-1].card.cost){
-        blood -= interactions[interactions.length-1].card.cost;
-        actions.push( {action : "playCard" , cardIndex : interactions[interactions.length-1].cardIndex, column: interactions[interactions.length-1].col  } )
+        actions.push( {action : "playCard" , cardIndex : Number(interactions[interactions.length-1].cardIndex), column: interactions[interactions.length-1].col  } )
     }
     
 
-    console.log(actions);
+    console.log("actions",actions);
+    return actions;
     //chooseCardToDraw(blood,hand,humanCards,deck);
 }
 
@@ -116,7 +115,7 @@ function calcThreatBoard(enemyBoard,yourBoard){
     return sortItems(threatMap);
 }
 
-export function compareCards(yourCard,opposingCard){
+export function compareCardsOld(yourCard,opposingCard){
     let yourDamage = yourCard.damage;
     let yourHealth = yourCard.health;
     let opposingDamage = opposingCard.damage;
@@ -150,7 +149,7 @@ export function compareCards(yourCard,opposingCard){
     return score;
 }
 
-export function compareCardsOld(yourCard,opposingCard){
+export function compareCards(yourCard,opposingCard){
      
     /*
         The cost factor:
@@ -237,18 +236,18 @@ export function compareCardsOld(yourCard,opposingCard){
         else opportunity += 0.2*yourCard.damage;
     } 
     if(yourCardHasRush && yourDamage === opposingHealth) {
-        console.log("instakill rush")
+        //console.log("instakill rush")
         opportunity += 0.25; 
     }
 
     
     let score = 0.25 * Math.fround(turnsToKill - turnsToDie) + costScore + opportunity;
 
-    console.log("card",yourCard,"opposingCard",opposingCard)
+    /*console.log("card",yourCard,"opposingCard",opposingCard)
     console.log("costScore",costScore)
     console.log("opportunity",opportunity)
     console.log("ttk - ttd",turnsToKill," - ",turnsToDie," = ",0.25*(turnsToKill - turnsToDie))
-    console.log("Final score",score)
+    console.log("Final score",score)*/
 
     return score; 
 }
