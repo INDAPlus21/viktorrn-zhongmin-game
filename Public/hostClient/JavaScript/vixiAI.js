@@ -116,7 +116,7 @@ function calcThreatBoard(enemyBoard,yourBoard){
     return sortItems(threatMap);
 }
 
-export function compareCardsOld(yourCard,opposingCard){
+export function compareCards(yourCard,opposingCard){
     let yourDamage = yourCard.damage;
     let yourHealth = yourCard.health;
     let opposingDamage = opposingCard.damage;
