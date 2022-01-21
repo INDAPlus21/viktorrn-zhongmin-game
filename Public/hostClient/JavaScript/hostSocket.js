@@ -167,7 +167,7 @@ function toggleLobbyMode(dir){
       for(let c of cards){
         deck.push(DataManager.getSpecificCard(c));
       }
-      playerObj = {name:"Capn. Davey", id:'000', originalDeck:deck, remainingDeck:[], hand:[], statusEffects:[], blood:0}
+      playerObj = {name:"Capn. Davey", id:'000', originalDeck:deck, remainingDeck:[], hand:deck, statusEffects:[], blood:0}
         
       playerInfo.player1 = playerObj;
       onPlayerReady(socket,'000');

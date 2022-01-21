@@ -6,19 +6,24 @@ export async function takeTurn(playerInfo,boardInfo,turn){
   // collect basic data
   let hand = playerInfo.player1.hand;
   let blood = playerInfo.player1.blood;
-  let deck = playerInfo.player1.remainingDeck;
   let myBoard = boardInfo.player1;
   let enemyBoard = boardInfo.player2;
 
-  drawOneCard(playerInfo.player1);
+  hand.push({
+    "name":"Human"
+    ,"damage":0
+    ,"health":1
+    ,"cost":0
+    ,"amulets":[]
+    ,"imgSrc":""
+  });
 
-  let iCad, iCannon, iHound, iSparrow = -1;
+  let iCad, iCannon, iHound, iDog, iH = -1;
 
   for (let i=0; i++; i<hand.length) {
     if (hand[i].name == 'Cadaver') iCad = i;
     if (hand[i].name == 'Cannon') iCannon = i;
     if (hand[i].name == 'Hound Master') iHound = i;
-    if (hand[i].name == 'Sparrow') iSparrow = i;
     if (hand[i].name == 'Blood Beast') iDog = i;
     if (hand[i].name == 'Human') iH = i;
   }
@@ -48,6 +53,9 @@ export async function takeTurn(playerInfo,boardInfo,turn){
       } catch {/* dude idk nothing */}
     }
   }
+
+  // debug
+  console.log("hand:", hand)
   
   // DAVEY JONES' SAIL PLAN
   // ONE: BRING ON AN' SACRIFICE ME MATEY.
