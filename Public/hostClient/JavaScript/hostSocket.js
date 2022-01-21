@@ -311,6 +311,7 @@ function shuffle (array) {
 
 // AI ACTION TIME BABY
 async function runActions(actions){
+  console.log("ran actions",actions)
   try{
     for(let a of actions){
       switch(a.action){
@@ -401,7 +402,7 @@ export async function onPlayerReady(socket,playerId){
             runActions(actions)
             break;
           case 2: 
-            actions = await HexAI.takeTurn( playerInfo,boardInfo )
+            actions = await HexAI.takeTurn( playerInfo,boardInfo ,boardInfo.turn)
             runActions(actions)
             break;
         }
@@ -696,7 +697,7 @@ export async function onPlayerEndTurn(socket, playerId){
             runActions(actions)
             break;
           case 2: 
-            actions = await HexAI.takeTurn( playerInfo,boardInfo )
+            actions = await HexAI.takeTurn( playerInfo,boardInfo,boardInfo.turn )
             runActions(actions)
             break;
         }
