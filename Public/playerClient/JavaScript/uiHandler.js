@@ -209,6 +209,7 @@ export class UIHandler{
             card.setAttribute('cardIndex',i);
             //handle klick event 
             card.onpointerdown = () => {
+                console.log("card clicked")
                 Main.getUIHandler().selectedHandCard(card);
             }
             

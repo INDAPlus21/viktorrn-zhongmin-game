@@ -11,7 +11,7 @@ let roomId; // room id
 let playerInfo = new Object();
 
 let columnAmount = 4;
-let playerMaxHealth = 12;
+let playerMaxHealth = 1; //12
 let amountOfHumanCards = 15;
 
 let lobbyData = {
@@ -379,6 +379,7 @@ export async function onPlayerLeave(socket,playerId){
   let player = 1;
   console.log("player",playerId)
   if(!player) return;
+  lobbyData.p1Ready = false;
   delete playerInfo['player'+player];
   if(lobbyData.GAMESTATE === "lobby"){
     $('player'+player+'State').innerHTML = "Waiting...";
@@ -646,6 +647,8 @@ export async function onPlayerEndTurn(socket, playerId){
 
 async function endRound(socket){
     socket.emit('endOfRound', playerInfo.player1.id, playerInfo.player1.originalDeck, playerInfo.player2.id, playerInfo.player2.originalDeck );
+    lobbyData.p1Ready = false;
+    lobbyData.p2Ready = false;
     playBgm('cabin');
     pauseBgm('trapper');
     clearElement($('playerBoard'));
