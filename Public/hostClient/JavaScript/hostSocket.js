@@ -11,7 +11,7 @@ let roomId; // room id
 let playerInfo = new Object();
 
 let columnAmount = 4;
-let playerMaxHealth = 12; 
+let playerMaxHealth = 12;
 let amountOfHumanCards = 15;
 
 
