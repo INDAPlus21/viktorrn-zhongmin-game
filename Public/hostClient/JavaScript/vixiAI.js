@@ -18,9 +18,10 @@ export async function takeTurn(playerInfo,boardInfo,turn){
         ---> Make A function that compares cards at will, for quicker debug <---
 
     */
-    console.log("AI on pre game",playerInfo.player1)
     let actions = [];
+    
     drawOneCard(playerInfo.player1);
+
     let hand = playerInfo.player1.hand;
     let blood = playerInfo.player1.blood += 1;
     let deck = playerInfo.player1.remainingDeck;
@@ -85,7 +86,6 @@ export async function takeTurn(playerInfo,boardInfo,turn){
         actions.push( {action : "playCard" , cardIndex : Number(interactions[interactions.length-1].cardIndex), column: interactions[interactions.length-1].col  } )
     }
     
-
     console.log("actions",actions);
     return actions;
     //chooseCardToDraw(blood,hand,humanCards,deck);
@@ -107,7 +107,6 @@ function calcThreatBoard(enemyBoard,yourBoard){
             threatMap.push({score : 0 , col : Number(r)})
             continue;
         }
-        console.log()
         let enemyCard = enemyBoard[r];
         let score = 1 + enemyCard.damage + enemyCard.health/2;
         threatMap.push( {score :  score , col : Number(r)} )

@@ -311,21 +311,25 @@ function shuffle (array) {
 
 // AI ACTION TIME BABY
 async function runActions(actions){
-  console.log("runActions ",actions)
-  for(let a of actions){
-    switch(a.action){
-      case 'playCard':
-        console.log("played card",a)
-        //if(boardInfo.player1[a.column] == null )
-        await onPlayerPlayCard(socket,'000',Number(a.cardIndex),a.column)
+  try{
+    for(let a of actions){
+      switch(a.action){
+        case 'playCard':
+          //if(boardInfo.player1[a.column] == null )
+          await onPlayerPlayCard(socket,'000',Number(a.cardIndex),a.column)
+          break;
+        case 'sacrificeCard':
+          console.log("sacrificed card",a)
+          await onSacrificeCard(socket,'000', a.column)
         break;
-      case 'sacrificeCard':
-        console.log("sacrificed card",a)
-        await onSacrificeCard(socket,'000', a.column)
-      break;
+      }
+      await new Promise(r => setTimeout(r, 750));
     }
+    onPlayerEndTurn(socket,'000');
+  }catch(error){
+    console.log("hah lol",error)
   }
-  onPlayerEndTurn(socket,'000');
+ 
 }
 
 // X- - - - - - - - -X
@@ -393,13 +397,12 @@ export async function onPlayerReady(socket,playerId){
         let actions;
         switch(lobbyData.currentMode){
           case 1 :
-            console.log("pre actions",playerInfo)
             actions = await VixiAI.takeTurn( playerInfo , boardInfo )
-            console.log("post actions",playerInfo)
             runActions(actions)
             break;
           case 2: 
-            //runActions(HexAI)
+            actions = await HexAI.takeTurn( playerInfo,boardInfo )
+            runActions(actions)
             break;
         }
         
@@ -689,12 +692,12 @@ export async function onPlayerEndTurn(socket, playerId){
         let actions;
         switch(lobbyData.currentMode){
           case 1 :
-            console.log("pre actions",playerInfo)
             actions = await VixiAI.takeTurn( playerInfo , boardInfo )
-            console.log("post actions",playerInfo)
             runActions(actions)
+            break;
           case 2: 
-            //runActions(HexAI)
+            actions = await HexAI.takeTurn( playerInfo,boardInfo )
+            runActions(actions)
             break;
         }
       }
