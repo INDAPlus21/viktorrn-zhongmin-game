@@ -186,7 +186,7 @@ export function compareCards(yourCard,opposingCard){
     if( yourCardFlying != enemyCardFlying){ yourDamage = 0; opposingDamage = 0; } 
     if( enemyCardFlying && canHitFlying){ yourDamage = yourCard.damage }
 
-    let costScore = 1 - 0.2*(point - midPoint) * (point - midPoint) - 0.25*point;
+    let costScore = 1 - 0.2*(point - midPoint) * (point - midPoint) - 0.5*point;
     
     let remainingHP =  yourHealth - opposingDamage * damageTimes;
     let turnsToDie;
