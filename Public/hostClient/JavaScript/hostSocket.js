@@ -50,6 +50,9 @@ let bgmTrapper = new Audio('./../../assets/Music/trapper.ogg');
 let bgmCabin = new Audio('./../../assets/Music/cabin.ogg');
 bgmTrapper.loop = true;
 bgmCabin.loop = true;
+// sfx
+let sfxAttack = new Audio('./../../assets/Music/sfx_attack.ogg');
+let sfxPlaceCard = new Audio('./../../assets/Music/sfx_placecard.ogg');
 
 async function playBgm (songName) {
   switch (songName) {
@@ -61,6 +64,12 @@ async function pauseBgm (songName) {
   switch (songName) {
     case 'trapper': bgmTrapper.pause(); break;
     case 'cabin': bgmCabin.pause(); break;
+  }
+}
+async function playSfx (sfx) {
+  switch (sfx) {
+    case 'attack': sfxAttack.play();break;
+    case 'playcard': sfxPlaceCard.play();break;
   }
 }
 
@@ -228,6 +237,7 @@ socket.on('connect', () => {// run this when connected
 
   socket.on('playerPlayCard', async (playerId, cardIndex, column) => {
     onPlayerPlayCard(socket,playerId,cardIndex,column);
+    playSfx('playcard')
   });
 
   socket.on('playerSacrificeCard', async (playerId,column) =>{
@@ -491,6 +501,7 @@ export async function onPlayerEndTurn(socket, playerId){
               switch(a){        
                 case 'Flying':
                   attackHitCard = false;
+                  break;
                 case 'High Block':
                   opponentCanBlockAir = true;
                   break;
@@ -531,6 +542,7 @@ export async function onPlayerEndTurn(socket, playerId){
               }
               
             }
+            playSfx('attack');
             await AnimationHandler.displayAttack(getCardFromBoard(atkingPlayer,col),getCardFromBoard(atkedPlayer,col),opposingCard,damage,atkingPlayer,true);
             await new Promise(r => setTimeout(r, 500));
 
