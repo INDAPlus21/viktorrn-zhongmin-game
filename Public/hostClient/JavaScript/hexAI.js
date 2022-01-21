@@ -85,3 +85,10 @@ export async function takeTurn(playerInfo,boardInfo,turn){
   }
   return actions;
 }
+
+
+function drawOneCard(playerObj) {
+    if (playerObj.remainingDeck.length > 0)
+    playerObj.hand.push(playerObj.remainingDeck.shift());
+    // shift() takes one element from the array and pushes it into the player's hand
+  }
