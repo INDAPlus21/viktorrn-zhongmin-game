@@ -47,6 +47,17 @@ window.onload = function(){
         socket.emit('joinRoom', roomId, playerName, socketId, (verdict, reason) => {
             if (verdict==='fail') $('loginErrorText').innerHTML = reason;
             else {
+                $('chatToggle').style.display = 'block';
+                $('chatToggle').onpointerdown = () =>{
+                    if($('chatWrapper').style.display == 'none'){
+                        $('chatWrapper').style.display = 'block';
+                        $('chatToggle').style.backgroundImage = "url('../../assets/closeIcon.svg')";
+                    }
+                    else{
+                        $('chatWrapper').style.display = 'none';
+                        $('chatToggle').style.backgroundImage = "url('../../assets/chatIcon.svg')";
+                    }
+                }
                 $('login').classList.remove('onscreen');
                 $('cardShop').classList.add('onscreen');
                 $('playerName').innerText = playerName;

@@ -383,3 +383,69 @@ transform: scale(1.05);
 #youWin,#youLose {text-align: center; font-size: 4em;}
 #youWin h1,#youLose h1{margin-top: 50vh;}
 
+/*Obligatory chat function*/
+#chatToggle{
+    display: none;
+    top:110px;
+    right: 20px;
+    z-index: 30;
+    position: absolute;
+    width: 75px;
+    height: 75px;
+    background-image: url('../assets/chatIcon.svg');
+    background-position: 13px;
+    background-size: 50px;
+    background-repeat: no-repeat;
+    background-color: none !important;
+    border:none;
+    border-radius: 10px;
+    
+}
+
+#chatWrapper{
+    z-index: 20;
+    display: none;
+    position: absolute;
+    top:0;
+    left:0;
+    background-color: rgba(0, 0, 0, 0.75);
+    width:100%;
+    height: 100%;
+
+}
+
+#chatWrapper .inputArea{
+    
+    position: absolute;
+    height: 60px;
+    width:400px;
+    
+    top:60%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    color:#fff;
+    
+    
+}
+
+#chatWrapper .inputArea #chatInput{
+    position: absolute;
+    border:none;
+    font-size: 2.5em;
+    width: 300px;
+    height: 60px;
+    background-color: rgba(238, 238, 238, 0.500);
+    border-radius: 5px 0 0 5px;
+    padding-left: 5px;
+}
+
+#chatWrapper .inputArea button{
+    position: absolute;
+    border:none;
+    left:300px;
+    width: 100px;
+    height: 60px;
+    border-radius: 0 5px 5px 0;
+    color: black;
+    font-size: 2.5em;
+}

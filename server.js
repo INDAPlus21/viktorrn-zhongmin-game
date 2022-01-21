@@ -148,6 +148,10 @@ io.on('connection', (socket) => { // server is online
     socket.to(loserPlayerId).emit('youLose');
   })
 
+  // event from player: player is sending a very angry letter to be displayed on host screen
+  socket.on('chat', (playerId, roomid, msg) => {
+    socket.to(roomId).emit('chat',playerId,msg);
+  })
 });
 
 http.listen(5000, function(){ // set port

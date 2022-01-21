@@ -124,6 +124,7 @@ export class UIHandler{
     suggestSacrifices(board){
         
         // change background text to indicate its sacrificing time
+        if(!Main.getPlayerTurn()) return;
         document.getElementById('backgroundTextText').innerHTML="MAKE YOUR CHOICE";
 
         for(let i in board){
@@ -173,6 +174,7 @@ export class UIHandler{
     disableDropZone(){
 
         // normal playing mode
+        if(!Main.getPlayerTurn()) return; 
         document.getElementById('backgroundTextText').innerHTML="PLAY YOUR HAND";
 
         try{
