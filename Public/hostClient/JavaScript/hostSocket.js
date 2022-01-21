@@ -501,7 +501,6 @@ export async function onPlayerEndTurn(socket, playerId){
               switch(a){        
                 case 'Flying':
                   attackHitCard = false;
-                  break;
                 case 'High Block':
                   opponentCanBlockAir = true;
                   break;
