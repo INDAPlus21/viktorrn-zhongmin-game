@@ -122,6 +122,10 @@ export class UIHandler{
     }
 
     suggestSacrifices(board){
+        
+        // change background text to indicate its sacrificing time
+        document.getElementById('backgroundTextText').innerHTML="MAKE YOUR CHOICE";
+
         for(let i in board){
            try{
             let el = this.actionSlotsHTMLHandle.children[i];
@@ -167,6 +171,10 @@ export class UIHandler{
     }
 
     disableDropZone(){
+
+        // normal playing mode
+        document.getElementById('backgroundTextText').innerHTML="PLAY YOUR HAND";
+
         try{
             for(let i in this.actionSlotsHTMLHandle.children){
                 let el = this.actionSlotsHTMLHandle.children[i];

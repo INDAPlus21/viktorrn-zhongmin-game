@@ -358,7 +358,22 @@ transform: scale(1.05);
 #sacrificeCardBtn{
     position: absolute;  
 }
-
+#backgroundText {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    z-index: -8;
+}
+#backgroundTextText {
+    font-size: 5em;
+    color: #888;
+    z-index: -9;
+}
 
 .displaying {
     display: block !important;

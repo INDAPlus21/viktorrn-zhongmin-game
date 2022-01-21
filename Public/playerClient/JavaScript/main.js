@@ -79,6 +79,7 @@ window.onload = function(){
     });
     
     socket.on('startTurn', (turn) => {
+
         console.log("playerData",playerData,"startTurn");
         UI_Handler.returnHandCard()
         currentlyYourTurn = true;
@@ -86,8 +87,11 @@ window.onload = function(){
         if(turn > 1){
             UI_Handler.displayActionSlots('chooseCard',playerData.deck,[],playerData.hand);
             playerPickingCard = true;
+            $('backgroundTextText').innerHTML="DRAW A CARD";
         }else{
             UI_Handler.displayActionSlots('playCards',[],playerData.board,[],columnAmount);
+            // if not card drawing mode right from start just go to normal playing mode directly
+            $('backgroundTextText').innerHTML="PLAY YOUR HAND";
         }  
         UI_Handler.drawHand(playerData.hand);
         $('endTurnBtn').classList.add('displaying');
@@ -343,6 +347,7 @@ export function chooseCard(cardType){
     socket.emit('playerDrawCard', roomId, socketId, cardType);
     displayPlayCardAreaOnSync = true;
     playerPickingCard = false;
+    $('backgroundTextText').innerHTML="PLAY YOUR HAND";
 }
 
 export function cardPlayed(cardIndex,col){
@@ -354,6 +359,8 @@ export function cardPlayed(cardIndex,col){
 }
 
 export function endTurn() {
+    $('backgroundTextText').innerHTML="WAIT YOUR TURN";
+
     $('endTurnBtn').classList.remove('displaying');
     $('sacrificeCardBtn').classList.remove('displaying');
     currentlyYourTurn = false;
