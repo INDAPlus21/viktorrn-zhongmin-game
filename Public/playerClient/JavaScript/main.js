@@ -24,13 +24,7 @@ let cardsLeftToSelect;
 let rareCards;
 let regularCards;
 
-function fix(txt) { // strips off bad characters, mostly for chat
-    return txt.replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
+
 
 window.onload = function(){
 
@@ -67,6 +61,21 @@ window.onload = function(){
                         $('chatToggle').style.backgroundImage = "url('../../assets/chatIcon.svg')";
                     }
                 }
+                // the chat send thing
+                $('chatSend').onpointerdown = () => {
+                    if ($('chatInput').value !== '') {
+                        socket.emit('chat', socketId, roomId, $('chatInput').value);
+                        $('chatInput').value = '';
+                    }
+                }
+
+                // the dom thing where it checks if the input key is enter - thanks stackoverflow
+                $('chatInput').onkeydown = (e) => {
+                    if (e.key === 'Enter' || e.keyCode === 13 && $('chatInput').value !== '') {
+                        socket.emit('chat', socketId, roomId, $('chatInput').value);
+                        $('chatInput').value = '';
+                    }
+                };
                 $('login').classList.remove('onscreen');
                 $('cardShop').classList.add('onscreen');
                 $('playerName').innerText = playerName;
@@ -77,21 +86,7 @@ window.onload = function(){
         });
     }
 
-    // the chat send thing
-    $('chatSend').onpointerdown = () => {
-        if ($('chatInput').value !== '') {
-            socket.emit('chat', socketId, roomId, $('chatInput').value);
-            $('chatInput').value = '';
-        }
-    }
-
-    // the dom thing where it checks if the input key is enter - thanks stackoverflow
-    $('chatInput').onkeydown = (e) => {
-        if (e.key === 'Enter' || e.keyCode === 13 && $('chatInput').value !== '') {
-            socket.emit('chat', socketId, roomId, $('chatInput').value);
-            $('chatInput').value = '';
-        }
-    };
+    
     
     socket.on('startGame', () => {
         UI_Handler.displayActionSlots('waitingForTurn');
@@ -424,6 +419,14 @@ function shuffle (array) {
   }
 
 //neccessary Util functions
+function fix(txt) { // strips off bad characters, mostly for chat
+    return txt.replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 export function $(el) { return document.getElementById(el) };
 export function getOffset( el ) {
     var _x = 0;
