@@ -222,6 +222,7 @@ socket.on('connect', () => {// run this when connected
 
   // incoming chat msg from a player
   socket.on('chat', async (playerId,msg) => {
+    if(lobbyData.GAMESTATE == "ingame")
       AnimationHandler.chatMessage(playerId,msg)
   });
 
@@ -644,6 +645,7 @@ async function endRound(socket){
     socket.emit('endOfRound', playerInfo.player1.id, playerInfo.player1.originalDeck, playerInfo.player2.id, playerInfo.player2.originalDeck );
     lobbyData.p1Ready = false;
     lobbyData.p2Ready = false;
+    lobbyData.GAMESTATE = "selectingCards";
     playBgm('cabin');
     pauseBgm('trapper');
     clearElement($('playerBoard'));
