@@ -223,7 +223,7 @@ socket.on('connect', () => {// run this when connected
   // incoming chat msg from a player
   socket.on('chat', async (playerId,msg) => {
     if(lobbyData.GAMESTATE == "ingame")
-      AnimationHandler.chatMessage(playerId,msg)
+      AnimationHandler.chatMessage(isPlayer(playerId),msg)
   });
 
 });

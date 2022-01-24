@@ -6,7 +6,7 @@ export async function chatMessage(senderIndex,text){
     let length = text.length >= 55 ? 1 : text.length / 55;
     let textOffset = length * 200;
     let ogPos = $('player'+senderIndex+'Name').getBoundingClientRect();
-    let ogY = dir == 1 ? ogPos.top + 30 : ogPos.top - 80 - 30 * Math.ceil(text.length / 55);
+    let ogY = dir == 1 ? ogPos.top + 30 : ogPos.top - 30 - 30 * Math.ceil(text.length / 55);
     
     let ang = Math.PI -Math.PI/8 * Math.floor(Math.random()*7) 
     let dist = 120;

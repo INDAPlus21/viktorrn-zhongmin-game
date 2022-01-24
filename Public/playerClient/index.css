@@ -58,8 +58,7 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
 /* Login page */
 #login{
     text-align: center;
-    color: #000;
-    font-size: 1.2em;
+   
 }
 
 #serverIP{
@@ -67,6 +66,8 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
     height: 30px; 
     width: 100px; 
     transform: scale(2);
+    color: #000;
+    font-size: 1.2em;
 }
 
 #loginPlayerName{
@@ -74,12 +75,16 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
     height: 30px; 
     width: 100px; 
     transform: scale(2); 
+    color: #000;
+    font-size: 1.2em;
 }
 
 #joinServerBtn{
     height:30px; 
     width: 100px; 
     transform: scale(2); 
+    color: #000;
+    font-size: 1.2em;
 }
 
 /*Help Manual button*/
