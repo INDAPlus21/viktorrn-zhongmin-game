@@ -45,9 +45,9 @@ io.on('connection', (socket) => { // server is online
     roomList[id][0] = Date.now() + 3600000 // add 1 hour to current timestamp
     roomList[id][1] = hostId;
 
-    console.log("New room created with ID: "+id);
+    //console.log("New room created with ID: "+id);
 
-    console.log(roomList);
+    //console.log(roomList);
 
     callback(id);
   });
@@ -69,7 +69,7 @@ io.on('connection', (socket) => { // server is online
           callback('success');
           // the host client will have already added the player to the database back in the 'isRoomOpen?' event
 
-          console.log('player '+playerId+' has joined room '+roomId)
+          //console.log('player '+playerId+' has joined room '+roomId)
       });
     }
 
@@ -122,7 +122,7 @@ io.on('connection', (socket) => { // server is online
 
  // event from player: player is ending turn
   socket.on('playerEndTurn', (roomId, playerId) => {
-    console.log('player '+playerId+' has ended their turn in '+roomId+'. Over to you, '+hostOf(roomId))
+    //console.log('player '+playerId+' has ended their turn in '+roomId+'. Over to you, '+hostOf(roomId))
     socket.to(hostOf(roomId)).emit('playerEndTurn', playerId);
   });
 
@@ -150,7 +150,7 @@ io.on('connection', (socket) => { // server is online
 
   // event from player: player is sending a very angry letter to be displayed on the host screen
   socket.on('chat', (playerId, roomId, msg) => {
-    socket.to(hostOf(roomId)).emit('chat',playerId,msg);
+    //socket.to(hostOf(roomId)).emit('chat',playerId,msg);
     console.log('Player '+playerId+' wrote: '+msg)
   })
 });
