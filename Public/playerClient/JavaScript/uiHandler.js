@@ -47,17 +47,17 @@ export class UIHandler{
             case 'chooseCard':
                 if(hand.length >= 7) this.displayActionSlots('playCards',[],board); 
                  
-                let human = document.createElement('div');
-                human.setAttribute('class','card');
-                human.onpointerdown = () =>{
+                let vessel = document.createElement('div');
+                vessel.setAttribute('class','card');
+                vessel.onpointerdown = () =>{
                     Main.clearElement(this.actionSlotsHTMLHandle);
-                    Main.chooseCard('Human');
+                    Main.chooseCard('Vessel');
                 }
                 let name = document.createElement('div');
-                name.innerText = "Human";
+                name.innerText = "Vessel";
                 name.setAttribute('class','name')
-                human.appendChild(name);
-                this.actionSlotsHTMLHandle.appendChild(human);
+                vessel.appendChild(name);
+                this.actionSlotsHTMLHandle.appendChild(vessel);
 
                 try{
                     if(deck.length > 0){

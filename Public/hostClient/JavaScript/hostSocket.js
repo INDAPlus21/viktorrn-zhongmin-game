@@ -12,7 +12,7 @@ let playerInfo = new Object();
 
 let columnAmount = 4;
 let playerMaxHealth = 12;
-let amountOfHumanCards = 15;
+let amountOfVesselCards = 15;
 
 
 let lobbyData = {
@@ -112,7 +112,7 @@ window.onload = async function(){
 
     $('spawnEffect').onpointerdown = () =>{
       AnimationHandler.displayAttack(getCardFromBoard(2,0),getCardFromBoard(1,0),12,2);
-  }*/
+  }
   $('displayCardComparisionPage').onpointerdown = () =>{
     if($('bodyPregame').classList[0] == 'onscreen'){
       $('bodyPregame').classList.remove('onscreen');
@@ -122,79 +122,21 @@ window.onload = async function(){
       $('cardComparison').classList.remove('onscreen');
     }
   }
-  let hand = ["Frank","Human","Blood Beast","Bat","Sparrow","Bow Man","Cannon"];
-  let cardsToCompareAgainst = ["Frank","Human","Blood Beast","Bat","Sparrow","Bow Man","Cannon"];
+
+  let hand = ["Frank","Vessel","Blood Beast","Bat","Sparrow","Bow Man","Cannon"];
+  let cardsToCompareAgainst = ["Frank","Vessel","Blood Beast","Bat","Sparrow","Bow Man","Cannon"];
   runCardComparisons(cardsToCompareAgainst,hand);
+  $('chatMsg').onpointerdown = () => {
+    AnimationHandler.chatMessage(2,"")
+  }
+*/
+
 
   $('pleaseClickOnThisForAudio').addEventListener('mousedown', function () {
     $('pleaseClickOnThisForAudio').remove();
     playBgm('cabin');
   })
   }); 
-}
-
-function toggleLobbyMode(dir){
-  lobbyData.currentMode = Math.abs( (lobbyData.currentMode + dir) % 3 );
-  let cards, deck, playerObj;
-  switch(lobbyData.currentMode){
-    case 0:
-      
-        $('currentMode').innerText = "PvP";
-       
-        if(playerInfo.player1.id == '000'){
-          console.log(playerInfo)
-          onPlayerLeave(playerInfo.player1.id);
-        }
-      break;
-    case 1: 
-      $('currentMode').innerText = "VS Botward";
-
-      cards = [ "Blood Beast" , "Frank" , "Bow Man" , "Cannon" ];
-      deck = [];
-      for(let c of cards){
-        deck.push(DataManager.getSpecificCard(c));
-      }
-      playerObj = {name:"Botward", id:'000', originalDeck:deck, remainingDeck:[], hand:[], statusEffects:[], blood:0}
-      
-      playerInfo.player1 = playerObj;
-      onPlayerReady(socket,'000');
-      break;
-    case 2:
-      $('currentMode').innerText = "VS Captain Davey";
-
-      cards = [ "Cadaver" , "Cadaver" , "Hound Master" , "Cannon" ];
-      deck = [];
-      for(let c of cards){
-        deck.push(DataManager.getSpecificCard(c));
-      }
-      playerObj = {name:"Capn. Davey", id:'000', originalDeck:deck, remainingDeck:[], hand:deck, statusEffects:[], blood:0}
-        
-      playerInfo.player1 = playerObj;
-      onPlayerReady(socket,'000');
-      break;
-  }
-}
-
-function runCardComparisons(hand,deck){
-  for(let i in hand) hand[i] = DataManager.getSpecificCard(hand[i]);
-  for(let i in deck) deck[i] = DataManager.getSpecificCard(deck[i]);
-  for(let c of hand){
-    let tr = document.createElement('tr');
-    let td1 = document.createElement('td');
-    td1.innerHTML = c.name + "<br>" + c.damage + "/" +c.health +":"+c.cost + "<br>" + textAmulets(c) + "<br>" + " ";
-    tr.appendChild(td1);
-    let opposingCards = [];
-    for(let oc of deck){
-      opposingCards.push({card : oc, score : VixiAI.compareCards(oc,c)})
-    }
-    VixiAI.sortItems(opposingCards);
-    for(let c of opposingCards){
-      let td2 = document.createElement('td');
-      td2.innerHTML = c.card.name + "<br>" + c.card.damage + "/" +c.card.health +":"+c.card.cost + "<br>" + textAmulets(c.card) + "<br>" + c.score;
-      tr.appendChild(td2);
-    }
-    $('scoreboard').appendChild(tr)
-  }
 }
 
 // socket connection
@@ -280,75 +222,15 @@ socket.on('connect', () => {// run this when connected
 
   // incoming chat msg from a player
   socket.on('chat', async (playerId,msg) => {
-    switch (isPlayer(playerId)) {
-      case 1:
-        // do ya thing, funky scrybe
-        console.log('Player 1 sent: '+msg);
-        break;
-      case 2:
-        console.log('Player 2 sent: '+msg);
-        break;
-    }
+      AnimationHandler.chatMessage(playerId,msg)
   });
 
 });
 
-// X----------------X
-// | Util functions |
-// X----------------X
-
-function isPlayer (playerId) {
-  //if(playerInfo.player1 == undefined && playerInfo.player2 == undefined) return false;
-  if (playerInfo.player1.id == playerId) return 1;
-  else if (playerInfo.player2.id == playerId) return 2;
-  else return false;
-}
-
-function shuffle (array) {
-  let currentIndex = array.length,  randomIndex;
-
-  // While there remain elements to shuffle...
-  while (currentIndex != 0) {
-
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-
-    // And swap it with the current element.
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex], array[currentIndex]];
-  }
-
-  return array;
-}
-
-// AI ACTION TIME BABY
-async function runActions(actions){
-  console.log("ran actions",actions)
-  try{
-    for(let a of actions){
-      switch(a.action){
-        case 'playCard':
-          //if(boardInfo.player1[a.column] == null )
-          await onPlayerPlayCard(socket,'000',Number(a.cardIndex),a.column)
-          break;
-        case 'sacrificeCard':
-          console.log("sacrificed card",a)
-          await onSacrificeCard(socket,'000', a.column)
-        break;
-      }
-      await new Promise(r => setTimeout(r, 750));
-    }
-    onPlayerEndTurn(socket,'000');
-  }catch(error){
-    console.log("hah lol",error)
-  }
- 
-}
-
 // X- - - - - - - - -X
 // | input functions |
 // X- - - - - - - - -X
+
 
 export async function onPlayerReady(socket,playerId){
   try{
@@ -379,8 +261,8 @@ export async function onPlayerReady(socket,playerId){
       playerInfo['player'+other].blood = 1;
       playerInfo['player'+starting].statusEffects = [];
       playerInfo['player'+other].statusEffects = [];
-      playerInfo['player'+starting].humanCards = amountOfHumanCards;
-      playerInfo['player'+other].humanCards = amountOfHumanCards;
+      playerInfo['player'+starting].VesselCards = amountOfVesselCards;
+      playerInfo['player'+other].VesselCards = amountOfVesselCards;
       
       boardInfo.p1damage = playerMaxHealth;
       boardInfo.p2damage = playerMaxHealth;
@@ -396,8 +278,8 @@ export async function onPlayerReady(socket,playerId){
         drawOneCard(playerInfo.player2);
       }
 
-      playerInfo.player1.hand.push(DataManager.getSpecificCard('Human'));
-      playerInfo.player2.hand.push(DataManager.getSpecificCard('Human'));
+      playerInfo.player1.hand.push(DataManager.getSpecificCard('Vessel'));
+      playerInfo.player2.hand.push(DataManager.getSpecificCard('Vessel'));
       //starts with giving player 1 the cards and then prompting
       UI_Handler.displayBoard(boardInfo,columnAmount,playerInfo);
 
@@ -498,8 +380,8 @@ export async function onSacrificeCard(socket, playerId, column){
 export async function onPlayerDrawCard(socket, playerId, drawnCard){
   playSfx('drawcard');
   let i = isPlayer(playerId);
-    if(drawnCard == 'Human'){ 
-      playerInfo['player'+i].hand.push(DataManager.getSpecificCard('Human'));}
+    if(drawnCard == 'Vessel'){ 
+      playerInfo['player'+i].hand.push(DataManager.getSpecificCard('Vessel'));}
     else{
       let card = playerInfo['player'+i].remainingDeck.shift();
       playerInfo['player'+i].hand.push(card); 
@@ -720,6 +602,44 @@ export async function onPlayerEndTurn(socket, playerId){
 
 // game functions
 
+async function runOnPlayedAmulets(card,playerBoard,opposingBoard,column,wasMirrorAmulet){
+  for(let a of card.amulets){
+    switch(a){
+      case"Shield":
+        if(card.shieldBroken != undefined) continue; 
+        card.shieldBroken = false;      
+        break;
+      case 'Mirror':
+        card.health = 2;
+        card.damage = 2;
+        card.amulets = [];
+        if(opposingBoard[column] == null) continue; 
+          card.health = opposingBoard[column].health;
+          card.damage = opposingBoard[column].damage;
+          card.amulets = opposingBoard[column].amulets;
+        if(wasMirrorAmulet === true) continue; 
+        runOnPlayedAmulets(card,playerBoard,opposingBoard,column,true);
+        break;
+      case 'Marching':
+        card.moveDirection = 1;
+        break;
+      case 'Rush':
+        card.age = 1;  
+        break;
+      case "Valiant Hearts":
+        card.shieldBroken = true;
+        for(let c in playerBoard){
+          if(playerBoard[c] == null || c == column || playerBoard[c].faction != "Humanity") continue; 
+          if(playerBoard[c].name == "Armoury") continue;
+          if(playerBoard[c].shieldBroken == undefined)
+            playerBoard[c].shieldBroken = false;
+        }
+        break;
+    }
+  }
+  return card;
+}
+
 async function endRound(socket){
     socket.emit('endOfRound', playerInfo.player1.id, playerInfo.player1.originalDeck, playerInfo.player2.id, playerInfo.player2.originalDeck );
     lobbyData.p1Ready = false;
@@ -776,56 +696,135 @@ async function removePlayerStatusEffect(playerObj,playerBoard,column){
   }
 }
 
-async function runOnPlayedAmulets(card,playerBoard,opposingBoard,column,wasMirrorAmulet){
-  for(let a of card.amulets){
-    switch(a){
-      case"Shield":
-        if(card.shieldBroken != undefined) continue; 
-        card.shieldBroken = false;      
-        break;
-      case 'Mirror':
-        card.health = 2;
-        card.damage = 2;
-        card.amulets = [];
-        if(opposingBoard[column] == null) continue; 
-          card.health = opposingBoard[column].health;
-          card.damage = opposingBoard[column].damage;
-          card.amulets = opposingBoard[column].amulets;
-        if(wasMirrorAmulet === true) continue; 
-        runOnPlayedAmulets(card,playerBoard,opposingBoard,column,true);
-        break;
-      case 'Marching':
-        card.moveDirection = 1;
-        break;
-      case 'Rush':
-        card.age = 1;  
-        break;
-      case "Valiant Hearts":
-        card.shieldBroken = true;
-        for(let c in playerBoard){
-          if(playerBoard[c] == null || c == column || playerBoard[c].faction != "Humanity") continue; 
-          if(playerBoard[c].name == "Armoury") continue;
-          if(playerBoard[c].shieldBroken == undefined)
-            playerBoard[c].shieldBroken = false;
-        }
-        break;
-    }
-  }
-  return card;
-}
-
 function drawOneCard(playerObj) {
   if (playerObj.remainingDeck.length > 0)
   playerObj.hand.push(playerObj.remainingDeck.shift());
   // shift() takes one element from the array and pushes it into the player's hand
 }
 
+// AI ACTION TIME BABY
+
+function toggleLobbyMode(dir){
+  lobbyData.currentMode = Math.abs( (lobbyData.currentMode + dir) % 3 );
+  let cards, deck, playerObj;
+  switch(lobbyData.currentMode){
+    case 0:
+      
+        $('currentMode').innerText = "PvP";
+       
+        if(playerInfo.player1.id == '000'){
+          console.log(playerInfo)
+          onPlayerLeave(playerInfo.player1.id);
+        }
+      break;
+    case 1: 
+      $('currentMode').innerText = "VS Botward";
+
+      cards = [ "Blood Beast" , "Frank" , "Bow Man" , "Cannon" ];
+      deck = [];
+      for(let c of cards){
+        deck.push(DataManager.getSpecificCard(c));
+      }
+      playerObj = {name:"Botward", id:'000', originalDeck:deck, remainingDeck:[], hand:[], statusEffects:[], blood:0}
+      
+      playerInfo.player1 = playerObj;
+      onPlayerReady(socket,'000');
+      break;
+    case 2:
+      $('currentMode').innerText = "VS Captain Davey";
+
+      cards = [ "Cadaver" , "Cadaver" , "Hound Master" , "Cannon" ];
+      deck = [];
+      for(let c of cards){
+        deck.push(DataManager.getSpecificCard(c));
+      }
+      playerObj = {name:"Capn. Davey", id:'000', originalDeck:deck, remainingDeck:[], hand:deck, statusEffects:[], blood:0}
+        
+      playerInfo.player1 = playerObj;
+      onPlayerReady(socket,'000');
+      break;
+  }
+}
+
+function runCardComparisons(hand,deck){
+  for(let i in hand) hand[i] = DataManager.getSpecificCard(hand[i]);
+  for(let i in deck) deck[i] = DataManager.getSpecificCard(deck[i]);
+  for(let c of hand){
+    let tr = document.createElement('tr');
+    let td1 = document.createElement('td');
+    td1.innerHTML = c.name + "<br>" + c.damage + "/" +c.health +":"+c.cost + "<br>" + textAmulets(c) + "<br>" + " ";
+    tr.appendChild(td1);
+    let opposingCards = [];
+    for(let oc of deck){
+      opposingCards.push({card : oc, score : VixiAI.compareCards(oc,c)})
+    }
+    VixiAI.sortItems(opposingCards);
+    for(let c of opposingCards){
+      let td2 = document.createElement('td');
+      td2.innerHTML = c.card.name + "<br>" + c.card.damage + "/" +c.card.health +":"+c.card.cost + "<br>" + textAmulets(c.card) + "<br>" + c.score;
+      tr.appendChild(td2);
+    }
+    $('scoreboard').appendChild(tr)
+  }
+}
+
+async function runActions(actions){
+  console.log("ran actions",actions)
+  try{
+    for(let a of actions){
+      switch(a.action){
+        case 'playCard':
+          //if(boardInfo.player1[a.column] == null )
+          await onPlayerPlayCard(socket,'000',Number(a.cardIndex),a.column)
+          break;
+        case 'sacrificeCard':
+          console.log("sacrificed card",a)
+          await onSacrificeCard(socket,'000', a.column)
+        break;
+      }
+      await new Promise(r => setTimeout(r, 750));
+    }
+    onPlayerEndTurn(socket,'000');
+  }catch(error){
+    console.log("hah lol",error)
+  }
+ 
+}
+
+
+// X- - - - - - - - -X
+// | Util  functions |
+// X- - - - - - - - -X
+
+function isPlayer (playerId) {
+  //if(playerInfo.player1 == undefined && playerInfo.player2 == undefined) return false;
+  if (playerInfo.player1.id == playerId) return 1;
+  else if (playerInfo.player2.id == playerId) return 2;
+  else return false;
+}
+
+function shuffle (array) {
+  let currentIndex = array.length,  randomIndex;
+
+  // While there remain elements to shuffle...
+  while (currentIndex != 0) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+
+  return array;
+}
+
 function getCardFromBoard(playerIndex,col){
   return $(`p${playerIndex}Card_${col}`);
 }
 
-
-//neccessary Util functions
 export function $(el) { return document.getElementById(el) };
 
 export function getOffset( el ) {
@@ -844,7 +843,7 @@ export function clearElement(el){
     }
 }
 export function getUIHandler(){
-    return UI_Handle;
+    return UI_Handler;
 }
 export function getCardLib(){
     return CardLibrary;

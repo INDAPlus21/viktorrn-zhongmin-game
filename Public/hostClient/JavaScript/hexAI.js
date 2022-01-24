@@ -10,7 +10,7 @@ export async function takeTurn(playerInfo,boardInfo,turn){
   let enemyBoard = boardInfo.player2;
 
   hand.push({
-    "name":"Human"
+    "name":"Vessel"
     ,"damage":0
     ,"health":1
     ,"cost":0
@@ -25,7 +25,7 @@ export async function takeTurn(playerInfo,boardInfo,turn){
     if (hand[i].name == 'Cannon') iCannon = i;
     if (hand[i].name == 'Hound Master') iHound = i;
     if (hand[i].name == 'Blood Beast') iDog = i;
-    if (hand[i].name == 'Human') iH = i;
+    if (hand[i].name == 'Vessel') iH = i;
   }
 
   let safeCol = [];

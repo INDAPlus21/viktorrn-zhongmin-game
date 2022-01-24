@@ -55,6 +55,32 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
     top:20px;
     
 }
+/* Login page */
+#login{
+    text-align: center;
+    color: #000;
+    font-size: 1.2em;
+}
+
+#serverIP{
+    margin: 300px 0 0 0; 
+    height: 30px; 
+    width: 100px; 
+    transform: scale(2);
+}
+
+#loginPlayerName{
+    margin: 60px 0; 
+    height: 30px; 
+    width: 100px; 
+    transform: scale(2); 
+}
+
+#joinServerBtn{
+    height:30px; 
+    width: 100px; 
+    transform: scale(2); 
+}
 
 /*Help Manual button*/
 #theManual {

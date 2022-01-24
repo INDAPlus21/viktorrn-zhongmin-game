@@ -147,9 +147,6 @@ section.onscreen {
     z-index: 10;
 }
 
-
-
-
 #BigBoiTextDisplay{
     z-index: 11;
     position: absolute;
@@ -316,6 +313,24 @@ section.onscreen {
     -webkit-transition: opacity 0.3s linear, left 0.7s cubic-bezier(0,1,0.5,1), top 0.7s cubic-bezier(1,0,0.5,1);
 }
 
+.chatMessage{
+    position: absolute;
+    z-index: 32;
+    text-align: center;
+    
+    color:var(--text);
+    max-width: 400px;
+    padding: 5px;
+    font-size: 2.5em;
+    border-radius: 10px;
+    background-color: rgba(8, 8, 8, 0.2);
+    transition: opacity 1s linear;
+    -webkit-transition: opacity 1s linear;
+    /*
+    
+    border: 3px solid black;*/
+
+}
 
 /*Scoreboard*/
 
@@ -329,6 +344,6 @@ section.onscreen {
 }
 
 #cardComparison #scoreboard td{
-    border-bottom: 2px solid #fff;
+    border-bottom: 2px solid var(--text);
     padding: 20px;
 }

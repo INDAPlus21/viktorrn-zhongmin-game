@@ -1,10 +1,49 @@
-export async function displayAttack(attackingCard,attackedCard,attackedCardData,damage,playerIndex,strikingCard){
-   
-    let dir;
-    if(playerIndex == 1) dir = 1;
-    else dir = -1;
+function $(el){return document.getElementById(el)}
 
-    //console.log("atk card",attackedCard,pos)
+export async function chatMessage(senderIndex,text){
+    let dir = senderIndex == 1 ? 1 : -1;
+    let textLength = text.length;
+    let length = text.length >= 55 ? 1 : text.length / 55;
+    let textOffset = length * 200;
+    let ogPos = $('player'+senderIndex+'Name').getBoundingClientRect();
+    let ogY = dir == 1 ? ogPos.top + 30 : ogPos.top - 80 - 30 * Math.ceil(text.length / 55);
+    
+    let ang = Math.PI -Math.PI/8 * Math.floor(Math.random()*7) 
+    let dist = 120;
+    let dvec = {x:dir*Math.cos(ang),y:dir*Math.sin(ang)};
+
+    let msg = document.createElement('div');
+    msg.innerText = '"'+text+'"';
+    msg.classList.add('chatMessage');
+    msg.style.top = ogY + 'px';
+    msg.style.left = (ogPos.left - textOffset) +'px';
+    msg.style.transform = "scale(0.1)";
+    msg.style.transition = "0.15s transform cubic-bezier(0.5,.1,.3,1.5),opacity 0.5s linear, top 7s linear, left 7s linear";
+    msg.style['-webkit-transform'] = "0.15s transform cubic-bezier(0.5,.1,.3,1.5), opacity 0.5s linear, top 7s linear, left 7s linear";
+  
+    document.body.appendChild(msg);
+
+    let a1 = setInterval(()=>{
+        clearInterval(a1);
+        msg.style.transform = "scale(1)"
+        msg.style.top = ogY + dvec.y*dist + "px";
+        msg.style.left = (ogPos.left - textOffset) + dvec.x*dist + "px";
+        let a2 = setInterval(()=>{
+            clearInterval(a2)
+            msg.style.opacity = '0';
+            let a3 = setInterval(()=>{
+                clearInterval(a3)
+                msg.remove();
+            },500)
+        }, 1000/17 *textLength)
+       
+    },10)
+
+}
+
+export async function displayAttack(attackingCard,attackedCard,attackedCardData,damage,playerIndex,strikingCard){
+    let dir = playerIndex == 1 ? 1 : -1;
+
     try{
         let pos2 = attackingCard.getBoundingClientRect();
         let dispCard = attackingCard.cloneNode(true);
@@ -81,7 +120,7 @@ export async function displayAttack(attackingCard,attackedCard,attackedCardData,
         div.style.left = (pos.left -20) +"px";
         div.style.top = (pos.top +dir*25) +"px";
         div.style.transition = "top 0.2s cubic-bezier(0,0.9,1,1), left 0.2s linear";
-        div.style.transfrom = "scale(10)";
+        div.style.transfrom = "scale(6)";
         div.style['-webkit-transform'] = "scale(6)";
         
         let c2 = setInterval(()=>{
@@ -140,6 +179,7 @@ export async function displayAttack(attackingCard,attackedCard,attackedCardData,
     }catch{}
     
 }
+
 export async function cardServerSidePlayed(){
 
 }

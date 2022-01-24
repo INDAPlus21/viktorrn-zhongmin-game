@@ -35,7 +35,7 @@ export async function takeTurn(playerInfo,boardInfo,turn){
     
     let interactions = [];
     for(let c in hand){
-        if(hand[c].name == "Human") continue;
+        if(hand[c].name == "Vessel") continue;
         for(let oc of treathMap){
             if(oc.score == 0) continue;
             let score = compareCards(hand[c] , enemyBoard[ oc.col ])
@@ -68,7 +68,7 @@ export async function takeTurn(playerInfo,boardInfo,turn){
     console.log("action map", interactions);
 
     for(let c in hand){
-        if(hand[c].name == "Human"){
+        if(hand[c].name == "Vessel"){
             blood++;
             hand.splice(c,1);
         }
