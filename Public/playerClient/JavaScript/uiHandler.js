@@ -133,6 +133,7 @@ export class UIHandler{
             if(board[i] != null){
                 
                 if(board[i].lastSacrificedOnTurn != Main.getCurrentturn()){
+                    AnimationHandler.backgroundTextClientSide("SaccrificeCard","Make Your Choice...")    
                     el.style.transform = 'scale(1.1)';
                     el.onpointerover = () =>{
                         el.style.border = 'none';
@@ -175,9 +176,8 @@ export class UIHandler{
             clearInterval(timer);
         },100)
 
-        if(!Main.getPlayerTurn()) return;
         // text animation
-        AnimationHandler.backgroundTextClientSide("SaccrificeCard","Make Your Choice...")
+        
     }
 
     disableDropZone(){

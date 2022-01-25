@@ -202,7 +202,7 @@ export async function backgroundTextClientSide(textType,text){
 }
 
 export async function clientSidePopUpPrompt(type,text){
-    await new Promise(r => setTimeout(r, 250));
+    await new Promise(r => setTimeout(r, 200));
     // Full height, including the scroll part
     const fullHeight = Math.max(
         document.body.scrollHeight,
