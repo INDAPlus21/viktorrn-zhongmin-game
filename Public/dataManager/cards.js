@@ -6,20 +6,17 @@ export function getCardDiv(card){
    
     let image = document.createElement('div');
     image.classList.add('image');
-    //console.log("../assets/CardImages/"+card.name+".svg")
-    var urlString = 'url(../assets/CardImages/'+ card.name.replace(/\s/g,'')+'.svg)';
-    try{
-        image.style.backgroundImage = urlString;
-    }
-    catch(error){
-        try{
-            urlString = 'url(../assets/CardImages/'+ card.name.replace(/\s/g,'')+'.png)';
-            image.style.backgroundImage = urlString;
+    var url = '../assets/CardImages/'+ card.name.replace(/\s/g,'')+'.svg';
+    checkIfImageExists(url,(result)=>{
+        if(result)image.style.backgroundImage = 'url('+url+')';
+        else {
+            url = '../assets/CardImages/'+ card.name.replace(/\s/g,'')+'.png';
+            checkIfImageExists(url,(result)=>{
+                if(result)image.style.backgroundImage = 'url('+url+')';
+                else console.log("no picture")
+            });
         }
-        catch(error){
-
-        }
-    }
+    })
     div.appendChild(image);
 
 
@@ -90,7 +87,6 @@ export function getCardDiv(card){
 
     return div;
 }
-
 export function textAmulets(card){
     let msg = "";
     for(let a of card.amulets){
@@ -146,3 +142,20 @@ export function textAmulets(card){
     }
     return msg;
 }
+function checkIfImageExists(url,callback) {
+    const img = new Image();
+
+    img.src = url;
+
+    if (img.complete) {
+      callback(true);
+    } else {
+      img.onload = () => {
+        callback(true);
+      };
+      
+      img.onerror = () => {
+        callback(false);
+      };
+    }
+  }

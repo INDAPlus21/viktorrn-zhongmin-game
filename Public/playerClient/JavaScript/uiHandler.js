@@ -1,4 +1,5 @@
 import * as Card from '../../dataManager/cards.js';
+import * as AnimationHandler from '../../dataManager/animations.js';
 import * as Main from './main.js';
 
 export class UIHandler{ 
@@ -38,6 +39,7 @@ export class UIHandler{
                             card.style.borderTop = "5px solid #6C80FF";
                         }
                         if(card.age == 0) div.style.opacity = 0.7;
+                        div.style.border = 'none';
                         div.appendChild(card);
                     }
                     this.actionSlotsHTMLHandle.appendChild(div);
@@ -122,10 +124,8 @@ export class UIHandler{
     }
 
     suggestSacrifices(board){
-        
-        // change background text to indicate its sacrificing time
-        if(!Main.getPlayerTurn()) return;
-        document.getElementById('backgroundTextText').innerHTML="MAKE YOUR CHOICE";
+         // change background text to indicate its sacrificing time
+   
 
         for(let i in board){
            try{
@@ -135,26 +135,31 @@ export class UIHandler{
                 if(board[i].lastSacrificedOnTurn != Main.getCurrentturn()){
                     el.style.transform = 'scale(1.1)';
                     el.onpointerover = () =>{
-                        el.style.border = '10px solid rgb(220, 220, 220)';
+                        el.style.border = 'none';
                         el.style.transform = 'scale(1.3)';
+                        el.firstChild.style.margin = '-10px -60px';
                     }
                     el.onpointerout = () =>{
                         el.style.transform = 'scale(1.1)'; 
-                        el.style.border = '';
+                        el.style.border = 'none';
+                        el.firstChild.style.margin = '';
+                        
                     }
                     el.onpointerdown = () =>{
                         
                         Main.sacrificeCard(i);
                         
                         //trigger animation or effect here
-                        console.log("sacced card",el);
+                        //console.log("sacced card",el);
                         let rebirth = false;
                         for(let a of board[i].amulets){
                             if(a == "Rebirth") rebirth = true;
                         }
 
-                        if(!rebirth) el.firstChild.remove();
-                        
+                        if(!rebirth) {
+                         el.style.border = '';   
+                         el.firstChild.remove();
+                        }
                         this.disableDropZone(); 
                     } 
                 }
@@ -162,21 +167,21 @@ export class UIHandler{
            }catch(err){
                console.log(err)
            } 
+
         }
     
         let timer = setInterval(()=>{
-            window.onpointerdown = this.disableDropZone; 
+            window.onpointerdown = ()=> { this.disableDropZone();}; 
             clearInterval(timer);
         },100)
-        
+
+        if(!Main.getPlayerTurn()) return;
+        // text animation
+        AnimationHandler.backgroundTextClientSide("SaccrificeCard","Make Your Choice...")
     }
 
     disableDropZone(){
-
         // normal playing mode
-        if(!Main.getPlayerTurn()) return; 
-        document.getElementById('backgroundTextText').innerHTML="PLAY YOUR HAND";
-
         try{
             for(let i in this.actionSlotsHTMLHandle.children){
                 let el = this.actionSlotsHTMLHandle.children[i];
@@ -190,6 +195,8 @@ export class UIHandler{
                 
             }
         }catch(error){console.log("error",error)}
+        if(!Main.getPlayerTurn()) return; 
+        AnimationHandler.backgroundTextClientSide("PlayCard","Play Your Hand")
         
     }
 
@@ -211,8 +218,8 @@ export class UIHandler{
             card.setAttribute('cardIndex',i);
             //handle klick event 
             card.onpointerdown = () => {
-                console.log("card clicked")
-                Main.getUIHandler().selectedHandCard(card);
+                //console.log("card clicked"
+                this.selectedHandCard(card);
             }
             
             this.handHTMLHandle.appendChild(card);
@@ -222,8 +229,8 @@ export class UIHandler{
     selectedHandCard(card){
         //animate card klicked
     if(Main.getPlayerPickingCard()) return
+    if(this.currentCardSelected != null) return
 
-        if(this.currentCardSelected == null){
             let pos = Main.getOffset(card); //get pos from original element to use for display animation
             let copy = card.cloneNode(true); //clones card element to create a display copy
             copy.setAttribute('class','highlightCard'); //setting som attributes for display element
@@ -246,18 +253,22 @@ export class UIHandler{
             this.currentCardSelected = card;
             this.currentCardSelected.style.visibility = 'hidden'; //visible
             this.currentCardSelected.style.margin = '0 35px 0 5px';
-        }
        
   
         //activate drop zone
         if(!Main.getPlayerTurn()) return
 
         let playerData = Main.getPlayerData();
-        if(playerData.bloodLevel >= playerData.hand[card.getAttribute('cardindex')].cost && !Main.getPlayerPickingCard())
+        if(playerData.bloodLevel >= playerData.hand[card.getAttribute('cardindex')].cost && !Main.getPlayerPickingCard()){
             this.activateDropZone(Main.getPlayerData().board);
+            
+            //prompt to play card
+        }
         else{
             this.disableDropZone();
-            console.log("need to sac a card or youre picking cards");
+            AnimationHandler.clientSidePopUpPrompt("Blood","Need More Blood");
+            //prompt text
+            //console.log("need to sac a card or youre picking cards");
         }
     }
 
