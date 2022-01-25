@@ -76,6 +76,7 @@ window.onload = function(){
                         $('chatInput').value = '';
                     }
                 };
+                $('theManual').style.display = 'block';
                 $('login').classList.remove('onscreen');
                 $('cardShop').classList.add('onscreen');
                 $('playerName').innerText = playerName;

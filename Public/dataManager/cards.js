@@ -1,3 +1,4 @@
+
 export function getCardDiv(card){
     let div = document.createElement('div');
     div.setAttribute('class','card');
@@ -5,7 +6,22 @@ export function getCardDiv(card){
    
     let image = document.createElement('div');
     image.classList.add('image');
+    //console.log("../assets/CardImages/"+card.name+".svg")
+    var urlString = 'url(../assets/CardImages/'+ card.name.replace(/\s/g,'')+'.svg)';
+    try{
+        image.style.backgroundImage = urlString;
+    }
+    catch(error){
+        try{
+            urlString = 'url(../assets/CardImages/'+ card.name.replace(/\s/g,'')+'.png)';
+            image.style.backgroundImage = urlString;
+        }
+        catch(error){
+
+        }
+    }
     div.appendChild(image);
+
 
     let imageSword = document.createElement('div');
     imageSword.classList.add('damageIcon');

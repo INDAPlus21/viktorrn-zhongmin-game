@@ -149,11 +149,11 @@
 
 .image{
     top:34px;
-  
-    /*background-image: url('./assets/CardImages/Drunk.svg');*/
+    
     background-repeat: no-repeat;
     background-position: 15px 0;
     background-size: 90px;
+    /*background-image: url('./assets/CardImages/Drunk.svg');
     /*mask-image: url('./assets/Card\ Images/BlackKnight.svg');
     mask-size: 70px;
     mask-repeat: no-repeat;
@@ -169,7 +169,7 @@
 }
 
 .description{
-    /*background-image: url('./assets/EffectImages/Rebirth.svg');*/
+    background-image: url('./assets/EffectImages/Rebirth.svg');
     font-size: 1.8em;
     opacity: 1;
     background-repeat: no-repeat;

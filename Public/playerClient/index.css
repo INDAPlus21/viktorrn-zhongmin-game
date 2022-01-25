@@ -415,6 +415,10 @@ transform: scale(1.05);
 #youWin h1,#youLose h1{margin-top: 50vh;}
 
 /*Obligatory chat function*/
+#theManual{
+    display: none;
+}
+
 #chatToggle{
     display: none;
     top:110px;
