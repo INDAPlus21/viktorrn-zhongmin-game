@@ -150,8 +150,8 @@ io.on('connection', (socket) => { // server is online
 
   // event from player: player is sending a very angry letter to be displayed on the host screen
   socket.on('chat', (playerId, roomId, msg) => {
-    //socket.to(hostOf(roomId)).emit('chat',playerId,msg);
-    console.log('Player '+playerId+' wrote: '+msg)
+    socket.to(hostOf(roomId)).emit('chat',playerId,msg);
+    //console.log('Player '+playerId+' wrote: '+msg)
   })
 });
 

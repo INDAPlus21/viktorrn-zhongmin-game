@@ -1,3 +1,4 @@
+
 export function getCardDiv(card){
     let div = document.createElement('div');
     div.setAttribute('class','card');
@@ -5,7 +6,22 @@ export function getCardDiv(card){
    
     let image = document.createElement('div');
     image.classList.add('image');
+    
+    var url = '../assets/CardImages/'+ card.name.replace(/\s/g,'')+'.svg';
+    try{
+    checkIfImageExists(url,(result)=>{
+        if(result)image.style.backgroundImage = 'url('+url+')';
+        else {
+            url = '../assets/CardImages/'+ card.name.replace(/\s/g,'')+'.png';
+            checkIfImageExists(url,(result)=>{
+                if(result)image.style.backgroundImage = 'url('+url+')';
+                else console.log("no picture")
+            });
+        }
+    })
+    }catch(error){}
     div.appendChild(image);
+
 
     let imageSword = document.createElement('div');
     imageSword.classList.add('damageIcon');
@@ -70,11 +86,14 @@ export function getCardDiv(card){
         bg.classList.add('rareCardBackground');
         div.appendChild(bg);
       }
-  
-
+      
+    let sac = document.createElement('div')
+    sac.classList.add('saccrificeSymbol')
+    sac.innerHTML =" &dagger;";
+    
+    div.appendChild(sac)
     return div;
 }
-
 export function textAmulets(card){
     let msg = "";
     for(let a of card.amulets){
@@ -125,8 +144,23 @@ export function textAmulets(card){
                 msg+="";
                 break;
         }
-        
-        
     }
     return msg;
 }
+function checkIfImageExists(url,callback) {
+    const img = new Image();
+
+    img.src = url;
+
+    if (img.complete) {
+      callback(true);
+    } else {
+      img.onload = () => {
+        callback(true);
+      };
+      
+      img.onerror = () => {
+        callback(false);
+      };
+    }
+  }

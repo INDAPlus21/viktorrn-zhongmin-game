@@ -191,3 +191,62 @@ export async function cardServerSideSacrificed(){
 export async function cardClientSideSacrificed(){
 
 }
+
+export async function backgroundTextClientSide(textType,text){
+    let msg = text;
+    switch(textType){
+        default:
+            document.getElementById('backgroundTextText').innerHTML = msg;
+            break;
+    }
+}
+
+export async function clientSidePopUpPrompt(type,text){
+    await new Promise(r => setTimeout(r, 200));
+    // Full height, including the scroll part
+    const fullHeight = Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight,
+        document.body.offsetHeight,
+        document.documentElement.offsetHeight,
+        document.body.clientHeight,
+        document.documentElement.clientHeight
+    );
+    const fullWidth = Math.max(
+        document.body.scrollWidth,
+        document.documentElement.scrollWidth,
+        document.body.offsetWidth,
+        document.documentElement.offsetWidth,
+        document.body.clientWidth,
+        document.documentElement.clientWidth
+    );
+    let ogPos = {top:fullHeight/2,left:fullWidth/2}
+    let msg = document.createElement('div');
+    msg.innerText = text;
+    msg.classList.add('textPopUp');
+    console.log("ogPos",ogPos)
+    msg.style.top = ogPos.top - 150 + 'px';
+    msg.style.left = ogPos.left -120 +'px';
+    msg.style.transform = "scale(0.1)";
+    msg.style.transition = "0.15s transform cubic-bezier(0.5,.1,.3,1.5),opacity 0.5s linear, top 7s linear, left 7s linear";
+    msg.style['-webkit-transform'] = "0.15s transform cubic-bezier(0.5,.1,.3,1.5), opacity 0.5s linear, top 7s linear, left 7s linear";
+  
+    document.body.appendChild(msg);
+
+    let a1 = setInterval(()=>{
+        clearInterval(a1);
+        msg.style.transform = "scale(1)"
+        msg.style.top = ogPos.top + 50 + "px";
+        msg.style.left = (ogPos.left - 140) + "px";
+        let a2 = setInterval(()=>{
+            clearInterval(a2)
+            msg.style.opacity = '0';
+            let a3 = setInterval(()=>{
+                clearInterval(a3)
+                msg.remove();
+            },500)
+        }, 300)
+       
+    },10)
+
+}

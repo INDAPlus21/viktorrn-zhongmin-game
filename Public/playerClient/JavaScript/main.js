@@ -1,6 +1,7 @@
 import * as Card from '../../dataManager/cards.js';
 import * as UIHandler from './uiHandler.js';
 import * as DataManagerImport from '../../dataManager/dataManager.js';
+import * as AnimationHandler from '../../dataManager/animations.js';
 //import e from './express'; // Comment- doesnt load
 
 let currentlyYourTurn = false;
@@ -76,6 +77,7 @@ window.onload = function(){
                         $('chatInput').value = '';
                     }
                 };
+                $('theManual').style.display = 'block';
                 $('login').classList.remove('onscreen');
                 $('cardShop').classList.add('onscreen');
                 $('playerName').innerText = playerName;
@@ -89,9 +91,10 @@ window.onload = function(){
     
     
     socket.on('startGame', () => {
-        UI_Handler.displayActionSlots('waitingForTurn');
         $('handPoint').classList.add('displaying');
         $('bloodLevel').classList.add('displaying');
+        AnimationHandler.backgroundTextClientSide("WaitingForTurn","Wait Your Turn")
+        UI_Handler.displayActionSlots('playCards',[],playerData.board,[],columnAmount);
     })
     
     socket.on('syncClient', (hand,playerboard,bloodLevel,playerDeck,redrawUI) => {
@@ -118,11 +121,11 @@ window.onload = function(){
         if(turn > 1){
             UI_Handler.displayActionSlots('chooseCard',playerData.deck,[],playerData.hand);
             playerPickingCard = true;
-            $('backgroundTextText').innerHTML="DRAW A CARD";
+            AnimationHandler.backgroundTextClientSide("DrawCard","Draw a Card")
         }else{
             UI_Handler.displayActionSlots('playCards',[],playerData.board,[],columnAmount);
             // if not card drawing mode right from start just go to normal playing mode directly
-            $('backgroundTextText').innerHTML="PLAY YOUR HAND";
+            AnimationHandler.backgroundTextClientSide("PlayCard","Play Your Hand")
         }  
         UI_Handler.drawHand(playerData.hand);
         $('endTurnBtn').classList.add('displaying');
@@ -132,7 +135,6 @@ window.onload = function(){
 
     socket.on("endOfRound",(deck)=>{
         displayCardShop(4);
-        console.log("ready to display cardShop",deck);
     })
     
     socket.on('youWin', () => {
@@ -357,7 +359,6 @@ function drawDeck(cards){
 export function doneWithStartingCards(cards){
     $('cardShop').classList.remove('onscreen');
     $('playArea').classList.add('onscreen');
-    UI_Handler.displayActionSlots('waitingForOtherPlayer');
     
     let deck = [];
     for(let i in cards){
@@ -366,6 +367,8 @@ export function doneWithStartingCards(cards){
 
     socket.emit('playerSelectedCards', roomId, socketId, deck);
     socket.emit('ready', roomId, socketId);
+    
+    AnimationHandler.backgroundTextClientSide("WaitingForOtherPlayer","Waiting for other player...")
     // @viktor at here, maybe change to another section that is just a blank waiting screen
 }
 
@@ -378,7 +381,9 @@ export function chooseCard(cardType){
     socket.emit('playerDrawCard', roomId, socketId, cardType);
     displayPlayCardAreaOnSync = true;
     playerPickingCard = false;
-    $('backgroundTextText').innerHTML="PLAY YOUR HAND";
+    
+    AnimationHandler.backgroundTextClientSide("PlayCard","Play Your Hand")
+    
 }
 
 export function cardPlayed(cardIndex,col){
@@ -390,13 +395,12 @@ export function cardPlayed(cardIndex,col){
 }
 
 export function endTurn() {
-    $('backgroundTextText').innerHTML="WAIT YOUR TURN";
+    AnimationHandler.backgroundTextClientSide("WaitForTurn","Wait Your Turn")
 
     $('endTurnBtn').classList.remove('displaying');
     $('sacrificeCardBtn').classList.remove('displaying');
     currentlyYourTurn = false;
     displayPlayCardAreaOnSync = true;
-    //UI_Handler.displayActionSlots('waitingForTurn');
     socket.emit('playerEndTurn', roomId, socketId);
 }
 

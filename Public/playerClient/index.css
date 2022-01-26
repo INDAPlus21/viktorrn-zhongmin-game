@@ -87,27 +87,6 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
     font-size: 1.2em;
 }
 
-/*Help Manual button*/
-#theManual {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    width: 75px;
-    height: 75px;
-    background: #eee;
-    border-radius: 8px;
-    z-index: 999;
-}
-#theManual div {
-    width: 70px;
-    height: 70px;
-    background: url("./../assets/help-circle-outline.svg");
-    background-size: contain;
-}
-
 
 
 /*Card styling*/
@@ -254,6 +233,10 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
 
     border-radius: 5px;
     border: 5px solid var(--actionSlotColor);
+    background-image: url('../assets/ArrowUp.png');
+    background-size: 160px;
+    background-position:-25px 20px;
+    background-repeat: no-repeat;
 
     transition: border 1s, transform 0.3s;
     transition-timing-function: cubic-bezier(0,.95,.25,1);
@@ -277,8 +260,8 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
     top:0px;
     margin: -5px -60px;
 
-    transition: top 0.5s linear, opacity 1s linear;
-    -webkit-transition: opacity 1s linear;
+    transition: top 0.5s linear, opacity 1s linear,margin 0.1s cubic-bezier(0,.95,.25,1);
+    -webkit-transition: opacity 1s linear, margin 0.1s cubic-bezier(0,.95,.25,1);
 }
 
 #actionSlots .cardSlot:hover{
@@ -297,7 +280,7 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
 #handPoint{
     position: absolute;
     bottom:40px;
-    width:100%;
+    width:110%;
     height: 200px;
     background-color: rgba(41, 41, 41, 0);
     text-align: center;
@@ -337,9 +320,11 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
     bottom:20px;
     right: 20px;
     display: none;
+    transition: transform 0.3s;
+    transition-timing-function: cubic-bezier(0,.95,.25,1);
 }
 
-#endTurnBtn:hover{
+#endTurnBtn:hover,#sacrificeCardBtn:hover{
 transform: scale(1.05);
 }
 
@@ -360,6 +345,8 @@ transform: scale(1.05);
     border: 10px solid rgb(0, 0, 0);
     border-radius: 20px;
     display: none;
+    transition: transform 0.3s;
+    transition-timing-function: cubic-bezier(0,.95,.25,1);
 }
 
 #bloodLevel{
@@ -386,9 +373,6 @@ transform: scale(1.05);
     transform: translateX(-50%);
 }
 
-#sacrificeCardBtn{
-    position: absolute;  
-}
 #backgroundText {
     position: absolute;
     top: 0;
@@ -406,6 +390,25 @@ transform: scale(1.05);
     z-index: -9;
 }
 
+.textPopUp{
+    position: absolute;
+    z-index: 32;
+    text-align: center;
+    
+    color:var(--bloodColor);
+    max-width: 400px;
+    padding: 5px;
+    font-size: 5em;
+    border-radius: 10px;
+    background-color: rgba(8, 8, 8, 0.2);
+    transition: opacity 1s linear;
+    -webkit-transition: opacity 1s linear;
+    /*
+    
+    border: 3px solid black;*/
+
+}
+
 .displaying {
     display: block !important;
 }
@@ -415,6 +418,30 @@ transform: scale(1.05);
 #youWin h1,#youLose h1{margin-top: 50vh;}
 
 /*Obligatory chat function*/
+/*Help Manual button*/
+#theManual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 75px;
+    height: 75px;
+    background-color: rgb(182, 177, 177);
+    border-radius: 8px;
+    z-index: 999;
+    display: none;
+    transition: transform 0.3s;
+    transition-timing-function: cubic-bezier(0,.95,.25,1);
+}
+#theManual div {
+    width: 70px;
+    height: 70px;
+    background: url("./../assets/help-circle-outline.svg");
+    background-size: contain;
+}
+
 #chatToggle{
     display: none;
     top:110px;
@@ -428,9 +455,16 @@ transform: scale(1.05);
     background-size: 50px;
     background-repeat: no-repeat;
     background-color: none !important;
+    background-color: rgb(182, 177, 177);
     border:none;
     border-radius: 10px;
+    transition: transform 0.3s;
+    transition-timing-function: cubic-bezier(0,.95,.25,1);
     
+}
+
+#chatToggle:hover,#theManual:hover{
+    transform: scale(1.05);
 }
 
 #chatWrapper{
@@ -480,3 +514,20 @@ transform: scale(1.05);
     color: black;
     font-size: 2.5em;
 }
+
+/* Animations */
+.shake {
+    animation: shake-animation 0.5s ease infinite;
+    transform-origin: 50% 50%;
+  }
+
+  @keyframes shake-animation {
+    0% { transform:translate(0,0) }
+   15% { transform:translate(-1px,0) }
+   25% { transform:translate(0,0) }
+   45% { transform:translate(1px,0) }
+   60% { transform:translate(-1px,0) }
+   70% { transform:translate(0px,0) }
+   85% { transform:translate(1px,0) }
+   100% { transform:translate(-1px,0) }
+ }

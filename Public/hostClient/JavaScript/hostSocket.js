@@ -789,6 +789,7 @@ async function runActions(actions){
     onPlayerEndTurn(socket,'000');
   }catch(error){
     console.log("hah lol",error)
+    onPlayerEndTurn(socket,'000');
   }
  
 }
