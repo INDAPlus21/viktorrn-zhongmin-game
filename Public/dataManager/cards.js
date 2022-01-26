@@ -83,8 +83,12 @@ export function getCardDiv(card){
         bg.classList.add('rareCardBackground');
         div.appendChild(bg);
       }
-  
+      
+    let sac = document.createElement('div')
+    sac.classList.add('saccrificeSymbol')
+    sac.innerHTML =" &dagger;";
 
+    div.appendChild(sac)
     return div;
 }
 export function textAmulets(card){
@@ -137,8 +141,6 @@ export function textAmulets(card){
                 msg+="";
                 break;
         }
-        
-        
     }
     return msg;
 }

@@ -39,7 +39,7 @@ export class UIHandler{
                             card.style.borderTop = "5px solid #6C80FF";
                         }
                         if(card.age == 0) div.style.opacity = 0.7;
-                        div.style.border = 'none';
+                        //div.style.border = 'none';
                         div.appendChild(card);
                     }
                     this.actionSlotsHTMLHandle.appendChild(div);
@@ -136,15 +136,16 @@ export class UIHandler{
                 if(board[i].lastSacrificedOnTurn != Main.getCurrentturn()){
                     AnimationHandler.backgroundTextClientSide("SaccrificeCard","Make Your Choice...")    
                     el.style.transform = 'scale(1.1)';
+                    el.firstChild.classList.add('shake')
                     el.onpointerover = () =>{
-                        el.style.border = 'none';
+                        /*el.style.border = 'none';
                         el.style.transform = 'scale(1.3)';
-                        el.firstChild.style.margin = '-10px -60px';
+                        el.firstChild.style.margin = '-10px -60px';*/
                     }
                     el.onpointerout = () =>{
-                        el.style.transform = 'scale(1.1)'; 
+                        /*el.style.transform = 'scale(1.1)'; 
                         el.style.border = 'none';
-                        el.firstChild.style.margin = '';
+                        el.firstChild.style.margin = '';*/
                         
                     }
                     el.onpointerdown = () =>{
@@ -192,6 +193,7 @@ export class UIHandler{
                     el.onpointerout = null;
                     el.onpointerover = null;
                     el.onpointerdown = null;
+                    el.firstChild.classList.remove('shake')
                 }
                 
             }

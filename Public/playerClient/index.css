@@ -233,6 +233,10 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
 
     border-radius: 5px;
     border: 5px solid var(--actionSlotColor);
+    background-image: url('../assets/ArrowUp.png');
+    background-size: 160px;
+    background-position:-25px 20px;
+    background-repeat: no-repeat;
 
     transition: border 1s, transform 0.3s;
     transition-timing-function: cubic-bezier(0,.95,.25,1);
@@ -510,3 +514,26 @@ transform: scale(1.05);
     color: black;
     font-size: 2.5em;
 }
+
+/* Animations */
+.shake {
+    animation: shake-animation 0.5s ease infinite;
+    transform-origin: 50% 50%;
+  }
+
+  .element {
+    margin: 0 auto;
+    width: 150px;
+    height: 150px;
+    background: red;
+  }
+  @keyframes shake-animation {
+    0% { transform:translate(0,0) }
+   15% { transform:translate(-1px,0) }
+   25% { transform:translate(0,0) }
+   45% { transform:translate(1px,0) }
+   60% { transform:translate(-1px,0) }
+   70% { transform:translate(0px,0) }
+   85% { transform:translate(1px,0) }
+   100% { transform:translate(-1px,0) }
+ }
