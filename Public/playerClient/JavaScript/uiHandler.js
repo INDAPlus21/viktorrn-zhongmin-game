@@ -101,7 +101,6 @@ export class UIHandler{
         for(let i in board){
             let el = this.actionSlotsHTMLHandle.children[i];
             if(board[i] == null){
-                console.log(board[i])
                 el.style.transform = 'scale(1.1)';
                 el.onpointerover = () =>{
                     el.style.border = '10px solid rgb(220, 220, 220)';
@@ -136,17 +135,14 @@ export class UIHandler{
                 if(board[i].lastSacrificedOnTurn != Main.getCurrentturn()){
                     AnimationHandler.backgroundTextClientSide("SaccrificeCard","Make Your Choice...")    
                     el.style.transform = 'scale(1.1)';
-                    el.firstChild.classList.add('shake')
+                    el.classList.add('shake')
+                    
                     el.onpointerover = () =>{
-                        /*el.style.border = 'none';
-                        el.style.transform = 'scale(1.3)';
-                        el.firstChild.style.margin = '-10px -60px';*/
+                        el.firstChild.childNodes[9].style.opacity = 1;
+                        
                     }
                     el.onpointerout = () =>{
-                        /*el.style.transform = 'scale(1.1)'; 
-                        el.style.border = 'none';
-                        el.firstChild.style.margin = '';*/
-                        
+                        el.firstChild.childNodes[9].style.opacity = 0;
                     }
                     el.onpointerdown = () =>{
                         
@@ -187,15 +183,17 @@ export class UIHandler{
         try{
             for(let i in this.actionSlotsHTMLHandle.children){
                 let el = this.actionSlotsHTMLHandle.children[i];
-                if(el.tagName == 'DIV'){
-                    el.style.transform = ''; 
-                    el.style.border = '';
-                    el.onpointerout = null;
-                    el.onpointerover = null;
-                    el.onpointerdown = null;
-                    el.firstChild.classList.remove('shake')
-                }
+                el.style.transform = ''; 
+                el.style.border = '';
+                el.onpointerout = null;
+                el.onpointerover = null;
+                el.onpointerdown = null;
                 
+                if(el.firstChild != undefined){
+                    el.classList.remove('shake');
+                    el.firstChild.childNodes[9].style.opacity = 0;
+                }
+                if( i == 3) break;
             }
         }catch(error){console.log("error",error)}
         if(!Main.getPlayerTurn()) return; 
@@ -233,6 +231,7 @@ export class UIHandler{
         //animate card klicked
     if(Main.getPlayerPickingCard()) return
     if(this.currentCardSelected != null) return
+    this.disableDropZone();
 
             let pos = Main.getOffset(card); //get pos from original element to use for display animation
             let copy = card.cloneNode(true); //clones card element to create a display copy
@@ -268,7 +267,7 @@ export class UIHandler{
             //prompt to play card
         }
         else{
-            this.disableDropZone();
+            
             AnimationHandler.clientSidePopUpPrompt("Blood","Need More Blood");
             //prompt text
             //console.log("need to sac a card or youre picking cards");
@@ -280,7 +279,7 @@ export class UIHandler{
         if(!this.cardWasPlayed){
             try{
                 this.currentDisplayedCard.style.left = this.currentDisplayedCard.getAttribute('ogLeft') + 'px';
-                this.currentDisplayedCard.style.top = this.currentDisplayedCard.getAttribute('ogTop') + 'px';
+                this.currentDisplayedCard.style.top = Number(this.currentDisplayedCard.getAttribute('ogTop'))+ 20 + 'px';
                 this.currentDisplayedCard.style.transform = 'scale(1) translateX(0)';
             }catch{}            
     

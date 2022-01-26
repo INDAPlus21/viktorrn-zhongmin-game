@@ -521,12 +521,6 @@ transform: scale(1.05);
     transform-origin: 50% 50%;
   }
 
-  .element {
-    margin: 0 auto;
-    width: 150px;
-    height: 150px;
-    background: red;
-  }
   @keyframes shake-animation {
     0% { transform:translate(0,0) }
    15% { transform:translate(-1px,0) }

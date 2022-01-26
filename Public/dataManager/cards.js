@@ -6,7 +6,9 @@ export function getCardDiv(card){
    
     let image = document.createElement('div');
     image.classList.add('image');
+    
     var url = '../assets/CardImages/'+ card.name.replace(/\s/g,'')+'.svg';
+    try{
     checkIfImageExists(url,(result)=>{
         if(result)image.style.backgroundImage = 'url('+url+')';
         else {
@@ -17,6 +19,7 @@ export function getCardDiv(card){
             });
         }
     })
+    }catch(error){}
     div.appendChild(image);
 
 
@@ -87,7 +90,7 @@ export function getCardDiv(card){
     let sac = document.createElement('div')
     sac.classList.add('saccrificeSymbol')
     sac.innerHTML =" &dagger;";
-
+    
     div.appendChild(sac)
     return div;
 }
