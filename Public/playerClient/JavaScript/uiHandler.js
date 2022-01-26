@@ -97,6 +97,7 @@ export class UIHandler{
     }
 
     activateDropZone(board){
+        window.onpointerdown = undefined;
         for(let i in board){
             let el = this.actionSlotsHTMLHandle.children[i];
             if(board[i] == null){
@@ -125,7 +126,7 @@ export class UIHandler{
 
     suggestSacrifices(board){
          // change background text to indicate its sacrificing time
-   
+         window.onpointerdown = undefined;
 
         for(let i in board){
            try{
