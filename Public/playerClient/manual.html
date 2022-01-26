@@ -4,12 +4,15 @@
   <link rel="stylesheet" href="./../reset.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
       background-color: #1c1b22;
       color: #eee;
       line-height: 1.2;
     }
-    div {
+    div#rulebookContainer {
       max-width: 800px;
       padding: 2em;
       margin: 0 auto;
@@ -25,43 +28,106 @@
     h1 {
       font-size: 2em;
     }
+    div.amuletInfo {
+      margin: 1em 0;
+      min-height: 80px;
+    }
     h2 {
       font-size: 1.3em;
-      margin-bottom: .2em;
+      vertical-align: center;
+      margin-bottom: .5em;
     }
-    p {
-      margin-bottom: 1.2em;
+    img {
+      float: left;
+      height: 70px;
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
-  <div>
+  <div id="rulebookContainer">
     <h1>The Rulebook</h1>
     <p>Certain cards come with certain attributes, printed on the card as either a symbol or an acronym. The following is a list of existing attributes and explanations of how they work.</p>
     <hr>
-    <h2>RS - Rush</h2>
-    <p>This card attacks immediately on the same turn it's placed.</p>
-    <h2>FL - Flying</h2>
-    <p>This card ignores any opposing cards (unless they have Flying or High Block) and attacks the enemy player directly. It can also only be attacked by Flying or Reach cards.</p>
-    <h2>HB - High Block</h2>
-    <p>This card prevents opposing Flying cards from attacking the player directly.</p>
-    <h2>RH - Reach</h2>
-    <p>This card can attack opposing Flying cards.</p>
-    <h2>MR - Mirror</h2>
-    <p>This card will copy all attributes and statistics of the opposing card when played. It has 2 attack and 2 health if there is no opposing card.</p>
-    <h2>DR - Drunk</h2>
-    <p>This card's attack is randomized between 0 and 3 (inclusive) each time when it attacks.</p>
-    <h2>SH - Shield</h2>
-    <p>This card will ignore the first incoming damage it takes.</p>
-    <h2>VH - Valiant Heart</h2>
-    <p>As long as this card is on the board, all other cards on the same side gain a shield at the start of the player's turn.</p>
-    <h2>MA - Marching</h2>
-    <p>After attacking, this card moves to the adjacent space in a certain direction, or changes direction if there is no vacant space. The starting direction is right.</p>
-    <h2>HM - Hound Master</h2>
-    <p>As long as this card is on the board, the player receives a Blood Beast at the start of their turn.</p>
-    <h2>HH - Headed Hunter</h2>
-    <p>This card gains +1 attack for every health the player lost.</p>
-    <h2>RB - Rebirth</h2>
-    <p>Upon sacrificing, this card does not perish, but only loses 1 health.</p>
+    <div class="amuletInfo">
+      <img src="./../assets/Amulets/Rush.png">
+      <h2 id="aRush">Rush</h2>
+      <p>This card attacks immediately on the same turn it's placed.</p>
+    </div>
+    <div class="amuletInfo">
+      <img src="./../assets/Amulets/Flying.png">
+      <h2>Flying</h2>
+      <p>This card ignores any opposing cards (unless they have Flying or High Block) and attacks the enemy player directly. It can also only be attacked by Flying or Reach cards.</p>
+    </div>
+    <div class="amuletInfo">
+      <img src="./../assets/Amulets/HighBlock.png">
+      <h2>High Block</h2>
+      <p>This card prevents opposing Flying cards from attacking the player directly.</p>
+    </div>
+    <div class="amuletInfo">
+      <img src="./../assets/Amulets/Reach.png">
+      <h2>Reach</h2>
+      <p>This card can attack opposing Flying cards.</p>
+    </div>
+    <div class="amuletInfo">
+
+      <h2>MR - Mirror</h2>
+      <p>This card will copy all attributes and statistics of the opposing card when played. It has 2 attack and 2 health if there is no opposing card.</p>
+    </div>
+    <div class="amuletInfo">
+      <img src="./../assets/Amulets/Drunk.png">
+      <h2>Drunk</h2>
+      <p>This card's attack is randomized between 0 and 3 (inclusive) each time when it attacks.</p>
+    </div>
+    <div class="amuletInfo">
+      <img src="./../assets/Amulets/Shield.png">
+      <h2>Shield</h2>
+      <p>This card will ignore the first incoming damage it takes.</p>
+    </div>
+    <div class="amuletInfo">
+      <img src="./../assets/Amulets/ValiantHeart.png">
+      <h2>Valiant Heart</h2>
+      <p>While this card is on the board, all Humanity-type cards on the same side gain a shield at the start of the player's turn.</p>
+    </div>
+    <div class="amuletInfo">
+      <img src="./../assets/Amulets/MoveR.png">
+      <h2>Marching</h2>
+      <p>After attacking, this card moves into the adjacent space in the specified direction, or changes direction if there is no vacant space. The starting direction is right.</p>
+    </div>
+    <div class="amuletInfo">
+      <img src="./../assets/Amulets/HoundMaster.png">
+      <h2>Hound Master</h2>
+      <p>As long as this card is on the board, the player receives a Blood Beast at the start of their turn.</p>
+    </div>
+    <div class="amuletInfo">
+      <img src="./../assets/Amulets/HeadHunter_alt.png">
+      <h2>Headed Hunter</h2>
+      <p>This card gains +1 attack for every health the player lost.</p>
+    </div>
+    <div class="amuletInfo">
+      <img src="./../assets/Amulets/Rebirth.png">
+      <h2>Rebirth</h2>
+      <p>Upon sacrificing, this card does not perish, but only loses 1 health.</p>
+    </div>
+    <div class="amuletInfo">
+      <img src="./../assets/Amulets/AceHand.png">
+      <h2>Ace Hand</h2>
+      <p>When this card is played, the player immediately draws a card from their deck (if there are any cards left).</p>
+    </div>
+    <div class="amuletInfo">
+      <img src="./../assets/Amulets/Trapper.png">
+      <h2>Trapper</h2>
+      <p>When an enemy card is played in front of this card, the enemy card immediately takes 1 damage.</p>
+    </div>
+    <div class="amuletInfo">
+      <img src="./../assets/Amulets/Retribution.png">
+      <h2>Retribution</h2>
+      <p>After an enemy card attacks this card, the enemy card takes 1 damage.</p>
+    </div>
+    <div class="amuletInfo">
+      <img src="./../assets/Amulets/Dominance.png">
+      <h2>Dominance</h2>
+      <p>The opposing enemy card loses 1 attack.</p>
+    </div>
   </div>
 </body>
