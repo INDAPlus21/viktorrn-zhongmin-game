@@ -136,13 +136,14 @@ export class UIHandler{
                     AnimationHandler.backgroundTextClientSide("SaccrificeCard","Make Your Choice...")    
                     el.style.transform = 'scale(1.1)';
                     el.classList.add('shake')
+                    console.log("selected item" , el.firstChild.lastChild )
                     
                     el.onpointerover = () =>{
-                        el.firstChild.childNodes[9].style.opacity = 1;
+                        el.firstChild.lastChild.style.opacity = 1;
                         
                     }
                     el.onpointerout = () =>{
-                        el.firstChild.childNodes[9].style.opacity = 0;
+                        el.firstChild.lastChild.style.opacity = 0;
                     }
                     el.onpointerdown = () =>{
                         
@@ -188,10 +189,10 @@ export class UIHandler{
                 el.onpointerout = null;
                 el.onpointerover = null;
                 el.onpointerdown = null;
-                
+           
                 if(el.firstChild != undefined){
                     el.classList.remove('shake');
-                    el.firstChild.childNodes[9].style.opacity = 0;
+                    el.firstChild.lastChild.style.opacity = 0;
                 }
                 if( i == 3) break;
             }

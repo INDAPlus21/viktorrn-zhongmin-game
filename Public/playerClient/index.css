@@ -280,7 +280,7 @@ body::-webkit-scrollbar,section::-webkit-scrollbar {
 #handPoint{
     position: absolute;
     bottom:40px;
-    width:110%;
+    width:100%;
     height: 200px;
     background-color: rgba(41, 41, 41, 0);
     text-align: center;

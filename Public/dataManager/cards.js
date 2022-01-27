@@ -93,9 +93,12 @@ export function getCardDiv(card){
       }
       
     let sac = document.createElement('div')
-    sac.classList.add('saccrificeSymbol')
-    sac.innerHTML =" &dagger;";
+    let sacDagger = document.createElement('div')
     
+    sacDagger.innerHTML = " &dagger;";
+    sac.classList.add('saccrificeSymbol')
+    sacDagger.classList.add('dagger')
+    sac.appendChild(sacDagger);    
     div.appendChild(sac)
     return div;
 }
@@ -105,16 +108,28 @@ export function getAttributeIcons(div,card){
         if(i == 2) {console.log("found more than 2 amulets");break}
         let disc = document.createElement('div');
         disc.classList.add('description');
-        if(card.amulets.length > 2)
+        if(card.amulets.length > 1){
             disc.classList.add('descriptionSlot'+i);
+        }  
         
-        var url = '../assets/Amulets/'+ card.amulets[i].replace(/\s/g,'')+'.png';
+        let amulet = card.amulets[i]
+        var url = '../assets/Amulets/'+amulet.replace(/\s/g,'')+'.png';
+        
         try{
         checkIfImageExists(url,(result)=>{
-            if(result)disc.style.backgroundImage = 'url('+url+')';
-            else console.log("no picture")
+            if(result){disc.style.backgroundImage = "url("+'../assets/Amulets/'+amulet.replace(/\s/g,'')+'.png'+")";}
         })
         }catch(error){}
+        for(let a of card.amulets){
+            switch(a){
+                case 'Marching':
+                    if(card.moveDirection == -1) url = '../assets/Amulets/MoveL.png';
+                    else url = '../assets/Amulets/MoveR.png';
+                    disc.style.backgroundImage = 'url('+url+')';
+                    break;
+            }
+            
+        }
 
         div.appendChild(disc)
     }
@@ -173,6 +188,7 @@ export function textAmulets(card){
     }
     return msg;
 }
+
 function checkIfImageExists(url,callback) {
     const img = new Image();
 
