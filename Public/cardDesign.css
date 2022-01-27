@@ -169,19 +169,37 @@
 }
 
 .description{
-    background-image: url('./assets/EffectImages/Rebirth.svg');
+    background-image: url('./assets/Amulets/AceHand.png');
     font-size: 1.8em;
     opacity: 1;
     background-repeat: no-repeat;
     background-position: 0 0;
     background-size: 50px;
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 10px;
+    left: 35px; /* 60 35 - 50/2 */
+    
+    bottom: 10px; 
     width: 50px;
     height: 50px;
+   
+    
     z-index: 1;
+}
+
+.descriptionSlot1{
+    background-size: 30px !important;
+    width: 30px !important;
+    height: 30px !important;
+    left: 30px !important;
+    bottom: 30px !important;
+}
+
+.descriptionSlot2{
+    background-size: 30px !important;
+    width: 30px !important;
+    height: 30px !important;
+    left: 60px !important;
+    bottom: 10px !important;
 }
 
 .saccrificeSymbol{
@@ -206,5 +224,11 @@
 }
 
 .saccrificeSymbol .dagger{
+    transform: translateX(-50%);
+    left: 50%;
     
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 8em;
+    font-weight: bold;
+    color: var(--bloodColor);
 }

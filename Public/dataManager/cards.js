@@ -75,11 +75,16 @@ export function getCardDiv(card){
     cost.classList.add('cost')
     div.appendChild(cost);
 
-    let description = document.createElement('div');
+    /*let description = document.createElement('div');
+    let d2 = document.createElement('div');
      
-    description.innerText = textAmulets(card);
-    description.classList.add('description')
+    //description.innerText = textAmulets(card);
+    description.classList.add('description','descriptionSlot1')
+    d2.classList.add('description','descriptionSlot2')
     div.appendChild(description);
+    div.appendChild(d2);*/
+
+    getAttributeIcons(div,card)
 
     if(card.rarity === "rare") {
         let bg = document.createElement('div');
@@ -94,6 +99,27 @@ export function getCardDiv(card){
     div.appendChild(sac)
     return div;
 }
+
+export function getAttributeIcons(div,card){
+    for(let i in card.amulets){
+        if(i == 2) {console.log("found more than 2 amulets");break}
+        let disc = document.createElement('div');
+        disc.classList.add('description');
+        if(card.amulets.length > 2)
+            disc.classList.add('descriptionSlot'+i);
+        
+        var url = '../assets/Amulets/'+ card.amulets[i].replace(/\s/g,'')+'.png';
+        try{
+        checkIfImageExists(url,(result)=>{
+            if(result)disc.style.backgroundImage = 'url('+url+')';
+            else console.log("no picture")
+        })
+        }catch(error){}
+
+        div.appendChild(disc)
+    }
+}
+
 export function textAmulets(card){
     let msg = "";
     for(let a of card.amulets){
