@@ -74,16 +74,7 @@ export function getCardDiv(card){
     }
     cost.classList.add('cost')
     div.appendChild(cost);
-
-    /*let description = document.createElement('div');
-    let d2 = document.createElement('div');
-     
-    //description.innerText = textAmulets(card);
-    description.classList.add('description','descriptionSlot1')
-    d2.classList.add('description','descriptionSlot2')
-    div.appendChild(description);
-    div.appendChild(d2);*/
-
+    
     getAttributeIcons(div,card)
 
     if(card.rarity === "rare") {

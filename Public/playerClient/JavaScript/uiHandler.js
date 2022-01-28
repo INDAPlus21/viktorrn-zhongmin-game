@@ -125,8 +125,7 @@ export class UIHandler{
 
     suggestSacrifices(board){
          // change background text to indicate its sacrificing time
-         window.onpointerdown = undefined;
-
+        this.returnHandCard();
         for(let i in board){
            try{
             let el = this.actionSlotsHTMLHandle.children[i];
@@ -136,7 +135,6 @@ export class UIHandler{
                     AnimationHandler.backgroundTextClientSide("SaccrificeCard","Make Your Choice...")    
                     el.style.transform = 'scale(1.1)';
                     el.classList.add('shake')
-                    console.log("selected item" , el.firstChild.lastChild )
                     
                     el.onpointerover = () =>{
                         el.firstChild.lastChild.style.opacity = 1;
@@ -145,22 +143,26 @@ export class UIHandler{
                     el.onpointerout = () =>{
                         el.firstChild.lastChild.style.opacity = 0;
                     }
-                    el.onpointerdown = () =>{
-                        
-                        Main.sacrificeCard(i);
-                        
-                        //trigger animation or effect here
-                        //console.log("sacced card",el);
-                        let rebirth = false;
-                        for(let a of board[i].amulets){
-                            if(a == "Rebirth") rebirth = true;
-                        }
-
-                        if(!rebirth) {
-                         el.style.border = '';   
-                         el.firstChild.remove();
-                        }
+                    el.onpointerdown = async () =>{
                         this.disableDropZone(); 
+                        let rebirth = false;
+                        if(board[i].health > 1){
+                            for(let a of board[i].amulets){
+                                if(a == "Rebirth") rebirth = true;   
+                            }
+                        }
+                        
+                        el.onpointerout = undefined;
+                        el.onpointerover = undefined;
+
+                        //el.firstChild.lastChild.style.opacity = 1;
+                        //el.firstChild.setAttribute('sacIsPlaying',true)
+                        //await AnimationHandler.sacrificeCard( el.firstChild , rebirth)
+                        if(!rebirth) {
+                            el.style.border = '';
+                            el.firstChild.remove();
+                        }
+                        Main.sacrificeCard(i);
                     } 
                 }
             }
@@ -169,9 +171,10 @@ export class UIHandler{
            } 
 
         }
-    
+
+        window.onpointerdown = undefined;
         let timer = setInterval(()=>{
-            window.onpointerdown = ()=> { this.disableDropZone();}; 
+            window.onpointerdown = ()=> { console.log("doc klicked");this.disableDropZone();}; 
             clearInterval(timer);
         },100)
 
@@ -181,6 +184,7 @@ export class UIHandler{
 
     disableDropZone(){
         // normal playing mode
+        console.log("disabled drop")
         try{
             for(let i in this.actionSlotsHTMLHandle.children){
                 let el = this.actionSlotsHTMLHandle.children[i];
@@ -192,14 +196,16 @@ export class UIHandler{
            
                 if(el.firstChild != undefined){
                     el.classList.remove('shake');
-                    el.firstChild.lastChild.style.opacity = 0;
+                    console.log("sacP",el.firstChild.lastChild.getAttribute('sacIsPlaying') )
+                    if(el.firstChild.lastChild.getAttribute('sacIsPlaying') === null)
+                        el.firstChild.lastChild.style.opacity = 0;
                 }
                 if( i == 3) break;
             }
         }catch(error){console.log("error",error)}
         if(!Main.getPlayerTurn()) return; 
         AnimationHandler.backgroundTextClientSide("PlayCard","Play Your Hand")
-        
+        window.onpointerdown = undefined;
     }
 
     drawBloodLevel(level){
@@ -232,46 +238,43 @@ export class UIHandler{
         //animate card klicked
     if(Main.getPlayerPickingCard()) return
     if(this.currentCardSelected != null) return
-    this.disableDropZone();
+    console.log("card disable")
 
-            let pos = Main.getOffset(card); //get pos from original element to use for display animation
-            let copy = card.cloneNode(true); //clones card element to create a display copy
-            copy.setAttribute('class','highlightCard'); //setting som attributes for display element
-            document.body.appendChild(copy);
-            copy.setAttribute('ogLeft',pos.left);
-            copy.setAttribute('ogTop',pos.top);
-            copy.style.left = pos.left + 'px';
-            copy.style.top = pos.top + 'px';
-            
-            var animation = setInterval(() => { //used for display animation
-              copy.style.left = '50%';
-              copy.style.top = '50%';
-              copy.style.transform = 'scale(2) translateX(-25%)';
-              window.onpointerdown = ()=>{this.returnHandCard()}
-              clearInterval(animation);
-            }, 100);
+    let pos = Main.getOffset(card); //get pos from original element to use for display animation
+    let copy = card.cloneNode(true); //clones card element to create a display copy
+    copy.setAttribute('class','highlightCard'); //setting som attributes for display element
+    document.body.appendChild(copy);
+    copy.setAttribute('ogLeft',pos.left);
+    copy.setAttribute('ogTop',pos.top);
+    copy.style.left = pos.left + 'px';
+    copy.style.top = pos.top + 'px';
     
-            this.currentDisplayedCard = copy;  
-    
-            this.currentCardSelected = card;
-            this.currentCardSelected.style.visibility = 'hidden'; //visible
-            this.currentCardSelected.style.margin = '0 35px 0 5px';
+    var animation = setInterval(() => { //used for display animation
+        copy.style.left = '50%';
+        copy.style.top = '50%';
+        copy.style.transform = 'scale(2) translateX(-25%)';
+        window.onpointerdown = ()=>{this.returnHandCard()}
+        clearInterval(animation);
+    }, 100);
+
+    this.currentDisplayedCard = copy;  
+
+    this.currentCardSelected = card;
+    this.currentCardSelected.style.visibility = 'hidden'; //visible
+    this.currentCardSelected.style.margin = '0 35px 0 5px';
        
   
-        //activate drop zone
-        if(!Main.getPlayerTurn()) return
+    //activate drop zone
+    if(!Main.getPlayerTurn()) return
 
-        let playerData = Main.getPlayerData();
-        if(playerData.bloodLevel >= playerData.hand[card.getAttribute('cardindex')].cost && !Main.getPlayerPickingCard()){
-            this.activateDropZone(Main.getPlayerData().board);
-            
-            //prompt to play card
+    let playerData = Main.getPlayerData();
+    if(playerData.bloodLevel >= playerData.hand[card.getAttribute('cardindex')].cost && !Main.getPlayerPickingCard()){
+        this.activateDropZone(Main.getPlayerData().board);
+        //prompt to play card
         }
-        else{
-            
-            AnimationHandler.clientSidePopUpPrompt("Blood","Need More Blood");
-            //prompt text
-            //console.log("need to sac a card or youre picking cards");
+    else{
+        AnimationHandler.clientSidePopUpPrompt("Blood","Need More Blood");
+        //prompt text
         }
     }
 

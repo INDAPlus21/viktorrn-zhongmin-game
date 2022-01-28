@@ -29,7 +29,7 @@ let regularCards;
 
 window.onload = function(){
 
-    DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager,(Manager = DataManager) => {
+    DataManager.parseCardDataFromJSON(DataManager.jsonPath+'cards.json',DataManager, (Manager = DataManager) => {
 
         cardsSlected = [];
         setCardPools();

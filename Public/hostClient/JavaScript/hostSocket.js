@@ -722,7 +722,7 @@ function toggleLobbyMode(dir){
     case 1: 
       $('currentMode').innerText = "VS Botward";
 
-      cards = [ "Blood Beast" , "Frank" , "Bow Man" , "Cannon" ];
+      cards = [ ];//"Blood Beast" , "Frank" , "Bow Man" , "Cannon" 
       deck = [];
       for(let c of cards){
         deck.push(DataManager.getSpecificCard(c));

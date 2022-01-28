@@ -188,6 +188,16 @@ export async function cardServerSideSacrificed(){
 
 }
 
+export async function sacrificeCard(cardDOM,rebirth){
+    let sacItem = cardDOM.lastChild;
+    let dagger = cardDOM.lastChild.firstChild;
+    dagger.style.top = '-30px';
+    console.log("sacItem",sacItem,"dagger",dagger)
+    await new Promise(r => setTimeout(r, 1000));
+    console.log("times up")
+    return true;
+}
+
 export async function cardClientSideSacrificed(){
 
 }
@@ -224,7 +234,6 @@ export async function clientSidePopUpPrompt(type,text){
     let msg = document.createElement('div');
     msg.innerText = text;
     msg.classList.add('textPopUp');
-    console.log("ogPos",ogPos)
     msg.style.top = ogPos.top - 150 + 'px';
     msg.style.left = ogPos.left -120 +'px';
     msg.style.transform = "scale(0.1)";
