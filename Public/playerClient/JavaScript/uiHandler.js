@@ -157,7 +157,7 @@ export class UIHandler{
 
                         //el.firstChild.lastChild.style.opacity = 1;
                         //el.firstChild.setAttribute('sacIsPlaying',true)
-                        //await AnimationHandler.sacrificeCard( el.firstChild , rebirth)
+                        AnimationHandler.sacrificeCard( el.firstChild , rebirth)
                         if(!rebirth) {
                             el.style.border = '';
                             el.firstChild.remove();
@@ -196,8 +196,8 @@ export class UIHandler{
            
                 if(el.firstChild != undefined){
                     el.classList.remove('shake');
-                    console.log("sacP",el.firstChild.lastChild.getAttribute('sacIsPlaying') )
-                    if(el.firstChild.lastChild.getAttribute('sacIsPlaying') === null)
+                    //console.log("sacP",el.firstChild.lastChild.getAttribute('sacIsPlaying') )
+                    //if(el.firstChild.lastChild.getAttribute('sacIsPlaying') === null)
                         el.firstChild.lastChild.style.opacity = 0;
                 }
                 if( i == 3) break;

@@ -188,13 +188,59 @@ export async function cardServerSideSacrificed(){
 
 }
 
-export async function sacrificeCard(cardDOM,rebirth){
-    let sacItem = cardDOM.lastChild;
-    let dagger = cardDOM.lastChild.firstChild;
-    dagger.style.top = '-30px';
-    console.log("sacItem",sacItem,"dagger",dagger)
-    await new Promise(r => setTimeout(r, 1000));
-    console.log("times up")
+export async function sacrificeCard(cardDOM){
+    let pos = cardDOM.getBoundingClientRect();
+    let clone = cardDOM.cloneNode(true);
+    clone.style.position = "absolute";
+    clone.style.top = pos.top +"px";
+    clone.style.left = pos.left +"px";
+    document.body.appendChild(clone);
+    let sacItem = clone.lastChild;
+    let dagger = clone.lastChild.firstChild;
+    sacItem.style.opacity = 1;
+    clone.style.transition = "top 0.1s cubic-bezier(0,0,.7,2), opacity 0.2s linear";
+    dagger.style.transition = " top 0.15s cubic-bezier(.2,0,0,1.9) ";
+    
+    await new Promise(r => setTimeout(r, 10));
+    dagger.style.top = '-80px';
+    
+    await new Promise(r => setTimeout(r, 200));
+    dagger.style.transition = " top 0.1s cubic-bezier(1,0,.7,1.6) ";
+    dagger.style.top = '20px';
+    
+    await new Promise(r => setTimeout(r, 50));
+    clone.style.top = pos.top + 10 + "px";
+    
+    await new Promise(r => setTimeout(r, 50));
+    let blood = document.createElement('div');
+    blood.style.top = pos.top + 100 + "px";
+    blood.style.left = pos.left + 40 + "px"; 
+    blood.classList.add('freeBlood');
+    document.body.appendChild(blood);
+    blood.style.transition = " top 0.3s cubic-bezier(0,.55,.55,1),transform 0.3s cubic-bezier(0,.55,.55,1)";
+    
+    await new Promise(r => setTimeout(r, 10));
+    blood.style.top = pos.top + 230 + "px";
+    //let extra = -15 + Math.floor(Math.random()*30);
+    //blood.style.transform = "rotate(" + (60+extra) + "deg)";
+    
+    await new Promise(r => setTimeout(r, 50));
+    clone.style.top = pos.top + "px";
+    dagger.style.top = '0px';
+    clone.style.opacity = 0;
+    
+    await new Promise(r => setTimeout(r, 190));
+    clone.remove();
+    await new Promise(r => setTimeout(r, 120));
+    blood.style.transition = " top 0.3s cubic-bezier(.69,0,.94,.77),left 0.3s cubic-bezier(.69,0,.94,.77),opacity 0.2s linear";
+    let pos2 = $('bloodLevel').getBoundingClientRect();
+    blood.style.left = pos2.left +"px";
+    blood.style.top = pos2.top +"px";
+    await new Promise(r => setTimeout(r, 200));
+    blood.style.opacity = 0;
+    await new Promise(r => setTimeout(r, 200));
+    blood.remove();
+
     return true;
 }
 
