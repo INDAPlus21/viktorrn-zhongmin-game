@@ -184,8 +184,36 @@ export async function cardServerSidePlayed(){
 
 }
 
-export async function cardServerSideSacrificed(){
-
+export async function cardServerSideSacrificed(cardDOM){
+    let pos = cardDOM.getBoundingClientRect();
+    let clone = cardDOM.cloneNode(true);
+    clone.style.position = "absolute";
+    clone.style.top = pos.top +"px";
+    clone.style.left = pos.left +"px";
+    document.body.appendChild(clone);
+    let sacItem = clone.lastChild;
+    let dagger = clone.lastChild.firstChild;
+    sacItem.style.opacity = 1;
+    clone.style.transition = "top 0.1s cubic-bezier(0,0,.7,2), opacity 0.2s linear";
+    dagger.style.transition = " top 0.15s cubic-bezier(.2,0,0,1.9) ";
+    
+    await new Promise(r => setTimeout(r, 10));
+    dagger.style.top = '-80px';
+    
+    await new Promise(r => setTimeout(r, 200));
+    dagger.style.transition = " top 0.1s cubic-bezier(1,0,.7,1.6) ";
+    dagger.style.top = '20px';
+    
+    await new Promise(r => setTimeout(r, 50));
+    clone.style.top = pos.top + 10 + "px";
+    
+    await new Promise(r => setTimeout(r, 110));
+    clone.style.top = pos.top + "px";
+    dagger.style.top = '0px';
+    clone.style.opacity = 0; 
+    await new Promise(r => setTimeout(r, 190));
+    clone.remove();
+    return true;
 }
 
 export async function sacrificeCard(cardDOM){

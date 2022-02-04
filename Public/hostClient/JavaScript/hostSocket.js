@@ -363,8 +363,10 @@ export async function onSacrificeCard(socket, playerId, column){
 
     if(removeCard){
       playSfx('sacrifice');
+      AnimationHandler.cardServerSideSacrificed(getCardFromBoard(i,column))
       await removePlayerStatusEffect(playerInfo['player'+i],boardInfo['player'+i],column);
       boardInfo['player'+i][column] = null;
+      
     }
     
     if(playerInfo['player'+i].blood < 4) playerInfo['player'+i].blood += 1;
