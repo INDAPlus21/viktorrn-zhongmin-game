@@ -242,7 +242,8 @@
     ,"Cadaver"
     ,"Cadaver"
 ]
-,"amuletDescriptions":[
+,"amuletDescriptions":
+    [
     {   "name":"Shield"
         ,"description":"Completly blocks the first incoming attack"
     }
@@ -285,5 +286,5 @@
     ,{   "name":"Manic"
         ,"description":"Attacks after EVERY turn"
     }
-]
+    ]
 }
