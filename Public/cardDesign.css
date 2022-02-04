@@ -17,8 +17,6 @@
     border: 1px solid var(--cardBorderColor);
 }
 
-
-
 .highlightCard{
     position: absolute;
     z-index: 10; 
@@ -250,4 +248,5 @@
     margin: 0 -15px 0 0;
     display: inline-block;
     z-index: 10;
+    pointer-events: none;
 }

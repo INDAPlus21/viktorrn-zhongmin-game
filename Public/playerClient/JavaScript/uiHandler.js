@@ -151,12 +151,8 @@ export class UIHandler{
                                 if(a == "Rebirth") rebirth = true;   
                             }
                         }
-                        
                         el.onpointerout = undefined;
                         el.onpointerover = undefined;
-
-                        //el.firstChild.lastChild.style.opacity = 1;
-                        //el.firstChild.setAttribute('sacIsPlaying',true)
                         AnimationHandler.sacrificeCard( el.firstChild , rebirth)
                         if(!rebirth) {
                             el.style.border = '';
@@ -303,8 +299,6 @@ export class UIHandler{
         //deactivate dropzone
         this.disableDropZone();
     }
-
- 
 
     playedCard(col,target){
         Main.getUIHandler().cardWasPlayed = true;

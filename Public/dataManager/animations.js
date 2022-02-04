@@ -35,7 +35,7 @@ export async function chatMessage(senderIndex,text){
                 clearInterval(a3)
                 msg.remove();
             },500)
-        }, 1000/17 *textLength)
+        }, 1000/13 *textLength)
        
     },10)
 
@@ -270,10 +270,6 @@ export async function sacrificeCard(cardDOM){
     blood.remove();
 
     return true;
-}
-
-export async function cardClientSideSacrificed(){
-
 }
 
 export async function backgroundTextClientSide(textType,text){

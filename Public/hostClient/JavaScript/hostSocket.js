@@ -362,7 +362,7 @@ export async function onSacrificeCard(socket, playerId, column){
     }
 
     if(removeCard){
-      playSfx('sacrifice');
+      let a = setInterval(()=>{playSfx('sacrifice'); clearInterval(a)},300) 
       AnimationHandler.cardServerSideSacrificed(getCardFromBoard(i,column))
       await removePlayerStatusEffect(playerInfo['player'+i],boardInfo['player'+i],column);
       boardInfo['player'+i][column] = null;
