@@ -19,6 +19,10 @@ let playerPickingCard = false;
 let columnAmount = 4;
 let currentTurn;
 
+let turnForMulitpleSelects = 0;
+let itemsLeftToChoose = 0;
+let itemsToChoose = 2;
+
 let cardsSlected;
 let cardsLeftToSelect;
 
@@ -119,9 +123,11 @@ window.onload = function(){
         currentlyYourTurn = true;
         currentTurn = turn;
         if(turn > 1){
+            itemsLeftToChoose = itemsToChoose;
             UI_Handler.displayActionSlots('chooseCard',playerData.deck,[],playerData.hand);
             playerPickingCard = true;
-            AnimationHandler.backgroundTextClientSide("DrawCard","Draw a Card")
+            
+            AnimationHandler.backgroundTextClientSide("DrawCard","Draw "+itemsLeftToChoose+" Card" + (itemsLeftToChoose== 1 ? "" : "s"))
         }else{
             UI_Handler.displayActionSlots('playCards',[],playerData.board,[],columnAmount);
             // if not card drawing mode right from start just go to normal playing mode directly
@@ -379,10 +385,14 @@ export function sacrificeCard(column){
 
 export function chooseCard(cardType){
     socket.emit('playerDrawCard', roomId, socketId, cardType);
-    displayPlayCardAreaOnSync = true;
-    playerPickingCard = false;
+    AnimationHandler.backgroundTextClientSide("DrawCard","Draw "+itemsLeftToChoose+" Card" + (itemsLeftToChoose == 1 ? "" : "s"))
+    if(itemsLeftToChoose <= 1){
+        AnimationHandler.backgroundTextClientSide("PlayCard","Play Your Hand")
+        displayPlayCardAreaOnSync = true;
+        playerPickingCard = false;
+        Main.clearElement(this.actionSlotsHTMLHandle);
+    }
     
-    AnimationHandler.backgroundTextClientSide("PlayCard","Play Your Hand")
     
 }
 
@@ -468,3 +478,6 @@ export function getPlayerPickingCard(){
 export function cloneObject(obj){
     return JSON.parse(JSON.stringify(obj));
 }
+
+export function setItemsLeftToChoose(a){itemsLeftToChoose += a;}
+export function getItemsLeftToChoose(){return itemsLeftToChoose;}

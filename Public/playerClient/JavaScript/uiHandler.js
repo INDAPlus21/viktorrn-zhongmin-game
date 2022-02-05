@@ -47,13 +47,14 @@ export class UIHandler{
             break;
 
             case 'chooseCard':
+                
                 if(hand.length >= 7) this.displayActionSlots('playCards',[],board); 
                  
                 let vessel = document.createElement('div');
                 vessel.setAttribute('class','card');
                 vessel.onpointerdown = () =>{
-                    Main.clearElement(this.actionSlotsHTMLHandle);
                     Main.chooseCard('Vessel');
+                    Main.setItemsLeftToChoose(-1);
                 }
                 let name = document.createElement('div');
                 name.innerText = "Vessel";
@@ -66,7 +67,7 @@ export class UIHandler{
                         let creature =  document.createElement('div');
                         creature.setAttribute('class','card');
                         creature.onpointerdown = () =>{
-                            Main.clearElement(this.actionSlotsHTMLHandle);
+                            Main.setItemsLeftToChoose(-1);
                             Main.chooseCard('Creature');
                         }
                         name = document.createElement('div');
